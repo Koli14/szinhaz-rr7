@@ -1,0 +1,34 @@
+.postContainer p {
+  margin-top: 10px;
+}
+
+.postContainer a {
+  font-weight: 800;
+  color: rgb(244, 169, 28);
+}
+
+.postContainer a:hover {
+  text-decoration: underline;
+}
+
+.postContainer figure {
+  margin: 24px auto;
+}
+
+.postContainer img {
+  margin: auto;
+}
+
+.postContainer .wp-block-quote {
+  border-left: 4px solid rgb(244, 169, 28);
+  margin: 1.75rem;
+  padding-inline: 1rem;
+  font-style: italic;
+  font-size: 1.5rem;
+  font-family: 'Noto Serif', serif;
+  line-height: 1.5;
+}
+
+.postContainer iframe {
+  margin: auto;
+}
