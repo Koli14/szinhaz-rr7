@@ -11,6 +11,10 @@ export const AD_SLOTS = {
   postEnd1: '9828694222',
   postEnd2: '6375272555',
   postEnd3: '6935355032',
+  homeBig1: '7613594428',
+  homeBig2: '3315256766',
+  homeLittle1: '2696309669',
+  homeLittle2: '2664520072',
 } as const
 
 export function AdSense({

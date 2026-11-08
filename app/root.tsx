@@ -15,6 +15,7 @@ import './app.css'
 import { Header } from './components/header'
 import { GateBanner } from './components/GateBanner'
 import { Footer } from './components/Footer'
+import { CookieConsent } from './components/CookieConsent'
 import { SearchModal } from './components/search/SearchModal'
 import { MobileDrawer } from './components/header/MobileDrawer'
 import { fetchFromGraphQL, gql } from './utils/graphql.server'
@@ -231,6 +232,7 @@ export default function App() {
         <Outlet />
       </Box>
       <Footer />
+      <CookieConsent />
       <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
       <MobileDrawer
         open={drawerOpen}
