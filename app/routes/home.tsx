@@ -26,10 +26,12 @@ const GET_HOME = gql`
           slug
           kiemeltCimke {
             featuredTag {
-              name
-              slug
-              taxonomyColor {
-                taxColor
+              nodes {
+                name
+                slug
+                ... on Tag {
+                  taxonomyColor { taxColor }
+                }
               }
             }
           }

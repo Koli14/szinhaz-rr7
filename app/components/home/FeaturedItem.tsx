@@ -14,7 +14,7 @@ export const FeaturedItem = ({
   desktopOnly?: boolean
 }) => {
   const image = item.featuredImage.node
-  const tag = item.kiemeltCimke.featuredTag ?? item.tags.nodes[0]
+  const tag = item.kiemeltCimke.featuredTag?.nodes?.[0] ?? item.tags.nodes[0]
   const isBig = !mobileOnly && !desktopOnly
   const bgColor = tag?.taxonomyColor?.taxColor ?? "#eda407"
 

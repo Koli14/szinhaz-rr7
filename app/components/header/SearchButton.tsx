@@ -1,12 +1,13 @@
 import { Box } from "@chakra-ui/react"
 import { IoSearchSharp } from "react-icons/io5"
 
-export default function SearchButton() {
+export default function SearchButton({ onClick }: { onClick?: () => void }) {
   return (
     <Box mr="2" ml={{ base: "auto" }}>
       <button
         type="button"
         aria-label="Keresés"
+        onClick={onClick}
         style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
       >
         <Box

@@ -5,7 +5,7 @@ import type { Post } from "~/types"
 
 export const PostHeader = ({ post }: { post: Post }) => {
   const { kiemeltCimke, tags, title, date } = post
-  const tag = kiemeltCimke.featuredTag ?? tags.nodes[0]
+  const tag = kiemeltCimke.featuredTag?.nodes?.[0] ?? tags.nodes[0]
 
   return (
     <Box>

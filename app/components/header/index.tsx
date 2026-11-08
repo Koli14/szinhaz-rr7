@@ -11,9 +11,11 @@ export type HeaderProps = {
   tagClouds: Tag[]
   menuItems: FlatMenuItem[]
   hasGateBanner: boolean
+  onSearchOpen?: () => void
+  onDrawerOpen?: () => void
 }
 
-export function Header({ tagClouds, menuItems, hasGateBanner }: HeaderProps) {
+export function Header({ tagClouds, menuItems, hasGateBanner, onSearchOpen, onDrawerOpen }: HeaderProps) {
   const dateToday = new Date().toLocaleString("hu-HU", {
     weekday: "long",
     year: "numeric",
@@ -51,9 +53,9 @@ export function Header({ tagClouds, menuItems, hasGateBanner }: HeaderProps) {
             <TagCloud tagClouds={tagClouds} />
           </Flex>
           <Flex direction="column">
-            <MobileMenu />
+            <MobileMenu onClick={onDrawerOpen} />
             <Flex display={{ base: "none", lg: "flex" }}>
-              <SearchButton />
+              <SearchButton onClick={onSearchOpen} />
               <SocialNav />
             </Flex>
             <Box

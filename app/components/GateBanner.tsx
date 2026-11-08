@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react"
 import type { GateBannerData } from "~/types"
 
 export const GateBanner = ({ banners }: { banners: GateBannerData }) => {
-  const { kep, link } = banners.gatebanner
+  const { kep, link } = banners.gatebanner ?? {}
   const mobileKep = banners.gatebannermobile.kep
 
   if (!kep) return null
