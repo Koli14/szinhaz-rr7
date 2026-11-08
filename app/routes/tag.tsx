@@ -1,11 +1,11 @@
-import { Box, Heading } from "@chakra-ui/react"
-import { useLoaderData } from "react-router"
-import { ArchiveItem } from "~/components/archive/ArchiveItem"
-import { Pagination } from "~/components/archive/Pagination"
-import { fetchFromGraphQL, gql } from "~/utils/graphql.server"
-import { POSTS_PER_PAGE } from "~/types"
-import type { PostPreview, PageInfo } from "~/types"
-import type { Route } from "./+types/tag"
+import { Box, Heading } from '@chakra-ui/react'
+import { useLoaderData } from 'react-router'
+import { ArchiveItem } from '~/components/archive/ArchiveItem'
+import { Pagination } from '~/components/archive/Pagination'
+import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
+import { POSTS_PER_PAGE } from '~/types'
+import type { PostPreview, PageInfo } from '~/types'
+import type { Route } from './+types/tag'
 
 type TagData = {
   tag: {
@@ -38,7 +38,9 @@ const GET_TAG = gql`
                 name
                 slug
                 ... on Tag {
-                  taxonomyColor { taxColor }
+                  taxonomyColor {
+                    taxColor
+                  }
                 }
               }
             }
@@ -47,7 +49,9 @@ const GET_TAG = gql`
             nodes {
               name
               slug
-              taxonomyColor { taxColor }
+              taxonomyColor {
+                taxColor
+              }
             }
           }
           featuredImage {
@@ -55,7 +59,10 @@ const GET_TAG = gql`
               altText
               sourceUrl
               mediaDetails {
-                sizes { name sourceUrl }
+                sizes {
+                  name
+                  sourceUrl
+                }
               }
             }
           }
@@ -66,13 +73,13 @@ const GET_TAG = gql`
 `
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const after = new URL(request.url).searchParams.get("after") ?? undefined
+  const after = new URL(request.url).searchParams.get('after') ?? undefined
   const data = await fetchFromGraphQL<TagData>(GET_TAG, {
     slug: params.tagSlug,
     first: POSTS_PER_PAGE,
     after,
   })
-  if (!data.tag) throw new Response("Not Found", { status: 404 })
+  if (!data.tag) throw new Response('Not Found', { status: 404 })
   return {
     name: data.tag.name,
     posts: data.tag.posts.nodes,
@@ -82,15 +89,21 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 }
 
 export function meta({ data }: Route.MetaArgs) {
-  const title = data?.name ? `${data.name} | Színház Online` : "Színház Online"
+  const title = data?.name ? `${data.name} | Színház Online` : 'Színház Online'
   return [{ title }]
 }
 
 export default function TagArchive() {
   const { name, posts, pageInfo, basePath } = useLoaderData<typeof loader>()
   return (
-    <Box px={{ base: "1rem", lg: "0" }} py="4">
-      <Heading as="h1" size="lg" mb="6" textTransform="uppercase" fontFamily="heading">
+    <Box px={{ base: '1rem', lg: '0' }} py='4'>
+      <Heading
+        as='h1'
+        size='lg'
+        mb='6'
+        textTransform='uppercase'
+        fontFamily='heading'
+      >
         {name}
       </Heading>
       <Box>

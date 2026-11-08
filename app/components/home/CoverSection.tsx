@@ -1,7 +1,7 @@
-import { Box } from "@chakra-ui/react"
-import { CoverItem } from "./CoverItem"
-import { FeaturedItem } from "./FeaturedItem"
-import type { PostPreview } from "~/types"
+import { Box } from '@chakra-ui/react'
+import { CoverItem } from './CoverItem'
+import { FeaturedItem } from './FeaturedItem'
+import type { PostPreview } from '~/types'
 
 export const LeftCoverItems = ({
   featuredItems,

@@ -1,11 +1,11 @@
-import { Box } from "@chakra-ui/react"
-import type { BannerSlot } from "~/types"
+import { Box } from '@chakra-ui/react'
+import type { BannerSlot } from '~/types'
 
 export function Banner({
   banner,
   aspectRatio,
   maxWidth,
-  mt = "20px",
+  mt = '20px',
 }: {
   banner: BannerSlot | null | undefined
   aspectRatio?: number
@@ -13,21 +13,25 @@ export function Banner({
   mt?: string
 }) {
   if (!banner?.kep?.sourceUrl) return null
-  const href = banner.link?.url ?? "#"
+  const href = banner.link?.url ?? '#'
 
   return (
-    <Box mt={mt} maxWidth={maxWidth ?? "100%"} mx="auto">
-      <a href={href} target="_blank" rel="noopener noreferrer">
+    <Box mt={mt} maxWidth={maxWidth ?? '100%'} mx='auto'>
+      <a href={href} target='_blank' rel='noopener noreferrer'>
         {aspectRatio ? (
-          <Box aspectRatio={aspectRatio} overflow="hidden">
+          <Box aspectRatio={aspectRatio} overflow='hidden'>
             <img
               src={banner.kep.sourceUrl}
-              alt="banner"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              alt='banner'
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </Box>
         ) : (
-          <img src={banner.kep.sourceUrl} alt="banner" style={{ width: "100%" }} />
+          <img
+            src={banner.kep.sourceUrl}
+            alt='banner'
+            style={{ width: '100%' }}
+          />
         )}
       </a>
     </Box>

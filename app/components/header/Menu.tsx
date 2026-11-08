@@ -1,7 +1,7 @@
-import { Box, Flex } from "@chakra-ui/react"
-import MenuItem from "./MenuItem"
-import type { HierarchicalMenuItem } from "./MenuItem"
-import type { FlatMenuItem } from "~/types"
+import { Box, Flex } from '@chakra-ui/react'
+import MenuItem from './MenuItem'
+import type { HierarchicalMenuItem } from './MenuItem'
+import type { FlatMenuItem } from '~/types'
 
 type ChildrenOf = Record<string, HierarchicalMenuItem[]>
 
@@ -29,19 +29,19 @@ export default function Menu({ menuItems }: { menuItems: FlatMenuItem[] }) {
   const hierarchicalList = flatListToHierarchical(menuItems)
 
   return (
-    <Box as="nav" width="100%" display={{ base: "none", lg: "block" }}>
+    <Box as='nav' width='100%' display={{ base: 'none', lg: 'block' }}>
       <Flex
-        as="ul"
-        justifyContent="center"
-        listStyleType="none"
-        align="center"
-        bg="accent.400"
-        minHeight="53px"
-        lineHeight="53px"
-        color="white"
-        fontFamily="menu"
-        letterSpacing="1.9px"
-        fontSize="19px"
+        as='ul'
+        justifyContent='center'
+        listStyleType='none'
+        align='center'
+        bg='accent.400'
+        minHeight='53px'
+        lineHeight='53px'
+        color='white'
+        fontFamily='menu'
+        letterSpacing='1.9px'
+        fontSize='19px'
       >
         {hierarchicalList.map((menuItem, index) => (
           <MenuItem

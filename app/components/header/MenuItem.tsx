@@ -1,5 +1,5 @@
-import { Box } from "@chakra-ui/react"
-import { Link } from "react-router"
+import { Box } from '@chakra-ui/react'
+import { Link } from 'react-router'
 
 export type HierarchicalMenuItem = {
   key: string
@@ -18,17 +18,17 @@ export default function MenuItem({
 }) {
   return (
     <Box
-      as="li"
-      textTransform="uppercase"
-      position="relative"
-      zIndex="99"
-      cursor="pointer"
+      as='li'
+      textTransform='uppercase'
+      position='relative'
+      zIndex='99'
+      cursor='pointer'
     >
       <Box
         asChild
-        px="1.375rem"
-        borderRight={isLast ? "0px solid transparent" : "1px solid white"}
-        display="block"
+        px='1.375rem'
+        borderRight={isLast ? '0px solid transparent' : '1px solid white'}
+        display='block'
       >
         <Link to={menuItem.uri}>{menuItem.title}</Link>
       </Box>

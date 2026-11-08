@@ -6,18 +6,18 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-} from "react-router"
-import { ChakraProvider, Box } from "@chakra-ui/react"
-import { useState } from "react"
-import type { Route } from "./+types/root"
-import { system } from "./utils/theme"
-import "./app.css"
-import { Header } from "./components/header"
-import { GateBanner } from "./components/GateBanner"
-import { SearchModal } from "./components/search/SearchModal"
-import { MobileDrawer } from "./components/header/MobileDrawer"
-import { fetchFromGraphQL, gql } from "./utils/graphql.server"
-import type { Tag, FlatMenuItem, BannersData, BannerSlot } from "./types"
+} from 'react-router'
+import { ChakraProvider, Box } from '@chakra-ui/react'
+import { useState } from 'react'
+import type { Route } from './+types/root'
+import { system } from './utils/theme'
+import './app.css'
+import { Header } from './components/header'
+import { GateBanner } from './components/GateBanner'
+import { SearchModal } from './components/search/SearchModal'
+import { MobileDrawer } from './components/header/MobileDrawer'
+import { fetchFromGraphQL, gql } from './utils/graphql.server'
+import type { Tag, FlatMenuItem, BannersData, BannerSlot } from './types'
 
 // ─── GraphQL (menu items + tags by slug) ────────────────────────────────────
 
@@ -81,7 +81,7 @@ type RestBannersAcf = {
 }
 
 function kepToSlot(kep: RestKep): { sourceUrl: string } | null {
-  if (!kep || typeof kep !== "object") return null
+  if (!kep || typeof kep !== 'object') return null
   return { sourceUrl: kep.url }
 }
 
@@ -96,7 +96,9 @@ async function fetchTagCloudSlugs(wpBase: string): Promise<string[]> {
   try {
     const res = await fetch(`${wpBase}/wp-json/acf/v3/options/options`)
     if (!res.ok) return []
-    const data = await res.json() as { acf: { tag_cloud?: Array<{ slug: string }> } }
+    const data = (await res.json()) as {
+      acf: { tag_cloud?: Array<{ slug: string }> }
+    }
     return data?.acf?.tag_cloud?.map((t) => t.slug) ?? []
   } catch {
     return []
@@ -107,7 +109,7 @@ async function fetchBanners(wpBase: string): Promise<BannersData | null> {
   try {
     const res = await fetch(`${wpBase}/wp-json/acf/v3/options/banners`)
     if (!res.ok) return null
-    const data = await res.json() as { acf?: RestBannersAcf }
+    const data = (await res.json()) as { acf?: RestBannersAcf }
     const acf = data?.acf
     if (!acf) return null
     return {
@@ -142,7 +144,7 @@ async function fetchBanners(wpBase: string): Promise<BannersData | null> {
 
 export async function loader(_: Route.LoaderArgs) {
   try {
-    const wpBase = (process.env.GRAPHQL_API ?? "").replace("/graphql", "")
+    const wpBase = (process.env.GRAPHQL_API ?? '').replace('/graphql', '')
 
     const [tagSlugs, banners] = await Promise.all([
       fetchTagCloudSlugs(wpBase),
@@ -160,7 +162,7 @@ export async function loader(_: Route.LoaderArgs) {
 
     return { tagClouds, menuItems: data.menuItems.nodes, banners }
   } catch (e) {
-    console.error("Root loader failed:", e)
+    console.error('Root loader failed:', e)
     return null
   }
 }
@@ -168,30 +170,30 @@ export async function loader(_: Route.LoaderArgs) {
 // ─── Layout & App ────────────────────────────────────────────────────────────
 
 export const links: Route.LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
+  { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
+    rel: 'preconnect',
+    href: 'https://fonts.gstatic.com',
+    crossOrigin: 'anonymous',
   },
   {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Bellefair&family=Noto+Serif:ital@0;1&family=Open+Sans:wght@400;800&display=swap",
+    rel: 'stylesheet',
+    href: 'https://fonts.googleapis.com/css2?family=Bellefair&family=Noto+Serif:ital@0;1&family=Open+Sans:wght@400;800&display=swap',
   },
 ]
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="hu">
+    <html lang='hu'>
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charSet='utf-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
         <Meta />
         <Links />
         <script
           async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5865633360595458"
-          crossOrigin="anonymous"
+          src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5865633360595458'
+          crossOrigin='anonymous'
         />
       </head>
       <body>
@@ -223,15 +225,15 @@ export default function App() {
         onDrawerOpen={() => setDrawerOpen(true)}
       />
       <Box
-        as="main"
-        position="relative"
-        top={hasGateBanner ? { base: "0", md: "250px" } : "0"}
-        mb={hasGateBanner ? { base: "0", md: "250px" } : "0"}
-        minH="calc(100vh - 320px)"
-        maxWidth="1210px"
-        mx={{ base: "0", lg: "auto" }}
-        px={{ lg: "0.5rem" }}
-        bg="white"
+        as='main'
+        position='relative'
+        top={hasGateBanner ? { base: '0', md: '250px' } : '0'}
+        mb={hasGateBanner ? { base: '0', md: '250px' } : '0'}
+        minH='calc(100vh - 320px)'
+        maxWidth='1210px'
+        mx={{ base: '0', lg: 'auto' }}
+        px={{ lg: '0.5rem' }}
+        bg='white'
       >
         <Outlet />
       </Box>
@@ -246,21 +248,21 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = "Hiba történt"
-  let details = "Váratlan hiba lépett fel."
+  let message = 'Hiba történt'
+  let details = 'Váratlan hiba lépett fel.'
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : `${error.status}`
+    message = error.status === 404 ? '404' : `${error.status}`
     details =
       error.status === 404
-        ? "Az oldal nem található."
+        ? 'Az oldal nem található.'
         : error.statusText || details
   } else if (import.meta.env.DEV && error instanceof Error) {
     details = error.message
   }
 
   return (
-    <Box p="8" textAlign="center">
+    <Box p='8' textAlign='center'>
       <h1>{message}</h1>
       <p>{details}</p>
     </Box>

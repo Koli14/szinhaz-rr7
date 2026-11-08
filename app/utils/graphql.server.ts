@@ -3,16 +3,18 @@ export async function fetchFromGraphQL<T>(
   variables?: Record<string, unknown>,
 ): Promise<T> {
   const endpoint = process.env.GRAPHQL_API
-  if (!endpoint) throw new Error("GRAPHQL_API env var is required")
+  if (!endpoint) throw new Error('GRAPHQL_API env var is required')
 
   const response = await fetch(endpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, variables }),
   })
 
   if (!response.ok) {
-    throw new Error(`GraphQL request failed: ${response.status} ${response.statusText}`)
+    throw new Error(
+      `GraphQL request failed: ${response.status} ${response.statusText}`,
+    )
   }
 
   const json = await response.json()

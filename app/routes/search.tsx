@@ -1,11 +1,11 @@
-import { Box, Heading } from "@chakra-ui/react"
-import { useLoaderData } from "react-router"
-import { ArchiveItem } from "~/components/archive/ArchiveItem"
-import { fetchFromGraphQL, gql } from "~/utils/graphql.server"
-import type { PostPreview, PageInfo } from "~/types"
-import { POSTS_PER_PAGE as PER_PAGE } from "~/types"
-import type { Route } from "./+types/search"
-import { Pagination } from "~/components/archive/Pagination"
+import { Box, Heading } from '@chakra-ui/react'
+import { useLoaderData } from 'react-router'
+import { ArchiveItem } from '~/components/archive/ArchiveItem'
+import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
+import type { PostPreview, PageInfo } from '~/types'
+import { POSTS_PER_PAGE as PER_PAGE } from '~/types'
+import type { Route } from './+types/search'
+import { Pagination } from '~/components/archive/Pagination'
 
 type SearchData = {
   posts: {
@@ -60,8 +60,8 @@ const SEARCH_POSTS = gql`
 
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url)
-  const search = url.searchParams.get("s") ?? ""
-  const after = url.searchParams.get("after") ?? undefined
+  const search = url.searchParams.get('s') ?? ''
+  const after = url.searchParams.get('after') ?? undefined
 
   if (!search.trim()) {
     return { search, posts: [], pageInfo: null, basePath: url.pathname }
@@ -84,7 +84,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 export function meta({ data }: Route.MetaArgs) {
   const title = data?.search
     ? `„${data.search}" keresési eredmények | Színház Online`
-    : "Keresés | Színház Online"
+    : 'Keresés | Színház Online'
   return [{ title }]
 }
 
@@ -92,13 +92,21 @@ export default function Search() {
   const { search, posts, pageInfo, basePath } = useLoaderData<typeof loader>()
 
   return (
-    <Box px={{ base: "1rem", lg: "0" }} py="4">
-      <Heading as="h1" size="lg" mb="6" textTransform="uppercase" fontFamily="heading">
-        {search ? `Keresés: „${search}"` : "Keresés"}
+    <Box px={{ base: '1rem', lg: '0' }} py='4'>
+      <Heading
+        as='h1'
+        size='lg'
+        mb='6'
+        textTransform='uppercase'
+        fontFamily='heading'
+      >
+        {search ? `Keresés: „${search}"` : 'Keresés'}
       </Heading>
       {posts.length === 0 ? (
-        <Box color="gray.500" py="8">
-          {search ? "Nem találtunk cikket erre a keresési kifejezésre." : "Adjon meg egy keresési kifejezést."}
+        <Box color='gray.500' py='8'>
+          {search
+            ? 'Nem találtunk cikket erre a keresési kifejezésre.'
+            : 'Adjon meg egy keresési kifejezést.'}
         </Box>
       ) : (
         <>
