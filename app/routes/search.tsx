@@ -1,7 +1,12 @@
 import { Box, Heading } from '@chakra-ui/react'
 import { useLoaderData } from 'react-router'
 import { ArchiveItem } from '~/components/archive/ArchiveItem'
-import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
+import {
+  fetchFromGraphQL,
+  gql,
+  POST_PREVIEW_FIELDS,
+} from '~/utils/graphql.server'
+import { CACHE, cacheHeaders } from '~/utils/cache'
 import type { PostPreview, PageInfo } from '~/types'
 import { POSTS_PER_PAGE as PER_PAGE } from '~/types'
 import type { Route } from './+types/search'
@@ -24,35 +29,7 @@ const SEARCH_POSTS = gql`
         startCursor
       }
       nodes {
-        title
-        slug
-        excerpt
-        kiemeltCimke {
-          featuredTag {
-            nodes {
-              name
-              slug
-              ... on Tag {
-                taxonomyColor { taxColor }
-              }
-            }
-        }
-        tags {
-          nodes {
-            name
-            slug
-            taxonomyColor { taxColor }
-          }
-        }
-        featuredImage {
-          node {
-            altText
-            sourceUrl
-            mediaDetails {
-              sizes { name sourceUrl }
-            }
-          }
-        }
+        ${POST_PREVIEW_FIELDS}
       }
     }
   }
@@ -83,10 +60,12 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export function meta({ data }: Route.MetaArgs) {
   const title = data?.search
-    ? `„${data.search}" keresési eredmények | Színház Online`
-    : 'Keresés | Színház Online'
-  return [{ title }]
+    ? `„${data.search}” keresési eredmények | Színház.online`
+    : 'Keresés | Színház.online'
+  return [{ title }, { name: 'robots', content: 'noindex, follow' }]
 }
+
+export const headers = cacheHeaders(CACHE.list)
 
 export default function Search() {
   const { search, posts, pageInfo, basePath } = useLoaderData<typeof loader>()

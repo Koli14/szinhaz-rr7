@@ -31,7 +31,7 @@ export function ArchiveItem({
           width={{ base: '100%', md: featured ? '55%' : '40%' }}
           mr={{ md: '6' }}
         >
-          <Link to={`/${item.slug}`}>
+          <Link to={item.uri ?? `/${item.slug}/`}>
             <Box aspectRatio={9 / 5} overflow='hidden'>
               <img
                 src={src}
@@ -48,7 +48,7 @@ export function ArchiveItem({
             <Tag tag={tag} />
           </Box>
         )}
-        <Link to={`/${item.slug}`}>
+        <Link to={item.uri ?? `/${item.slug}/`}>
           <Heading
             as='h4'
             fontFamily='heading'

@@ -26,7 +26,7 @@ export const FeaturedItem = ({
       }}
     >
       <Box pos='relative' mb={{ lg: '22px' }}>
-        <Link to={`/${item.slug}`}>
+        <Link to={item.uri ?? `/${item.slug}/`}>
           <Box aspectRatio={16 / 9} overflow='hidden' width='100%'>
             <img
               src={image.sourceUrl}
@@ -38,7 +38,7 @@ export const FeaturedItem = ({
         </Link>
         {tag && <CoverTag tag={tag} />}
       </Box>
-      <Link to={`/${item.slug}`}>
+      <Link to={item.uri ?? `/${item.slug}/`}>
         <CoverHeading
           title={item.title}
           bgColor={bgColor}

@@ -1,11 +1,10 @@
+import { getGraphqlEndpoint } from './wp.server'
+
 export async function fetchFromGraphQL<T>(
   query: string,
   variables?: Record<string, unknown>,
 ): Promise<T> {
-  const endpoint = process.env.GRAPHQL_API
-  if (!endpoint) throw new Error('GRAPHQL_API env var is required')
-
-  const response = await fetch(endpoint, {
+  const response = await fetch(getGraphqlEndpoint(), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, variables }),
@@ -27,3 +26,46 @@ export async function fetchFromGraphQL<T>(
 }
 
 export const gql = String.raw
+
+// Fields needed to render a post in lists (home, archives, search)
+export const POST_PREVIEW_FIELDS = gql`
+  title
+  slug
+  uri
+  excerpt
+  kiemeltCimke {
+    featuredTag {
+      nodes {
+        name
+        slug
+        ... on Tag {
+          taxonomyColor {
+            taxColor
+          }
+        }
+      }
+    }
+  }
+  tags {
+    nodes {
+      name
+      slug
+      taxonomyColor {
+        taxColor
+      }
+    }
+  }
+  featuredImage {
+    node {
+      title
+      altText
+      sourceUrl
+      mediaDetails {
+        sizes {
+          name
+          sourceUrl
+        }
+      }
+    }
+  }
+`

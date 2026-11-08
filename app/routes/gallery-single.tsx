@@ -1,6 +1,8 @@
 import { Box, Heading } from '@chakra-ui/react'
 import { useLoaderData } from 'react-router'
 import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
+import { CACHE, cacheHeaders } from '~/utils/cache'
+import { buildSeoMeta, SEO_FIELDS } from '~/utils/seo.server'
 import type { Route } from './+types/gallery-single'
 import '~/styles/post.css'
 
@@ -8,6 +10,7 @@ type GalleryPost = {
   title: string
   content: string
   featuredImage: { node: { sourceUrl: string; altText: string } } | null
+  seo: { fullHead: string | null } | null
 }
 
 type GalleryData = {
@@ -19,6 +22,7 @@ const GET_GALLERY = gql`
     myGallery(id: $slug, idType: SLUG) {
       title
       content
+      ${SEO_FIELDS}
       featuredImage {
         node {
           sourceUrl
@@ -29,18 +33,21 @@ const GET_GALLERY = gql`
   }
 `
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params, request }: Route.LoaderArgs) {
   const data = await fetchFromGraphQL<GalleryData>(GET_GALLERY, {
     slug: params.gallerySlug,
   })
   if (!data.myGallery) throw new Response('Not Found', { status: 404 })
-  return { gallery: data.myGallery }
+  return {
+    gallery: data.myGallery,
+    seo: buildSeoMeta(request, data.myGallery.seo, data.myGallery.title),
+  }
 }
 
-export function meta({ data }: Route.MetaArgs) {
-  if (!data?.gallery) return [{ title: 'Nem található | Színház Online' }]
-  return [{ title: `${data.gallery.title} | Galéria | Színház Online` }]
-}
+export const meta: Route.MetaFunction = ({ data }) =>
+  data?.seo ?? [{ title: 'Az oldal nem található | Színház.online' }]
+
+export const headers = cacheHeaders(CACHE.post)
 
 export default function GallerySingle() {
   const { gallery } = useLoaderData<typeof loader>()

@@ -20,6 +20,7 @@ export type FeaturedImage = {
 export type PostPreview = {
   title: string
   slug: string
+  uri?: string
   excerpt: string
   kiemeltCimke: { featuredTag: { nodes: Tag[] } | null }
   tags: { nodes: Tag[] }
@@ -30,6 +31,7 @@ export type Post = {
   title: string
   content: string
   date: string
+  uri: string
   kiemeltCimke: { featuredTag: { nodes: Tag[] } | null }
   tags: { nodes: Tag[] }
 }
@@ -59,6 +61,7 @@ export type BannersData = {
   bigbanner4: BannerSlot | null
   littlebanner1: BannerSlot | null
   littlebanner2: BannerSlot | null
+  whateversizebanner: BannerSlot | null
   adsense: {
     postbigadsense1: boolean | null
     postbigadsense1_2: boolean | null

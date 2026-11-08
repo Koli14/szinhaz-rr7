@@ -27,7 +27,7 @@ export const Tag = ({ tag, ...props }: TagProps) => {
       _hover={{ bg: 'white', color: bgColor, borderColor: bgColor }}
       {...props}
     >
-      <Link to={`/tags/${tag.slug}`}>{tag.name}</Link>
+      <Link to={`/tag/${tag.slug}/`}>{tag.name}</Link>
     </Box>
   )
 }

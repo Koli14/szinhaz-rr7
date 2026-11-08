@@ -4,6 +4,7 @@ import { Pagination } from '~/components/archive/Pagination'
 import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
 import { POSTS_PER_PAGE as PER_PAGE } from '~/types'
 import type { GalleryItem, PageInfo } from '~/types'
+import { CACHE, cacheHeaders } from '~/utils/cache'
 import type { Route } from './+types/gallery'
 
 type GalleriesData = {
@@ -50,8 +51,10 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export function meta() {
-  return [{ title: 'Galéria | Színház Online' }]
+  return [{ title: 'Galériák - Színház.online' }]
 }
+
+export const headers = cacheHeaders(CACHE.list)
 
 export default function Gallery() {
   const { galleries, pageInfo, basePath } = useLoaderData<typeof loader>()
@@ -103,7 +106,7 @@ function GalleryCard({ gallery }: { gallery: GalleryItem }) {
       _hover={{ opacity: 0.85 }}
       transition='opacity 0.2s'
     >
-      <Link to={`/galeria/${gallery.slug}`}>
+      <Link to={`/galeria/${gallery.slug}/`}>
         {img ? (
           <Box aspectRatio={4 / 3} overflow='hidden' bg='gray.100'>
             <img

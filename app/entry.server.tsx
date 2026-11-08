@@ -4,6 +4,7 @@ import type { AppLoadContext, EntryContext } from 'react-router'
 import { createReadableStreamFromReadable } from '@react-router/node'
 import { ServerRouter } from 'react-router'
 import { isbot } from 'isbot'
+import { CACHE } from './utils/cache'
 import type { RenderToPipeableStreamOptions } from 'react-dom/server'
 import { renderToPipeableStream } from 'react-dom/server'
 
@@ -18,6 +19,13 @@ export default function handleRequest(
   // If you have middleware enabled:
   // loadContext: RouterContextProvider
 ) {
+  // Never let the CDN keep a server error; keep 404s only briefly
+  if (responseStatusCode >= 500) {
+    responseHeaders.set('Cache-Control', CACHE.none)
+  } else if (responseStatusCode >= 400) {
+    responseHeaders.set('Cache-Control', CACHE.error)
+  }
+
   // https://httpwg.org/specs/rfc9110.html#HEAD
   if (request.method.toUpperCase() === 'HEAD') {
     return new Response(null, {

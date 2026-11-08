@@ -25,7 +25,7 @@ export const CoverItem = ({ item }: { item: PostPreview }) => {
           minHeight='100px'
           mx='1rem'
         >
-          <Link to={`/${item.slug}`}>
+          <Link to={item.uri ?? `/${item.slug}/`}>
             <Box aspectRatio={1} overflow='hidden' width='100%'>
               <img
                 src={src}
@@ -43,7 +43,7 @@ export const CoverItem = ({ item }: { item: PostPreview }) => {
             <Tag tag={tag} />
           </Box>
         )}
-        <Link to={`/${item.slug}`}>
+        <Link to={item.uri ?? `/${item.slug}/`}>
           <CoverHeading title={item.title} />
           <CoverExcerpt excerpt={item.excerpt} />
         </Link>

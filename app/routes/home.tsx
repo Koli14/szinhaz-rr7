@@ -1,78 +1,57 @@
 import { Box, Flex } from '@chakra-ui/react'
-import { useLoaderData } from 'react-router'
+import { redirect, useLoaderData } from 'react-router'
 import { LeftCoverItems, RightCoverItems } from '~/components/home/CoverSection'
-import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
+import { CACHE, cacheHeaders } from '~/utils/cache'
+import {
+  fetchFromGraphQL,
+  gql,
+  POST_PREVIEW_FIELDS,
+} from '~/utils/graphql.server'
+import { buildSeoMeta, SEO_FIELDS } from '~/utils/seo.server'
 import type { PostPreview } from '~/types'
 import type { Route } from './+types/home'
 
 type HomeData = {
-  folder: {
-    posts: {
-      nodes: PostPreview[]
-    }
-  }
+  folder: { posts: { nodes: PostPreview[] } } | null
+  frontPage: { seo: { fullHead: string | null } } | null
 }
 
 const GET_HOME = gql`
   query getHome {
     folder(id: "cimlap", idType: SLUG) {
-      posts(first: 100, where: { orderby: { field: MENU_ORDER, order: ASC } }) {
+      posts(
+        first: 100
+        where: { orderby: { field: MENU_ORDER, order: ASC } }
+      ) {
         nodes {
-          excerpt
-          title
-          slug
-          kiemeltCimke {
-            featuredTag {
-              nodes {
-                name
-                slug
-                ... on Tag {
-                  taxonomyColor {
-                    taxColor
-                  }
-                }
-              }
-            }
-          }
-          tags {
-            nodes {
-              name
-              slug
-              taxonomyColor {
-                taxColor
-              }
-            }
-          }
-          featuredImage {
-            node {
-              title
-              altText
-              sourceUrl
-              mediaDetails {
-                sizes {
-                  name
-                  sourceUrl
-                }
-              }
-            }
-          }
+          ${POST_PREVIEW_FIELDS}
         }
+      }
+    }
+    frontPage: nodeByUri(uri: "/") {
+      ... on Page {
+        ${SEO_FIELDS}
       }
     }
   }
 `
 
-export async function loader(_: Route.LoaderArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
+  // WordPress search URLs (/?s=…), as used by Yoast's SearchAction schema
+  const s = new URL(request.url).searchParams.get('s')
+  if (s !== null) throw redirect(`/search?s=${encodeURIComponent(s)}`)
+
   const data = await fetchFromGraphQL<HomeData>(GET_HOME)
-  return { nodes: data.folder.posts.nodes }
+  return {
+    nodes: data.folder?.posts.nodes ?? [],
+    seo: buildSeoMeta(request, data.frontPage?.seo, 'Színház.online'),
+  }
 }
 
-export function meta(_: Route.MetaArgs) {
-  return [
-    { title: 'Színház Online' },
-    { name: 'description', content: 'A színházi világ hírei' },
-  ]
-}
+export const meta: Route.MetaFunction = ({ data }) =>
+  data?.seo ?? [{ title: 'Színház.online' }]
+
+export const headers = cacheHeaders(CACHE.list)
 
 export default function Home() {
   const { nodes: items } = useLoaderData<typeof loader>()

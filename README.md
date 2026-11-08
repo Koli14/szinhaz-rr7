@@ -1,87 +1,57 @@
-# Welcome to React Router!
+# Színház.online (React Router 7)
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Headless frontend for [szinhaz.online](https://szinhaz.online), replacing the
+Frontity site. Data comes from WordPress through WPGraphQL.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Stack
 
-## Features
+- React Router 7 (framework mode, SSR) + Vite, React 19, Chakra UI v3
+- WordPress backend plugins: WPGraphQL, WPGraphQL for ACF (3.x), Yoast SEO,
+  Add WPGraphQL SEO, ACF PRO, Custom Post Type UI
+- Deployed on Vercel with `@vercel/react-router` (Fluid compute, `fra1`)
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## URLs
 
-## Getting Started
+The site keeps the WordPress/Frontity URL structure:
 
-### Installation
+| URL | Route |
+| --- | --- |
+| `/` | home (`cimlap` folder) |
+| `/:slug/` | post or page, resolved with `nodeByUri` |
+| `/category/…/`, `/tag/:slug/`, `/folder/:slug/`, `/hirek/` | archives, with `/page/N/` pagination |
+| `/galeria/`, `/galeria/:slug/` | galleries |
+| `/idezet/:slug/` | quotes |
+| `/search?s=…` | search (`/?s=…` redirects here) |
+| `/sitemap_index.xml`, `/*-sitemap*.xml`, `/main-sitemap.xsl` | Yoast sitemaps proxied from WordPress |
+| `/feed/` | RSS feed proxied from WordPress |
+| `/robots.txt` | generated, see `SITE_INDEXABLE` |
 
-Install the dependencies:
+Missing trailing slashes, `/page/1/`, `/kezdooldal/`, `/tags/:slug`,
+`/sitemap.xml` and `/wp-sitemap.xml` answer with a 301.
+
+## SEO
+
+Every page renders the Yoast head (`seo { fullHead }`) of its WordPress
+object: title, description, canonical, Open Graph and JSON-LD. Backend URLs
+are rewritten to the frontend origin (`SITE_URL` or the request origin);
+uploads stay on WordPress.
+
+## Caching
+
+Routes export `headers` with CDN cache rules (`app/utils/cache.ts`), the same
+as the Frontity site:
+
+- home and listings: `s-maxage=60, stale-while-revalidate=86400`
+- posts and pages: `s-maxage=3600, stale-while-revalidate=86400`
+- sitemaps 1 h, feed 10 min, 404s 1 min, 5xx never
+- hashed assets (`/assets/*`): one year, immutable (`vercel.json`)
+
+## Development
 
 ```bash
+cp .env.example .env
 npm install
-```
-
-### Development
-
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
+npm run dev        # http://localhost:5173
+npm run typecheck
 npm run build
 ```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
