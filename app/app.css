@@ -1,3 +1,47 @@
+@font-face {
+  font-family: 'Bellefair';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./assets/fonts/bellefair-v6-latin-ext-regular.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./assets/fonts/noto-serif-v9-latin-ext-regular.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./assets/fonts/noto-serif-v9-latin-ext-italic.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./assets/fonts/open-sans-v18-latin-ext-regular.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('./assets/fonts/open-sans-v18-latin-ext-800.woff2') format('woff2');
+}
+
 *,
 *::before,
 *::after {
@@ -9,7 +53,10 @@ body {
   background-color: #fff;
 }
 
+/* height: auto keeps the width/height ratio of content images, so the
+   browser reserves their space before they load (no layout shift) */
 img {
   display: block;
   max-width: 100%;
+  height: auto;
 }

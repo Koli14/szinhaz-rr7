@@ -12,6 +12,8 @@ import { useState } from 'react'
 import type { Route } from './+types/root'
 import { system } from './utils/theme'
 import './app.css'
+import openSans from './assets/fonts/open-sans-v18-latin-ext-regular.woff2?url'
+import notoSerif from './assets/fonts/noto-serif-v9-latin-ext-regular.woff2?url'
 import { Header } from './components/header'
 import { GateBanner } from './components/GateBanner'
 import { Footer } from './components/Footer'
@@ -165,16 +167,22 @@ export function shouldRevalidate() {
 
 // ─── Layout & App ────────────────────────────────────────────────────────────
 
+// Self-hosted fonts (as on Frontity): the Google Fonts stylesheet blocked
+// rendering for about a second on mobile. Preload the body and heading fonts.
 export const links: Route.LinksFunction = () => [
-  { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   {
-    rel: 'preconnect',
-    href: 'https://fonts.gstatic.com',
+    rel: 'preload',
+    href: openSans,
+    as: 'font',
+    type: 'font/woff2',
     crossOrigin: 'anonymous',
   },
   {
-    rel: 'stylesheet',
-    href: 'https://fonts.googleapis.com/css2?family=Bellefair&family=Noto+Serif:ital@0;1&family=Open+Sans:wght@400;800&display=swap',
+    rel: 'preload',
+    href: notoSerif,
+    as: 'font',
+    type: 'font/woff2',
+    crossOrigin: 'anonymous',
   },
 ]
 
