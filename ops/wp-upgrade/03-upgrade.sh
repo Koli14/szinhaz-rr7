@@ -33,7 +33,7 @@ t 'plugin languages' w language plugin update --all
 t 'activate graphql plugins' w plugin activate wp-graphql wpgraphql-acf add-wpgraphql-seo
 t 'plugin db upgrades (load once)' w option get wpseo --format=json >/dev/null
 t 'apply rr7 config' w eval-file $R/apply-config.php $R/rr7-config.json
-t 'mu-plugin: headless exceptions' cp $P/szinhaz-headless-exceptions.php $T/wp-content/mu-plugins/
+t 'mu-plugins: headless exceptions, graphql' cp $P/szinhaz-headless-exceptions.php $P/szinhaz-graphql.php $T/wp-content/mu-plugins/
 t 'rewrite flush' w rewrite flush
 t 'cache flush' w cache flush
 

@@ -972,7 +972,9 @@
           "min": "",
           "max": "",
           "return_format": "id",
-          "bidirectional_target": []
+          "bidirectional_target": [],
+          "show_in_graphql": 1,
+          "graphql_field_name": "relatedPosts"
         }
       ],
       "location": [
@@ -997,7 +999,7 @@
       "allow_ai_access": false,
       "ai_description": "",
       "show_in_graphql": 1,
-      "graphql_field_name": "kapcsolóDóCikkek",
+      "graphql_field_name": "relatedPostsFields",
       "map_graphql_types_from_location_rules": 0,
       "graphql_types": ""
     },

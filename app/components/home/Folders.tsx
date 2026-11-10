@@ -1,5 +1,5 @@
 import { Box, Flex, Heading } from '@chakra-ui/react'
-import { Link } from 'react-router'
+import { Link } from '~/components/Link'
 
 export type FolderPost = {
   title: string
@@ -86,12 +86,12 @@ function Folder({ folder }: { folder: HomeFolder }) {
   )
 }
 
-function FolderPostItem({
+export function FolderPostItem({
   post,
-  hideOnMobile,
+  hideOnMobile = false,
 }: {
   post: FolderPost
-  hideOnMobile: boolean
+  hideOnMobile?: boolean
 }) {
   return (
     <Box

@@ -16,26 +16,21 @@ import {
   POST_PREVIEW_FIELDS,
 } from '~/utils/graphql.server'
 import { buildSeoMeta, SEO_FIELDS } from '~/utils/seo.server'
+import {
+  FOLDER_POST_FIELDS,
+  toFolderPost,
+  toImage,
+} from '~/utils/folderPost.server'
+import type { GqlFolderPost, GqlImage } from '~/utils/folderPost.server'
 import type { PostPreview } from '~/types'
 import type { Route } from './+types/home'
-
-type GqlImage = {
-  node: { altText: string; sourceUrl: string; sized: string | null }
-} | null
 
 type GqlFolder = {
   __typename: string
   name: string
   slug: string
   taxonomyColor: { taxColor: string | null } | null
-  posts: {
-    nodes: {
-      title: string
-      uri: string
-      excerpt: string
-      featuredImage: GqlImage
-    }[]
-  }
+  posts: { nodes: GqlFolderPost[] }
 }
 
 type FolderList = { nodes: GqlFolder[] } | null
@@ -74,14 +69,7 @@ const FOLDER_FIELDS = gql`
       slug
       taxonomyColor { taxColor }
       posts(first: 99, where: { orderby: { field: MENU_ORDER, order: ASC } }) {
-        nodes {
-          title
-          uri
-          excerpt
-          featuredImage {
-            node { altText sourceUrl sized: sourceUrl(size: THUMBNAIL) }
-          }
-        }
+        nodes { ${FOLDER_POST_FIELDS} }
       }
     }
   }
@@ -110,7 +98,7 @@ const GET_HOME = gql`
         }
       }
     }
-    quotes(first: 10) {
+    quotes(first: 10, where: { orderby: { field: MENU_ORDER, order: ASC } }) {
       nodes {
         content
         quoteFields {
@@ -119,7 +107,7 @@ const GET_HOME = gql`
         }
       }
     }
-    myGalleries(first: 10) {
+    myGalleries(first: 10, where: { orderby: { field: MENU_ORDER, order: ASC } }) {
       nodes {
         title
         uri
@@ -131,22 +119,6 @@ const GET_HOME = gql`
   }
 `
 
-const toImage = (img: GqlImage) =>
-  img?.node
-    ? { src: img.node.sized ?? img.node.sourceUrl, alt: img.node.altText }
-    : null
-
-// Plain text, cut at a word boundary like the Frontity theme did
-function shortExcerpt(html: string, max = 100) {
-  const text = html
-    .replace(/<\/?[^>]+(>|$)/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-  if (text.length <= max) return text
-  const cut = text.slice(0, max - 1)
-  return `${cut.slice(0, cut.lastIndexOf(' '))}...`
-}
-
 function toFolders(list: FolderList): HomeFolder[] {
   return (list?.nodes ?? [])
     .filter((f) => f.__typename === 'Folder')
@@ -154,12 +126,7 @@ function toFolders(list: FolderList): HomeFolder[] {
       name: f.name,
       slug: f.slug,
       color: f.taxonomyColor?.taxColor ?? null,
-      posts: f.posts.nodes.map((p) => ({
-        title: p.title,
-        uri: p.uri,
-        excerpt: shortExcerpt(p.excerpt ?? ''),
-        image: toImage(p.featuredImage),
-      })),
+      posts: f.posts.nodes.map(toFolderPost),
     }))
 }
 
