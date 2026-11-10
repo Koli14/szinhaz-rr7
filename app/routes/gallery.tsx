@@ -5,6 +5,7 @@ import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
 import { POSTS_PER_PAGE as PER_PAGE } from '~/types'
 import type { GalleryItem, PageInfo } from '~/types'
 import { CACHE, cacheHeaders } from '~/utils/cache'
+import { buildSeoMeta } from '~/utils/seo.server'
 import type { Route } from './+types/gallery'
 
 type GalleriesData = {
@@ -47,12 +48,12 @@ export async function loader({ request }: Route.LoaderArgs) {
     galleries: data.myGalleries.nodes,
     pageInfo: data.myGalleries.pageInfo,
     basePath: new URL(request.url).pathname,
+    seo: buildSeoMeta(request, null, 'Galériák - Színház.online'),
   }
 }
 
-export function meta() {
-  return [{ title: 'Galériák - Színház.online' }]
-}
+export const meta: Route.MetaFunction = ({ data }) =>
+  data?.seo ?? [{ title: 'Galériák - Színház.online' }]
 
 export const headers = cacheHeaders(CACHE.list)
 
