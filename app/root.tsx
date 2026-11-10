@@ -17,6 +17,7 @@ import { GateBanner } from './components/GateBanner'
 import { Footer } from './components/Footer'
 import { CookieConsent } from './components/CookieConsent'
 import { SearchModal } from './components/search/SearchModal'
+import { useAdSenseScript } from './components/AdSense'
 import { MobileDrawer } from './components/header/MobileDrawer'
 import { fetchFromGraphQL, gql } from './utils/graphql.server'
 import type { Tag, FlatMenuItem, BannersData, BannerSlot } from './types'
@@ -184,11 +185,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <Meta />
         <Links />
-        <script
-          async
-          src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5865633360595458'
-          crossOrigin='anonymous'
-        />
       </head>
       <body>
         <ChakraProvider value={system}>{children}</ChakraProvider>
@@ -203,6 +199,7 @@ export default function App() {
   const data = useLoaderData<typeof loader>()
   const [searchOpen, setSearchOpen] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
+  useAdSenseScript()
 
   const hasGateBanner = !!data?.banners?.gatebanner?.kep
   const tagClouds = data?.tagClouds ?? []

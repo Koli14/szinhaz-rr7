@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 const ADSENSE_CLIENT = 'ca-pub-5865633360595458'
 
@@ -17,6 +17,21 @@ export const AD_SLOTS = {
   homeLittle2: '2664520072',
 } as const
 
+// Loads adsbygoogle.js once, after hydration. In the server HTML it inserted
+// its own scripts into <head> before React hydrated, and React then threw the
+// whole page away and rendered it again on the client.
+export function useAdSenseScript() {
+  useEffect(() => {
+    if (document.querySelector('script[data-adsbygoogle]')) return
+    const script = document.createElement('script')
+    script.async = true
+    script.crossOrigin = 'anonymous'
+    script.dataset.adsbygoogle = ''
+    script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`
+    document.head.appendChild(script)
+  }, [])
+}
+
 export function AdSense({
   slot,
   inArticle = false,
@@ -24,7 +39,13 @@ export function AdSense({
   slot: string
   inArticle?: boolean
 }) {
+  const ref = useRef<HTMLModElement>(null)
+
   useEffect(() => {
+    // Push each <ins> once (effects can run again on remount)
+    const el = ref.current
+    if (!el || el.dataset.pushed) return
+    el.dataset.pushed = 'true'
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ;((window as any).adsbygoogle = (window as any).adsbygoogle || []).push(
@@ -36,6 +57,7 @@ export function AdSense({
   if (inArticle) {
     return (
       <ins
+        ref={ref}
         className='adsbygoogle'
         style={{ display: 'block', marginTop: '1rem', textAlign: 'center' }}
         data-ad-client={ADSENSE_CLIENT}
@@ -48,6 +70,7 @@ export function AdSense({
 
   return (
     <ins
+      ref={ref}
       className='adsbygoogle'
       style={{ display: 'block', marginTop: '1rem' }}
       data-ad-client={ADSENSE_CLIENT}

@@ -1,5 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react'
-import { Link } from 'react-router'
+import { Link } from '~/components/Link'
 import Menu from './Menu'
 import MobileMenu from './MobileMenu'
 import SearchButton from './SearchButton'
@@ -23,6 +23,7 @@ export function Header({
   onDrawerOpen,
 }: HeaderProps) {
   const dateToday = new Date().toLocaleString('hu-HU', {
+    timeZone: 'Europe/Budapest',
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -71,6 +72,8 @@ export function Header({
               textTransform='uppercase'
               fontSize='13px'
               display={{ base: 'none', lg: 'block' }}
+              // a cached page can be from yesterday: the browser's date wins
+              suppressHydrationWarning
             >
               {dateToday}
             </Box>
