@@ -1,5 +1,5 @@
 import { Box, Flex, Heading } from '@chakra-ui/react'
-import { Link } from 'react-router'
+import { Link } from '~/components/Link'
 import { Tag } from '~/components/Tags'
 import type { PostPreview } from '~/types'
 

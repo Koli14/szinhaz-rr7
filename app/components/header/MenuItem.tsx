@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import { useState } from 'react'
-import { Link } from 'react-router'
+import { Link } from '~/components/Link'
 
 export type HierarchicalMenuItem = {
   key: string

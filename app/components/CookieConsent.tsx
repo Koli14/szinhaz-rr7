@@ -1,6 +1,6 @@
 import { Box, Flex } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router'
+import { Link } from '~/components/Link'
 
 // Same cookie as the react-cookie-consent banner on the Frontity site, so
 // visitors who already accepted it don't see the notice again.

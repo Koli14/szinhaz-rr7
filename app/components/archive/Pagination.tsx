@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import { Link } from 'react-router'
+import { Link } from '~/components/Link'
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
 import type { PageInfo } from '~/types'
 

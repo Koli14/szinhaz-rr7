@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import { Link } from 'react-router'
+import { Link } from '~/components/Link'
 import { Carousel } from '~/components/Carousel'
 
 export type HomeQuote = {

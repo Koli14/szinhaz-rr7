@@ -7,7 +7,7 @@ import {
   DrawerCloseTrigger,
 } from '@chakra-ui/react'
 import { Box, Flex } from '@chakra-ui/react'
-import { Link } from 'react-router'
+import { Link } from '~/components/Link'
 import { IoCloseSharp, IoLogoFacebook, IoLogoInstagram } from 'react-icons/io5'
 import { socialLinks } from '~/utils/helpers'
 import type { FlatMenuItem } from '~/types'
