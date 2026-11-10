@@ -24,6 +24,8 @@ Files `03-upgrade.sh` needs in `~/rehearsal/`:
 - `pkg/advanced-custom-fields-pro/` (6.8.11, licensed, not on wordpress.org)
 - `pkg/add-wpgraphql-seo/` (6.0.0)
 - `pkg/szinhaz-headless-exceptions.php` (lets Yoast sitemaps through headless-mode)
+- `pkg/szinhaz-graphql.php` (related posts options page in GraphQL; no default
+  tag colour in GraphQL, as in REST)
 - `apply-config.php`, `rr7-config.json`, `lib.sh`
 
 `rr7-config.json` holds the ACF field groups and CPT UI post types of the
