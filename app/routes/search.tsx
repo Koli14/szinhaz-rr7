@@ -10,7 +10,7 @@ import { CACHE, cacheHeaders } from '~/utils/cache'
 import type { PostPreview, PageInfo } from '~/types'
 import { POSTS_PER_PAGE as PER_PAGE } from '~/types'
 import type { Route } from './+types/search'
-import { Pagination } from '~/components/archive/Pagination'
+import { PageNav } from '~/components/archive/PageNav'
 
 type SearchData = {
   posts: {
@@ -18,6 +18,21 @@ type SearchData = {
     pageInfo: PageInfo
   }
 }
+
+type CursorData = { posts: { pageInfo: { endCursor: string | null } } }
+
+// Like the archives: numbered pages, but no crawling of deep result pages
+const MAX_PAGE = 50
+
+const SEARCH_CURSOR = gql`
+  query searchCursor($search: String!, $skip: Int!) {
+    posts(first: $skip, where: { search: $search }) {
+      pageInfo {
+        endCursor
+      }
+    }
+  }
+`
 
 const SEARCH_POSTS = gql`
   query searchPosts($search: String!, $first: Int!, $after: String) {
@@ -35,13 +50,32 @@ const SEARCH_POSTS = gql`
   }
 `
 
+const empty = (search: string, page = 1) => ({
+  search,
+  posts: [] as PostPreview[],
+  page,
+  hasNextPage: false,
+})
+
+// /search?s=alma&page=2 — results in WordPress' relevance order
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url)
-  const search = url.searchParams.get('s') ?? ''
-  const after = url.searchParams.get('after') ?? undefined
+  const search = (url.searchParams.get('s') ?? '').trim()
+  const page = Number(url.searchParams.get('page') ?? '1')
 
-  if (!search.trim()) {
-    return { search, posts: [], pageInfo: null, basePath: url.pathname }
+  if (!search) return empty(search)
+  if (!Number.isInteger(page) || page < 1 || page > MAX_PAGE) {
+    throw new Response('Not Found', { status: 404 })
+  }
+
+  let after: string | null = null
+  if (page > 1) {
+    const cursor = await fetchFromGraphQL<CursorData>(SEARCH_CURSOR, {
+      search,
+      skip: (page - 1) * PER_PAGE,
+    })
+    after = cursor.posts.pageInfo.endCursor
+    if (!after) return empty(search, page)
   }
 
   const data = await fetchFromGraphQL<SearchData>(SEARCH_POSTS, {
@@ -53,8 +87,8 @@ export async function loader({ request }: Route.LoaderArgs) {
   return {
     search,
     posts: data.posts.nodes,
-    pageInfo: data.posts.pageInfo,
-    basePath: `${url.pathname}?s=${encodeURIComponent(search)}`,
+    page,
+    hasNextPage: data.posts.pageInfo.hasNextPage,
   }
 }
 
@@ -68,7 +102,7 @@ export function meta({ data }: Route.MetaArgs) {
 export const headers = cacheHeaders(CACHE.list)
 
 export default function Search() {
-  const { search, posts, pageInfo, basePath } = useLoaderData<typeof loader>()
+  const { search, posts, page, hasNextPage } = useLoaderData<typeof loader>()
 
   return (
     <Box px={{ base: '1rem', lg: '0' }} py='4'>
@@ -94,7 +128,13 @@ export default function Search() {
               <ArchiveItem key={post.slug} item={post} featured={i === 0} />
             ))}
           </Box>
-          {pageInfo && <Pagination pageInfo={pageInfo} basePath={basePath} />}
+          <PageNav
+            page={page}
+            hasNextPage={hasNextPage}
+            pageUrl={(n) =>
+              `/search?s=${encodeURIComponent(search)}${n > 1 ? `&page=${n}` : ''}`
+            }
+          />
         </>
       )}
     </Box>
