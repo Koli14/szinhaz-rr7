@@ -71,7 +71,7 @@ export function SearchModal({
                 ref={inputRef}
                 name='s'
                 defaultValue={params.get('s') ?? undefined}
-                placeholder='Type and Hit Enter'
+                placeholder='Keresés…'
                 variant='flushed'
                 fontSize={{ base: '24px', md: '32px' }}
                 height='auto'
