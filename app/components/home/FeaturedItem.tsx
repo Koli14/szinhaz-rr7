@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import { Link } from 'react-router'
+import { Link } from '~/components/Link'
 import { CoverTag } from '~/components/Tags'
 import { CoverExcerpt, CoverHeading } from './CoverItem'
 import type { PostPreview } from '~/types'
@@ -16,7 +16,7 @@ export const FeaturedItem = ({
   const image = item.featuredImage.node
   const tag = item.kiemeltCimke.featuredTag?.nodes?.[0] ?? item.tags.nodes[0]
   const isBig = !mobileOnly && !desktopOnly
-  const bgColor = tag?.taxonomyColor?.taxColor ?? '#eda407'
+  const bgColor = tag?.taxonomyColor?.taxColor || '#F4A91C'
 
   return (
     <Box

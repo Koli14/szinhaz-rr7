@@ -1,14 +1,15 @@
 import type { BoxProps } from '@chakra-ui/react'
 import { Box } from '@chakra-ui/react'
-import { Link } from 'react-router'
+import { Link } from '~/components/Link'
 import type { Tag as TagType } from '~/types'
 
 interface TagProps extends BoxProps {
   tag: TagType
 }
 
+// Fallbacks as on Frontity: post tags #d1a169, tag cloud #eda407
 export const Tag = ({ tag, ...props }: TagProps) => {
-  const bgColor = tag.taxonomyColor?.taxColor ?? '#eda407'
+  const bgColor = tag.taxonomyColor?.taxColor || '#d1a169'
   return (
     <Box
       asChild
@@ -33,7 +34,7 @@ export const Tag = ({ tag, ...props }: TagProps) => {
 }
 
 export const CloudTag = ({ tag }: { tag: TagType }) => {
-  const color = tag.taxonomyColor?.taxColor ?? '#eda407'
+  const color = tag.taxonomyColor?.taxColor || '#eda407'
   return (
     <Tag
       tag={tag}
