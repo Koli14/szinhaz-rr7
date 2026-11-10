@@ -1,0 +1,1636 @@
+{
+  "acf": [
+    {
+      "key": "group_5e96cbab0d1c2",
+      "title": "Bannerek",
+      "fields": [
+        {
+          "key": "field_60a6130bc1641",
+          "label": "AdSense",
+          "name": "adsense",
+          "aria-label": "",
+          "type": "group",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "layout": "table",
+          "show_in_graphql": 1,
+          "graphql_field_name": "adsense",
+          "sub_fields": [
+            {
+              "key": "field_60a6145aea56a",
+              "label": "Kezdőoldal - Nagy Banner 1 - Címlap alatt, bal oldalt",
+              "name": "homeBigAdSense1",
+              "aria-label": "",
+              "type": "true_false",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "message": "",
+              "default_value": 0,
+              "ui": 0,
+              "ui_on_text": "",
+              "ui_off_text": "",
+              "show_in_graphql": 1,
+              "graphql_field_name": "homeBigAdSense1"
+            },
+            {
+              "key": "field_60a6148dea56b",
+              "label": "Kezdőoldal - Nagy Banner 2 - Címlap alatt, bal oldalt 2",
+              "name": "homeBigAdSense2",
+              "aria-label": "",
+              "type": "true_false",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "message": "",
+              "default_value": 0,
+              "ui": 0,
+              "ui_on_text": "",
+              "ui_off_text": "",
+              "show_in_graphql": 1,
+              "graphql_field_name": "homeBigAdSense2"
+            },
+            {
+              "key": "field_60a61316c1642",
+              "label": "Kezdőoldal - Kis banner 1",
+              "name": "homeLittleAdSense1",
+              "aria-label": "",
+              "type": "true_false",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "message": "",
+              "default_value": 0,
+              "ui": 0,
+              "ui_on_text": "",
+              "ui_off_text": "",
+              "show_in_graphql": 1,
+              "graphql_field_name": "homeLittleAdSense1"
+            },
+            {
+              "key": "field_60a6138cc1643",
+              "label": "Kezdőoldal - Kis Banner 2 - Címlap jobb alján",
+              "name": "homeLittleAdSense2",
+              "aria-label": "",
+              "type": "true_false",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "message": "",
+              "default_value": 0,
+              "ui": 0,
+              "ui_on_text": "",
+              "ui_off_text": "",
+              "show_in_graphql": 1,
+              "graphql_field_name": "homeLittleAdSense2"
+            },
+            {
+              "key": "field_60a614e9ea56d",
+              "label": "Cikk Elején - Nagy Banner 1",
+              "name": "postBigAdSense1",
+              "aria-label": "",
+              "type": "true_false",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "message": "",
+              "default_value": 0,
+              "ui": 0,
+              "ui_on_text": "",
+              "ui_off_text": "",
+              "show_in_graphql": 1,
+              "graphql_field_name": "postBigAdSense1"
+            },
+            {
+              "key": "field_633bed8c4e6cd",
+              "label": "Cikk Elején - Nagy Banner 2",
+              "name": "postBigAdSense1_2",
+              "aria-label": "",
+              "type": "true_false",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "message": "",
+              "default_value": 0,
+              "ui": 0,
+              "ui_on_text": "",
+              "ui_off_text": "",
+              "show_in_graphql": 1,
+              "graphql_field_name": "postBigAdSense1v2"
+            },
+            {
+              "key": "field_660d8ccda9fc6",
+              "label": "Cikk Elején - Nagy Banner 3",
+              "name": "postBigAdSense1_3",
+              "aria-label": "",
+              "type": "true_false",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "message": "",
+              "default_value": 0,
+              "ui": 0,
+              "ui_on_text": "",
+              "ui_off_text": "",
+              "show_in_graphql": 1,
+              "graphql_field_name": "postBigAdSense1v3"
+            },
+            {
+              "key": "field_620526331aefb",
+              "label": "Cikk Közepén - Nagy Banner",
+              "name": "postBigAdSense2",
+              "aria-label": "",
+              "type": "true_false",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "message": "",
+              "default_value": 0,
+              "ui": 0,
+              "ui_on_text": "",
+              "ui_off_text": "",
+              "show_in_graphql": 1,
+              "graphql_field_name": "postBigAdSense2"
+            },
+            {
+              "key": "field_60a6141dea568",
+              "label": "Cikk Végén - Kis Banner 1",
+              "name": "postLittleAdSense1",
+              "aria-label": "",
+              "type": "true_false",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "message": "",
+              "default_value": 0,
+              "ui": 0,
+              "ui_on_text": "",
+              "ui_off_text": "",
+              "show_in_graphql": 1,
+              "graphql_field_name": "postLittleAdSense1"
+            },
+            {
+              "key": "field_633bed644e6cc",
+              "label": "Cikk Végén - Kis Banner 2",
+              "name": "postLittleAdSense1_2",
+              "aria-label": "",
+              "type": "true_false",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "message": "",
+              "default_value": 0,
+              "ui": 0,
+              "ui_on_text": "",
+              "ui_off_text": "",
+              "show_in_graphql": 1,
+              "graphql_field_name": "postLittleAdSense1v2"
+            },
+            {
+              "key": "field_660d8cfea9fc7",
+              "label": "Cikk Végén - Kis Banner 3",
+              "name": "postLittleAdSense1_3",
+              "aria-label": "",
+              "type": "true_false",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "message": "",
+              "default_value": 0,
+              "ui": 0,
+              "ui_on_text": "",
+              "ui_off_text": "",
+              "show_in_graphql": 1,
+              "graphql_field_name": "postLittleAdSense1v3"
+            }
+          ]
+        },
+        {
+          "key": "field_5ee23c0d3d72e",
+          "label": "Nagy Banner 1 - Címlap bal közepe + Cikk vége (800x200)",
+          "name": "bigBanner1",
+          "aria-label": "",
+          "type": "group",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "layout": "table",
+          "sub_fields": [
+            {
+              "key": "field_5ee23c0d3d72f",
+              "label": "Kép (800x200)",
+              "name": "kep",
+              "aria-label": "",
+              "type": "image",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url",
+              "preview_size": "medium",
+              "library": "all",
+              "min_width": "",
+              "min_height": "",
+              "min_size": "",
+              "max_width": "",
+              "max_height": "",
+              "max_size": "",
+              "mime_types": ""
+            },
+            {
+              "key": "field_5ee23c0d3d730",
+              "label": "Link",
+              "name": "link",
+              "aria-label": "",
+              "type": "link",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url"
+            }
+          ]
+        },
+        {
+          "key": "field_60a4bd841ac0f",
+          "label": "Nagy Banner 2 - Címlap bal közepe + Cikk vége (800x200)",
+          "name": "bigBanner2",
+          "aria-label": "",
+          "type": "group",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "layout": "table",
+          "sub_fields": [
+            {
+              "key": "field_60a4bd851ac10",
+              "label": "Kép (800x200)",
+              "name": "kep",
+              "aria-label": "",
+              "type": "image",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url",
+              "preview_size": "medium",
+              "library": "all",
+              "min_width": "",
+              "min_height": "",
+              "min_size": "",
+              "max_width": "",
+              "max_height": "",
+              "max_size": "",
+              "mime_types": ""
+            },
+            {
+              "key": "field_60a4bd851ac11",
+              "label": "Link",
+              "name": "link",
+              "aria-label": "",
+              "type": "link",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url"
+            }
+          ]
+        },
+        {
+          "key": "field_5ee23c363d731",
+          "label": "Nagy Banner 3 - Címlap bal alja + Cikk eleje (800x200)",
+          "name": "bigBanner3",
+          "aria-label": "",
+          "type": "group",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "layout": "table",
+          "sub_fields": [
+            {
+              "key": "field_5ee23c363d732",
+              "label": "Kép (800x200)",
+              "name": "kep",
+              "aria-label": "",
+              "type": "image",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url",
+              "preview_size": "medium",
+              "library": "all",
+              "min_width": "",
+              "min_height": "",
+              "min_size": "",
+              "max_width": "",
+              "max_height": "",
+              "max_size": "",
+              "mime_types": ""
+            },
+            {
+              "key": "field_5ee23c363d733",
+              "label": "Link",
+              "name": "link",
+              "aria-label": "",
+              "type": "link",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url"
+            }
+          ]
+        },
+        {
+          "key": "field_60a4bd9f1ac12",
+          "label": "Nagy Banner 4 - Címlap bal alja + Cikk eleje (800x200)",
+          "name": "bigBanner4",
+          "aria-label": "",
+          "type": "group",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "layout": "table",
+          "sub_fields": [
+            {
+              "key": "field_60a4bd9f1ac13",
+              "label": "Kép (800x200)",
+              "name": "kep",
+              "aria-label": "",
+              "type": "image",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url",
+              "preview_size": "medium",
+              "library": "all",
+              "min_width": "",
+              "min_height": "",
+              "min_size": "",
+              "max_width": "",
+              "max_height": "",
+              "max_size": "",
+              "mime_types": ""
+            },
+            {
+              "key": "field_60a4bd9f1ac14",
+              "label": "Link",
+              "name": "link",
+              "aria-label": "",
+              "type": "link",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url"
+            }
+          ]
+        },
+        {
+          "key": "field_5e96d3152de83",
+          "label": "Kis Banner 1 - Címlap jobb közepe + cikk vége(390x187)",
+          "name": "littleBanner1",
+          "aria-label": "",
+          "type": "group",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "layout": "table",
+          "sub_fields": [
+            {
+              "key": "field_5e96d34c2de84",
+              "label": "Kép (390x187)",
+              "name": "kep",
+              "aria-label": "",
+              "type": "image",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url",
+              "preview_size": "medium",
+              "library": "all",
+              "min_width": "",
+              "min_height": "",
+              "min_size": "",
+              "max_width": "",
+              "max_height": "",
+              "max_size": "",
+              "mime_types": ""
+            },
+            {
+              "key": "field_5e96d35e2de85",
+              "label": "Link",
+              "name": "link",
+              "aria-label": "",
+              "type": "link",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url"
+            }
+          ]
+        },
+        {
+          "key": "field_5f45249d6cd8b",
+          "label": "Kis Banner 2 - Címlap jobb alja + cikk vége(390x187)",
+          "name": "littleBanner2",
+          "aria-label": "",
+          "type": "group",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "layout": "table",
+          "sub_fields": [
+            {
+              "key": "field_5f45249d6cd8c",
+              "label": "Kép (390x187)",
+              "name": "kep",
+              "aria-label": "",
+              "type": "image",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url",
+              "preview_size": "medium",
+              "library": "all",
+              "min_width": "",
+              "min_height": "",
+              "min_size": "",
+              "max_width": "",
+              "max_height": "",
+              "max_size": "",
+              "mime_types": ""
+            },
+            {
+              "key": "field_5f45249d6cd8d",
+              "label": "Link",
+              "name": "link",
+              "aria-label": "",
+              "type": "link",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url"
+            }
+          ]
+        },
+        {
+          "key": "field_5f4f5b8be04be",
+          "label": "Kapu Banner (1920x1000)",
+          "name": "gateBanner",
+          "aria-label": "",
+          "type": "group",
+          "instructions": "A kapubannerben ne legyen kivágva a címlap helye (ne legyen benne fehér rész)!",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "layout": "table",
+          "sub_fields": [
+            {
+              "key": "field_5f4f5b8be04bf",
+              "label": "Kép (1920x1000)",
+              "name": "kep",
+              "aria-label": "",
+              "type": "image",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url",
+              "preview_size": "medium",
+              "library": "all",
+              "min_width": "",
+              "min_height": "",
+              "min_size": "",
+              "max_width": "",
+              "max_height": "",
+              "max_size": "",
+              "mime_types": ""
+            },
+            {
+              "key": "field_5f4f5b8be04c0",
+              "label": "Link",
+              "name": "link",
+              "aria-label": "",
+              "type": "link",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url"
+            }
+          ]
+        },
+        {
+          "key": "field_60954bf4057b1",
+          "label": "Kapu Banner Mobil (767x125)",
+          "name": "gateBannerMobile",
+          "aria-label": "",
+          "type": "group",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "layout": "table",
+          "sub_fields": [
+            {
+              "key": "field_60954bf4057b2",
+              "label": "Kép (767x125)",
+              "name": "kep",
+              "aria-label": "",
+              "type": "image",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url",
+              "preview_size": "medium",
+              "library": "all",
+              "min_width": "",
+              "min_height": "",
+              "min_size": "",
+              "max_width": "",
+              "max_height": "",
+              "max_size": "",
+              "mime_types": ""
+            }
+          ]
+        },
+        {
+          "key": "field_6728bde59710b",
+          "label": "Bármekkora banner - Cikk eleje",
+          "name": "whateverSizeBanner",
+          "aria-label": "",
+          "type": "group",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "layout": "table",
+          "sub_fields": [
+            {
+              "key": "field_6728bde59710c",
+              "label": "Kép",
+              "name": "kep",
+              "aria-label": "",
+              "type": "image",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url",
+              "preview_size": "medium",
+              "library": "all",
+              "min_width": "",
+              "min_height": "",
+              "min_size": "",
+              "max_width": "",
+              "max_height": "",
+              "max_size": "",
+              "mime_types": ""
+            },
+            {
+              "key": "field_6728bde59710d",
+              "label": "Link",
+              "name": "link",
+              "aria-label": "",
+              "type": "link",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "return_format": "url"
+            }
+          ]
+        }
+      ],
+      "location": [
+        [
+          {
+            "param": "options_page",
+            "operator": "==",
+            "value": "bannerek"
+          }
+        ]
+      ],
+      "menu_order": 0,
+      "position": "normal",
+      "style": "default",
+      "label_placement": "top",
+      "instruction_placement": "label",
+      "hide_on_screen": "",
+      "active": true,
+      "description": "",
+      "show_in_rest": 0,
+      "display_title": "",
+      "allow_ai_access": false,
+      "ai_description": "",
+      "show_in_graphql": 1,
+      "map_graphql_types_from_location_rules": 0,
+      "graphql_types": "",
+      "graphql_field_name": "bannerFields"
+    },
+    {
+      "key": "group_5e4272fcf2ce2",
+      "title": "Galéria",
+      "fields": [
+        {
+          "key": "field_5e42732ce5f40",
+          "label": "Galéria",
+          "name": "galeria",
+          "aria-label": "",
+          "type": "gallery",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "return_format": "array",
+          "preview_size": "medium",
+          "insert": "append",
+          "library": "all",
+          "min": "",
+          "max": "",
+          "min_width": "",
+          "min_height": "",
+          "min_size": "",
+          "max_width": "",
+          "max_height": "",
+          "max_size": "",
+          "mime_types": ""
+        }
+      ],
+      "location": [
+        [
+          {
+            "param": "post_type",
+            "operator": "==",
+            "value": "galeria"
+          }
+        ]
+      ],
+      "menu_order": 0,
+      "position": "normal",
+      "style": "default",
+      "label_placement": "top",
+      "instruction_placement": "label",
+      "hide_on_screen": "",
+      "active": true,
+      "description": "",
+      "show_in_rest": 1,
+      "display_title": "",
+      "allow_ai_access": false,
+      "ai_description": "",
+      "show_in_graphql": 1,
+      "graphql_field_name": "galleryFields",
+      "map_graphql_types_from_location_rules": 0,
+      "graphql_types": ""
+    },
+    {
+      "key": "group_5e4172f86e79e",
+      "title": "Idézet",
+      "fields": [
+        {
+          "key": "field_5e41732509669",
+          "label": "Név",
+          "name": "nev",
+          "aria-label": "",
+          "type": "text",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "",
+          "placeholder": "",
+          "prepend": "",
+          "append": "",
+          "maxlength": ""
+        },
+        {
+          "key": "field_5e41732d0966a",
+          "label": "Cikk link",
+          "name": "post_link",
+          "aria-label": "",
+          "type": "post_object",
+          "instructions": "",
+          "required": 1,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "post_type": ["post"],
+          "post_status": "",
+          "taxonomy": "",
+          "return_format": "object",
+          "multiple": 0,
+          "allow_null": 0,
+          "allow_in_bindings": 1,
+          "bidirectional": 0,
+          "show_in_graphql": 1,
+          "graphql_description": "",
+          "graphql_field_name": "",
+          "graphql_connection_type": "one_to_one",
+          "ui": 1,
+          "bidirectional_target": []
+        }
+      ],
+      "location": [
+        [
+          {
+            "param": "post_type",
+            "operator": "==",
+            "value": "idezet"
+          }
+        ]
+      ],
+      "menu_order": 0,
+      "position": "normal",
+      "style": "default",
+      "label_placement": "top",
+      "instruction_placement": "label",
+      "hide_on_screen": "",
+      "active": true,
+      "description": "",
+      "show_in_rest": 1,
+      "display_title": "",
+      "allow_ai_access": false,
+      "ai_description": "",
+      "show_in_graphql": 1,
+      "graphql_field_name": "quoteFields",
+      "map_graphql_types_from_location_rules": 0,
+      "graphql_types": ""
+    },
+    {
+      "key": "group_602e6ddf404dc",
+      "title": "Kapcsolódó cikkek",
+      "fields": [
+        {
+          "key": "field_602e6ddf88eb3",
+          "label": "Kapcsolódó cikkek",
+          "name": "related_posts",
+          "aria-label": "",
+          "type": "relationship",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "post_type": ["post"],
+          "taxonomy": "",
+          "filters": ["search", "taxonomy"],
+          "elements": "",
+          "min": "",
+          "max": "",
+          "return_format": "id",
+          "bidirectional_target": []
+        }
+      ],
+      "location": [
+        [
+          {
+            "param": "options_page",
+            "operator": "==",
+            "value": "related-posts"
+          }
+        ]
+      ],
+      "menu_order": 0,
+      "position": "normal",
+      "style": "default",
+      "label_placement": "top",
+      "instruction_placement": "label",
+      "hide_on_screen": "",
+      "active": true,
+      "description": "",
+      "show_in_rest": 1,
+      "display_title": "",
+      "allow_ai_access": false,
+      "ai_description": "",
+      "show_in_graphql": 1,
+      "graphql_field_name": "kapcsolóDóCikkek",
+      "map_graphql_types_from_location_rules": 0,
+      "graphql_types": ""
+    },
+    {
+      "key": "group_5e296f1f584f7",
+      "title": "Kezdőoldal",
+      "fields": [
+        {
+          "key": "field_5e29713254590",
+          "label": "Folderek 1 Jobb oldal",
+          "name": "folderek1_jobb",
+          "aria-label": "",
+          "type": "taxonomy",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "50",
+            "class": "",
+            "id": ""
+          },
+          "taxonomy": "folder",
+          "field_type": "multi_select",
+          "allow_null": 0,
+          "add_term": 0,
+          "save_terms": 0,
+          "load_terms": 0,
+          "return_format": "object",
+          "multiple": 0,
+          "bidirectional_target": []
+        },
+        {
+          "key": "field_5e4fa41580832",
+          "label": "Folderek 1 Bal oldal",
+          "name": "folderek1_bal",
+          "aria-label": "",
+          "type": "taxonomy",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "50",
+            "class": "",
+            "id": ""
+          },
+          "taxonomy": "folder",
+          "field_type": "multi_select",
+          "allow_null": 0,
+          "add_term": 0,
+          "save_terms": 0,
+          "load_terms": 0,
+          "return_format": "object",
+          "multiple": 0,
+          "bidirectional_target": []
+        },
+        {
+          "key": "field_5e4fa45580833",
+          "label": "Folderek 2 Jobb oldal",
+          "name": "folderek2_jobb",
+          "aria-label": "",
+          "type": "taxonomy",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "50",
+            "class": "",
+            "id": ""
+          },
+          "taxonomy": "folder",
+          "field_type": "multi_select",
+          "allow_null": 0,
+          "add_term": 0,
+          "save_terms": 0,
+          "load_terms": 0,
+          "return_format": "object",
+          "multiple": 0,
+          "bidirectional_target": []
+        },
+        {
+          "key": "field_5e4fa47080835",
+          "label": "Folderek 2 Bal oldal",
+          "name": "folderek2_bal",
+          "aria-label": "",
+          "type": "taxonomy",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "50",
+            "class": "",
+            "id": ""
+          },
+          "taxonomy": "folder",
+          "field_type": "multi_select",
+          "allow_null": 0,
+          "add_term": 0,
+          "save_terms": 0,
+          "load_terms": 0,
+          "return_format": "object",
+          "multiple": 0,
+          "bidirectional_target": []
+        }
+      ],
+      "location": [
+        [
+          {
+            "param": "page_type",
+            "operator": "==",
+            "value": "front_page"
+          }
+        ]
+      ],
+      "menu_order": 0,
+      "position": "normal",
+      "style": "default",
+      "label_placement": "top",
+      "instruction_placement": "label",
+      "hide_on_screen": ["the_content"],
+      "active": true,
+      "description": "",
+      "show_in_rest": 1,
+      "display_title": "",
+      "allow_ai_access": false,
+      "ai_description": "",
+      "show_in_graphql": 1,
+      "graphql_field_name": "Homepage",
+      "map_graphql_types_from_location_rules": 0,
+      "graphql_types": ""
+    },
+    {
+      "key": "group_5e6225f98cecc",
+      "title": "Tag Cloud",
+      "fields": [
+        {
+          "key": "field_5e62263e48f7c",
+          "label": "Tag Cloud",
+          "name": "tag_cloud",
+          "aria-label": "",
+          "type": "taxonomy",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "taxonomy": "post_tag",
+          "field_type": "multi_select",
+          "allow_null": 0,
+          "add_term": 1,
+          "save_terms": 0,
+          "load_terms": 0,
+          "return_format": "object",
+          "multiple": 0,
+          "bidirectional_target": []
+        }
+      ],
+      "location": [
+        [
+          {
+            "param": "options_page",
+            "operator": "==",
+            "value": "tag-cloud"
+          }
+        ]
+      ],
+      "menu_order": 0,
+      "position": "normal",
+      "style": "default",
+      "label_placement": "top",
+      "instruction_placement": "label",
+      "hide_on_screen": "",
+      "active": true,
+      "description": "",
+      "show_in_rest": 0,
+      "display_title": "",
+      "allow_ai_access": false,
+      "ai_description": "",
+      "show_in_graphql": 1,
+      "map_graphql_types_from_location_rules": 0,
+      "graphql_types": "",
+      "graphql_field_name": "tagCloudFields"
+    },
+    {
+      "key": "group_5e3046735650e",
+      "title": "Taxonomia Szín",
+      "fields": [
+        {
+          "key": "field_5e3046b260cfc",
+          "label": "Szín",
+          "name": "tax_color",
+          "aria-label": "",
+          "type": "color_picker",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "show_in_graphql": 1,
+          "default_value": "#eda407",
+          "enable_opacity": 0,
+          "return_format": "string",
+          "custom_palette_source": "",
+          "palette_colors": "",
+          "show_color_wheel": true
+        }
+      ],
+      "location": [
+        [
+          {
+            "param": "taxonomy",
+            "operator": "==",
+            "value": "all"
+          }
+        ]
+      ],
+      "menu_order": 0,
+      "position": "normal",
+      "style": "default",
+      "label_placement": "top",
+      "instruction_placement": "label",
+      "hide_on_screen": "",
+      "active": true,
+      "description": "",
+      "show_in_rest": 0,
+      "display_title": "",
+      "allow_ai_access": false,
+      "ai_description": "",
+      "show_in_graphql": 1,
+      "graphql_field_name": "taxonomyColor",
+      "map_graphql_types_from_location_rules": 0,
+      "graphql_types": ""
+    },
+    {
+      "key": "group_5e297448057f5",
+      "title": "Videó Ajánló",
+      "fields": [
+        {
+          "key": "field_5e2972f3aa406",
+          "label": "Videó ajánló",
+          "name": "video_ajanlo",
+          "aria-label": "",
+          "type": "repeater",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "collapsed": "",
+          "min": 0,
+          "max": 0,
+          "layout": "table",
+          "button_label": "Videó hozzáadása",
+          "sub_fields": [
+            {
+              "key": "field_5e297311aa407",
+              "label": "Cím",
+              "name": "title",
+              "aria-label": "",
+              "type": "text",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "default_value": "",
+              "placeholder": "",
+              "prepend": "",
+              "append": "",
+              "maxlength": "",
+              "parent_repeater": "field_5e2972f3aa406"
+            },
+            {
+              "key": "field_5eb161b4a2f17",
+              "label": "Szolgáltató",
+              "name": "provider",
+              "aria-label": "",
+              "type": "select",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "choices": {
+                "youtube": "youtube",
+                "facebook": "facebook"
+              },
+              "default_value": "youtube",
+              "allow_null": 0,
+              "multiple": 0,
+              "ui": 0,
+              "return_format": "value",
+              "ajax": 0,
+              "placeholder": "",
+              "create_options": 0,
+              "save_options": 0,
+              "parent_repeater": "field_5e2972f3aa406"
+            },
+            {
+              "key": "field_5e297322aa408",
+              "label": "Video ID",
+              "name": "video_id",
+              "aria-label": "",
+              "type": "text",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "default_value": "",
+              "placeholder": "",
+              "prepend": "",
+              "append": "",
+              "maxlength": "",
+              "parent_repeater": "field_5e2972f3aa406"
+            },
+            {
+              "key": "field_5eb12ba9e6cb6",
+              "label": "Rövid leírás",
+              "name": "description",
+              "aria-label": "",
+              "type": "text",
+              "instructions": "",
+              "required": 0,
+              "conditional_logic": 0,
+              "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+              },
+              "default_value": "",
+              "placeholder": "",
+              "prepend": "",
+              "append": "",
+              "maxlength": "",
+              "parent_repeater": "field_5e2972f3aa406"
+            }
+          ],
+          "rows_per_page": 20
+        }
+      ],
+      "location": [
+        [
+          {
+            "param": "page",
+            "operator": "==",
+            "value": "101303"
+          }
+        ]
+      ],
+      "menu_order": 0,
+      "position": "normal",
+      "style": "default",
+      "label_placement": "top",
+      "instruction_placement": "label",
+      "hide_on_screen": "",
+      "active": true,
+      "description": "",
+      "show_in_rest": 0,
+      "display_title": "",
+      "allow_ai_access": false,
+      "ai_description": "",
+      "show_in_graphql": 1,
+      "graphql_field_name": "videoAjanloFields",
+      "map_graphql_types_from_location_rules": 0,
+      "graphql_types": ""
+    },
+    {
+      "key": "group_5e42a99ea747e",
+      "title": "Galéria a Bejegyzéshez",
+      "fields": [
+        {
+          "key": "field_5e42a9d5b7f43",
+          "label": "Galéria",
+          "name": "galeria",
+          "aria-label": "",
+          "type": "post_object",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "post_type": ["galeria"],
+          "taxonomy": "",
+          "allow_null": 0,
+          "multiple": 0,
+          "return_format": "object",
+          "ui": 1,
+          "bidirectional_target": []
+        }
+      ],
+      "location": [
+        [
+          {
+            "param": "post_type",
+            "operator": "==",
+            "value": "post"
+          }
+        ]
+      ],
+      "menu_order": 1,
+      "position": "side",
+      "style": "default",
+      "label_placement": "top",
+      "instruction_placement": "label",
+      "hide_on_screen": "",
+      "active": true,
+      "description": "",
+      "show_in_rest": 0,
+      "display_title": "",
+      "allow_ai_access": false,
+      "ai_description": "",
+      "show_in_graphql": 1,
+      "graphql_field_name": "postGalleryFields",
+      "map_graphql_types_from_location_rules": 0,
+      "graphql_types": ""
+    },
+    {
+      "key": "group_5e5cdd65cf2c1",
+      "title": "Kiemelt cimke",
+      "fields": [
+        {
+          "key": "field_5e5cddba8f985",
+          "label": "Kiemelt Címke",
+          "name": "featured_tag",
+          "aria-label": "",
+          "type": "taxonomy",
+          "instructions": "",
+          "required": 0,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "taxonomy": "post_tag",
+          "field_type": "select",
+          "allow_null": 1,
+          "add_term": 1,
+          "save_terms": 0,
+          "load_terms": 0,
+          "return_format": "id",
+          "multiple": 0,
+          "bidirectional_target": []
+        }
+      ],
+      "location": [
+        [
+          {
+            "param": "post_type",
+            "operator": "==",
+            "value": "post"
+          }
+        ]
+      ],
+      "menu_order": 1,
+      "position": "side",
+      "style": "default",
+      "label_placement": "top",
+      "instruction_placement": "label",
+      "hide_on_screen": "",
+      "active": true,
+      "description": "",
+      "show_in_rest": 0,
+      "display_title": "",
+      "allow_ai_access": false,
+      "ai_description": "",
+      "show_in_graphql": 1,
+      "graphql_field_name": "kiemeltCimke",
+      "map_graphql_types_from_location_rules": 0,
+      "graphql_types": ""
+    }
+  ],
+  "options": {
+    "cptui_post_types": {
+      "idezet": {
+        "name": "idezet",
+        "label": "Idézetek",
+        "singular_label": "Idézet",
+        "description": "",
+        "public": "true",
+        "publicly_queryable": "true",
+        "show_ui": "true",
+        "show_in_nav_menus": "true",
+        "delete_with_user": "false",
+        "show_in_rest": "true",
+        "rest_base": "",
+        "rest_controller_class": "",
+        "rest_namespace": "",
+        "has_archive": "true",
+        "has_archive_string": "",
+        "exclude_from_search": "false",
+        "capability_type": "post",
+        "hierarchical": "true",
+        "can_export": "false",
+        "rewrite": "true",
+        "rewrite_slug": "",
+        "rewrite_withfront": "true",
+        "query_var": "true",
+        "query_var_slug": "",
+        "menu_position": "5",
+        "show_in_menu": "true",
+        "show_in_menu_string": "",
+        "menu_icon": "dashicons-format-quote",
+        "register_meta_box_cb": null,
+        "supports": ["title", "editor", "excerpt"],
+        "taxonomies": ["category", "post_tag"],
+        "labels": {
+          "menu_name": "",
+          "all_items": "",
+          "add_new": "",
+          "add_new_item": "",
+          "edit_item": "",
+          "new_item": "",
+          "view_item": "",
+          "view_items": "",
+          "search_items": "",
+          "not_found": "",
+          "not_found_in_trash": "",
+          "parent_item_colon": "",
+          "featured_image": "",
+          "set_featured_image": "",
+          "remove_featured_image": "",
+          "use_featured_image": "",
+          "archives": "",
+          "insert_into_item": "",
+          "uploaded_to_this_item": "",
+          "filter_items_list": "",
+          "items_list_navigation": "",
+          "items_list": "",
+          "attributes": "",
+          "name_admin_bar": "",
+          "item_published": "",
+          "item_published_privately": "",
+          "item_reverted_to_draft": "",
+          "item_scheduled": "",
+          "item_updated": ""
+        },
+        "custom_supports": "",
+        "enter_title_here": "",
+        "show_in_graphql": "1",
+        "graphql_single_name": "Quote",
+        "graphql_plural_name": "Quotes"
+      },
+      "galeria": {
+        "name": "galeria",
+        "label": "Galériák",
+        "singular_label": "Galéria",
+        "description": "",
+        "public": "true",
+        "publicly_queryable": "true",
+        "show_ui": "true",
+        "show_in_nav_menus": "true",
+        "delete_with_user": "false",
+        "show_in_rest": "true",
+        "rest_base": "",
+        "rest_controller_class": "",
+        "rest_namespace": "",
+        "has_archive": "true",
+        "has_archive_string": "",
+        "exclude_from_search": "false",
+        "capability_type": "post",
+        "hierarchical": "false",
+        "can_export": "false",
+        "rewrite": "true",
+        "rewrite_slug": "",
+        "rewrite_withfront": "true",
+        "query_var": "true",
+        "query_var_slug": "",
+        "menu_position": "7",
+        "show_in_menu": "true",
+        "show_in_menu_string": "",
+        "menu_icon": "dashicons-images-alt",
+        "register_meta_box_cb": null,
+        "supports": ["title", "thumbnail"],
+        "taxonomies": ["category", "post_tag"],
+        "labels": {
+          "menu_name": "",
+          "all_items": "",
+          "add_new": "",
+          "add_new_item": "",
+          "edit_item": "",
+          "new_item": "",
+          "view_item": "",
+          "view_items": "",
+          "search_items": "",
+          "not_found": "",
+          "not_found_in_trash": "",
+          "parent_item_colon": "",
+          "featured_image": "",
+          "set_featured_image": "",
+          "remove_featured_image": "",
+          "use_featured_image": "",
+          "archives": "",
+          "insert_into_item": "",
+          "uploaded_to_this_item": "",
+          "filter_items_list": "",
+          "items_list_navigation": "",
+          "items_list": "",
+          "attributes": "",
+          "name_admin_bar": "",
+          "item_published": "",
+          "item_published_privately": "",
+          "item_reverted_to_draft": "",
+          "item_scheduled": "",
+          "item_updated": ""
+        },
+        "custom_supports": "",
+        "enter_title_here": "",
+        "show_in_graphql": "1",
+        "graphql_single_name": "MyGallery",
+        "graphql_plural_name": "MyGalleries"
+      }
+    }
+  }
+}
