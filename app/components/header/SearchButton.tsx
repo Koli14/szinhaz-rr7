@@ -7,6 +7,7 @@ export default function SearchButton({ onClick }: { onClick?: () => void }) {
       <button
         type='button'
         aria-label='Keresés'
+        data-search-trigger=''
         onClick={onClick}
         style={{
           background: 'none',
