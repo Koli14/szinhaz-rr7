@@ -1,6 +1,6 @@
 import { Box, Flex } from '@chakra-ui/react'
 import { IoLogoFacebook } from 'react-icons/io5'
-import { Link } from 'react-router'
+import { Link } from '~/components/Link'
 import SocialNav from '~/components/header/SocialNav'
 
 const MENU = [
@@ -18,7 +18,7 @@ const LOGOS = [
 
 export function Footer() {
   return (
-    <Box as='footer' bg='white'>
+    <Box as='footer' bg='white' mt={{ base: '0', md: '50px' }}>
       <Box asChild display={{ base: 'block', md: 'none' }}>
         <a
           href='https://facebook.com/szinhazonline/'
@@ -56,7 +56,6 @@ export function Footer() {
             bg={{ base: '#F4A91C', md: 'transparent' }}
             width={{ base: '100%', md: 'auto' }}
             p='28px'
-            whiteSpace='nowrap'
           >
             © {new Date().getFullYear()} szinhaz.online
           </Flex>
@@ -102,7 +101,8 @@ export function Footer() {
           <Flex
             order={{ base: 1, md: 3 }}
             alignItems='center'
-            flexWrap='wrap'
+            flexWrap={{ base: 'wrap', md: 'nowrap' }}
+            flexShrink={0}
             maxWidth='100%'
             px={{ base: '18px', md: '0' }}
           >
@@ -113,12 +113,13 @@ export function Footer() {
                 target='_blank'
                 rel='noopener noreferrer'
               >
-                <img
-                  src={src}
-                  alt={alt}
-                  loading='lazy'
-                  style={{ maxHeight: 80, maxWidth: 'min(200px, 30vw)' }}
-                />
+                <Box
+                  asChild
+                  maxHeight='80px'
+                  maxWidth={{ base: 'min(200px, 30vw)', md: '200px' }}
+                >
+                  <img src={src} alt={alt} loading='lazy' />
+                </Box>
               </a>
             ))}
           </Flex>
