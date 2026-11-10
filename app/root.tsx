@@ -18,6 +18,7 @@ import { Footer } from './components/Footer'
 import { CookieConsent } from './components/CookieConsent'
 import { SearchModal } from './components/search/SearchModal'
 import { useAdSenseScript } from './components/AdSense'
+import { NavigationProgress } from './components/NavigationProgress'
 import { MobileDrawer } from './components/header/MobileDrawer'
 import { fetchFromGraphQL, gql } from './utils/graphql.server'
 import type { Tag, FlatMenuItem, BannersData, BannerSlot } from './types'
@@ -207,6 +208,7 @@ export default function App() {
 
   return (
     <>
+      <NavigationProgress />
       {hasGateBanner && data?.banners && <GateBanner banners={data.banners} />}
       <Header
         tagClouds={tagClouds}
