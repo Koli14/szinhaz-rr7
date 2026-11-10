@@ -1,8 +1,22 @@
 import { Box, Flex, Heading } from '@chakra-ui/react'
-import { Link } from 'react-router'
+import { CoverItem } from '~/components/home/CoverItem'
+import { FeaturedItem } from '~/components/home/FeaturedItem'
+import { Link } from '~/components/Link'
 import { Tag } from '~/components/Tags'
 import type { PostPreview } from '~/types'
 
+const imageSrc = (item: PostPreview, featured: boolean) => {
+  const image = item.featuredImage?.node
+  const size = (name: string) =>
+    image?.mediaDetails.sizes.find((s) => s.name === name)?.sourceUrl
+  return featured
+    ? (size('large') ?? size('medium_large') ?? image?.sourceUrl)
+    : (size('medium_large') ?? size('medium') ?? image?.sourceUrl)
+}
+
+// One archive entry, laid out like Frontity: a wide image + text row on
+// desktop (the first entry of each page is bigger), the home page cover
+// items on phones.
 export function ArchiveItem({
   item,
   featured = false,
@@ -10,60 +24,69 @@ export function ArchiveItem({
   item: PostPreview
   featured?: boolean
 }) {
+  return (
+    <>
+      <Box display={{ base: 'block', md: 'none' }}>
+        {featured ? <FeaturedItem item={item} /> : <CoverItem item={item} />}
+      </Box>
+      <DesktopItem item={item} featured={featured} />
+    </>
+  )
+}
+
+function DesktopItem({
+  item,
+  featured,
+}: {
+  item: PostPreview
+  featured: boolean
+}) {
   const image = item.featuredImage?.node
-  const src =
-    image?.mediaDetails.sizes.find((s) => s.name === 'medium')?.sourceUrl ??
-    image?.sourceUrl
+  const src = imageSrc(item, featured)
   const tag = item.kiemeltCimke.featuredTag?.nodes?.[0] ?? item.tags.nodes[0]
+  const to = item.uri ?? `/${item.slug}/`
 
   return (
     <Flex
       as='article'
-      direction={{ base: 'column', md: 'row' }}
+      display={{ base: 'none', md: 'flex' }}
+      direction='row'
+      position='relative'
       py='5'
-      borderBottom='1px solid'
-      borderColor='gray.200'
-      gap={{ base: 3, md: 0 }}
     >
       {src && (
-        <Box
-          flexShrink={0}
-          width={{ base: '100%', md: featured ? '55%' : '40%' }}
-          mr={{ md: '6' }}
-        >
-          <Link to={item.uri ?? `/${item.slug}/`}>
+        <Box asChild display='block' flex={featured ? '11' : '1'}>
+          <Link to={to}>
             <Box aspectRatio={9 / 5} overflow='hidden'>
               <img
                 src={src}
                 alt={image?.altText}
+                loading='lazy'
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </Box>
           </Link>
         </Box>
       )}
-      <Flex direction='column' flex={1} justify='center'>
+      <Flex px='40px' flex={featured ? '9' : '2'} direction='column'>
         {tag && (
-          <Box mb='2'>
+          <Flex mb='6px'>
             <Tag tag={tag} />
-          </Box>
+          </Flex>
         )}
-        <Link to={item.uri ?? `/${item.slug}/`}>
-          <Heading
-            as='h4'
-            fontFamily='heading'
-            fontSize={featured ? '1.6875rem' : '1.375rem'}
-            fontWeight='500'
-            lineHeight='1.25'
-            textTransform='uppercase'
-            mb='3'
-            dangerouslySetInnerHTML={{ __html: item.title }}
-          />
-        </Link>
+        <Heading
+          as='h4'
+          fontFamily='heading'
+          fontSize={featured ? '1.6875rem' : '1.375rem'}
+          fontWeight='500'
+          lineHeight='1.25'
+          textTransform='uppercase'
+        >
+          <Link to={to} dangerouslySetInnerHTML={{ __html: item.title }} />
+        </Heading>
         <Box
-          flex={1}
-          color='gray.700'
-          fontSize='0.9375rem'
+          my='3'
+          flex='1'
           dangerouslySetInnerHTML={{ __html: item.excerpt }}
         />
       </Flex>

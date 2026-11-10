@@ -1,5 +1,6 @@
 import { Box, Grid, Heading } from '@chakra-ui/react'
-import { Link, useLoaderData } from 'react-router'
+import { useLoaderData } from 'react-router'
+import { Link } from '~/components/Link'
 import { Pagination } from '~/components/archive/Pagination'
 import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
 import { POSTS_PER_PAGE as PER_PAGE } from '~/types'
@@ -17,7 +18,11 @@ type GalleriesData = {
 
 const GET_GALLERIES = gql`
   query getGalleries($first: Int!, $after: String) {
-    myGalleries(first: $first, after: $after) {
+    myGalleries(
+      first: $first
+      after: $after
+      where: { orderby: { field: MENU_ORDER, order: ASC } }
+    ) {
       pageInfo {
         hasNextPage
         hasPreviousPage

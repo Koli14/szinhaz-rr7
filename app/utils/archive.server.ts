@@ -49,6 +49,7 @@ const POSTS_PAGE = gql`
   }
 `
 
+// Lists are in menu order (Simple Custom Post Order), as on Frontity.
 // `$root` adds the unfiltered post list, used by the posts page (/hirek/)
 const ARCHIVE_CURSOR = gql`
   query archiveCursor(
@@ -59,9 +60,9 @@ const ARCHIVE_CURSOR = gql`
   ) {
     nodeByUri(uri: $uri) {
       __typename
-      ${termFields('posts(first: $skip) { pageInfo { endCursor } }')}
+      ${termFields('posts(first: $skip, where: { orderby: { field: MENU_ORDER, order: ASC } }) { pageInfo { endCursor } }')}
     }
-    posts(first: $skip) @include(if: $root) { pageInfo { endCursor } }
+    posts(first: $skip, where: { orderby: { field: MENU_ORDER, order: ASC } }) @include(if: $root) { pageInfo { endCursor } }
     ${POSTS_PAGE}
   }
 `
@@ -76,12 +77,12 @@ const ARCHIVE_PAGE = gql`
   ) {
     nodeByUri(uri: $uri) {
       __typename
-      ${termFields(`posts(first: $first, after: $after) {
+      ${termFields(`posts(first: $first, after: $after, where: { orderby: { field: MENU_ORDER, order: ASC } }) {
         pageInfo { hasNextPage hasPreviousPage endCursor startCursor }
         nodes { ${POST_PREVIEW_FIELDS} }
       }`)}
     }
-    posts(first: $first, after: $after) @include(if: $root) {
+    posts(first: $first, after: $after, where: { orderby: { field: MENU_ORDER, order: ASC } }) @include(if: $root) {
       pageInfo { hasNextPage hasPreviousPage endCursor startCursor }
       nodes { ${POST_PREVIEW_FIELDS} }
     }

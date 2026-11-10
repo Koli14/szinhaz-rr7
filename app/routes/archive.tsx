@@ -1,5 +1,6 @@
 import { Box, Heading } from '@chakra-ui/react'
-import { Link, redirect, useLoaderData } from 'react-router'
+import { redirect, useLoaderData } from 'react-router'
+import { Link } from '~/components/Link'
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
 import { ArchiveItem } from '~/components/archive/ArchiveItem'
 import { loadArchive, splitPagedPath } from '~/utils/archive.server'
@@ -43,22 +44,12 @@ export default function Archive() {
     useLoaderData<typeof loader>()
 
   return (
-    <Box px={{ base: '1rem', lg: '0' }} py='4'>
-      <Heading
-        as='h1'
-        size='lg'
-        mb='6'
-        textTransform='uppercase'
-        fontFamily='heading'
-        dangerouslySetInnerHTML={{ __html: name }}
-      />
+    <Box py='4'>
+      {/* Frontity showed no title; keep it for screen readers and SEO */}
+      <Heading as='h1' srOnly dangerouslySetInnerHTML={{ __html: name }} />
       <Box>
         {posts.map((post, i) => (
-          <ArchiveItem
-            key={post.slug}
-            item={post}
-            featured={page === 1 && i === 0}
-          />
+          <ArchiveItem key={post.slug} item={post} featured={i === 0} />
         ))}
       </Box>
       <Box display='flex' mt='56px' justifyContent='center' gap='4'>
