@@ -52,6 +52,12 @@ export function buildSeoMeta(
       meta.push({ property: a.property, content: a.content })
   }
 
+  // Yoast has no description for most archives: use the site tagline, as
+  // the Frontity site did
+  if (!meta.some((m) => 'name' in m && m.name === 'description')) {
+    meta.push({ name: 'description', content: 'A színházi világ hírei' })
+  }
+
   let hasCanonical = false
   for (const [tag] of head.matchAll(/<link\s[^>]*>/g)) {
     const a = parseAttributes(tag)
