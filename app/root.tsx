@@ -236,6 +236,7 @@ export default function App() {
       <MobileDrawer
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
+        onSearchOpen={() => setSearchOpen(true)}
         menuItems={menuItems}
       />
     </>

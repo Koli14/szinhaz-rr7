@@ -6,9 +6,11 @@ import { useNavigate, useSearchParams } from 'react-router'
 // Gives the focus back to the header search button without scrolling there
 // (the default focus restore made the page jump when closing)
 function focusSearchButton() {
-  document
-    .querySelector<HTMLElement>('[data-search-trigger]')
-    ?.focus({ preventScroll: true })
+  const buttons = document.querySelectorAll<HTMLElement>(
+    '[data-search-trigger]',
+  )
+  const visible = [...buttons].find((b) => b.offsetParent !== null)
+  visible?.focus({ preventScroll: true })
 }
 
 // Full-screen light search overlay with an underlined input, as on Frontity

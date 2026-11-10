@@ -1,9 +1,13 @@
 import { Box } from '@chakra-ui/react'
+import type { BoxProps } from '@chakra-ui/react'
 import { IoSearchSharp } from 'react-icons/io5'
 
-export default function SearchButton({ onClick }: { onClick?: () => void }) {
+export default function SearchButton({
+  onClick,
+  ...props
+}: { onClick?: () => void } & BoxProps) {
   return (
-    <Box mr='2' ml={{ base: 'auto' }}>
+    <Box mr='2' ml={{ base: 'auto' }} {...props}>
       <button
         type='button'
         aria-label='Keresés'
