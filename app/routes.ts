@@ -49,6 +49,9 @@ export default [
   // Aliases
   route('kezdooldal', 'routes/redirect.ts', { id: 'redirect-front-page' }),
   route('tags/:slug', 'routes/redirect.ts', { id: 'redirect-tags' }),
+  route('wp-content/*', 'routes/redirect.ts', { id: 'redirect-wp-content' }),
+  // WordPress paged post URLs (/post-slug/2/), linked from outside
+  route(':slug/:page', 'routes/redirect.ts', { id: 'redirect-post-page' }),
 
   // Single posts, pages and quotes, resolved by their WordPress URI
   route('idezet/:slug', 'routes/node.tsx', { id: 'node-quote' }),

@@ -11,6 +11,7 @@ source ~/rehearsal/lib.sh
 T=${TARGET:-$SUB/remix}
 w() { wp --path=$T "$@"; }
 t 'enable Yoast XML sitemap' w eval 'WPSEO_Options::set("enable_xml_sitemap", true);'
-t 'vercel purge constants' eval 'w config set SZINHAZ_PURGE_URL "$PURGE_URL" --type=constant && w config set SZINHAZ_PURGE_SECRET "$PURGE_SECRET" --type=constant'
+# wp-cli echoes the value it sets: keep the secret out of the output
+t 'vercel purge constants' eval 'w config set SZINHAZ_PURGE_URL "$PURGE_URL" --type=constant && w config set SZINHAZ_PURGE_SECRET "$PURGE_SECRET" --type=constant >/dev/null'
 t 'rewrite flush' w rewrite flush
 t 'cache flush' w cache flush
