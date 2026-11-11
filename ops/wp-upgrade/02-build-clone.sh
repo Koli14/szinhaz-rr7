@@ -8,10 +8,13 @@ rm -f $C/wp-cli.phar
 # On a rerun the original remix install is already in $R/remix-orig.
 ORIG=$SUB/remix
 [ -d $R/remix-orig ] && ORIG=$R/remix-orig
+# The table prefix is read from the prod wp-config, so it is not in the repo.
+PREFIX=$(wp --path=$SUB/wp --skip-plugins --skip-themes config get table_prefix)
+[ -n "$PREFIX" ]
 cp $ORIG/wp-config.php $C/wp-config.php
-sed -i "s/^\$table_prefix = 'remix_';/\$table_prefix = '<prefix>';/" $C/wp-config.php
+sed -i "s/^\$table_prefix = '[^']*';/\$table_prefix = '$PREFIX';/" $C/wp-config.php
 sed -i "s/^define( 'WP_DEBUG', false );/define( 'WP_DEBUG', true );/" $C/wp-config.php
-grep -q "^\$table_prefix = '<prefix>';" $C/wp-config.php
+grep -qF "\$table_prefix = '$PREFIX';" $C/wp-config.php
 EXTRA="define( 'WP_HOME', 'https://remix.szinhaz.online' );
 define( 'WP_SITEURL', 'https://remix.szinhaz.online' );
 define( 'WPLANG', 'hu_HU' );
@@ -55,4 +58,4 @@ safety() {
   wp --path=$SUB/remix --skip-plugins --skip-themes option update upload_url_path 'https://wp.szinhaz.online/wp-content/uploads'
 }
 t 'clone safety settings' safety
-wp --path=$SUB/remix --skip-plugins --skip-themes db query "SELECT COUNT(*) posts FROM <prefix>posts WHERE post_type='post' AND post_status='publish'"
+wp --path=$SUB/remix --skip-plugins --skip-themes db query "SELECT COUNT(*) posts FROM ${PREFIX}posts WHERE post_type='post' AND post_status='publish'"
