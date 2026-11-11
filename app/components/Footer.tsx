@@ -1,6 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react'
 import { IoLogoFacebook } from 'react-icons/io5'
-import { openConsentSettings } from '~/components/Analytics'
 import { Link } from '~/components/Link'
 import SocialNav from '~/components/header/SocialNav'
 
@@ -41,7 +40,15 @@ function FooterMenuItem({
 
 export function Footer() {
   return (
-    <Box as='footer' bg='white' mt={{ base: '0', md: '50px' }}>
+    // Positioned above the fixed gate banner, which otherwise covers the
+    // footer on tall desktop windows
+    <Box
+      as='footer'
+      position='relative'
+      zIndex={1}
+      bg='white'
+      mt={{ base: '0', md: '50px' }}
+    >
       <Box asChild display={{ base: 'block', md: 'none' }}>
         <a
           href='https://facebook.com/szinhazonline/'
@@ -101,16 +108,6 @@ export function Footer() {
                 <Link to={to}>{name}</Link>
               </FooterMenuItem>
             ))}
-            <FooterMenuItem first={false}>
-              {/* Google's consent message (CMP) can be reopened any time */}
-              <button
-                type='button'
-                onClick={openConsentSettings}
-                style={{ textTransform: 'inherit', letterSpacing: 'inherit' }}
-              >
-                Süti beállítások
-              </button>
-            </FooterMenuItem>
           </Flex>
 
           <Flex

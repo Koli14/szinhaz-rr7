@@ -17,7 +17,6 @@ declare global {
       version: number,
       callback: (data: TcData, success: boolean) => void,
     ) => void
-    googlefc?: { callbackQueue?: unknown[]; showRevocationMessage?: () => void }
   }
 }
 
@@ -156,11 +155,43 @@ export function useGoogleAnalytics(measurementId: string | null | undefined) {
   }, [measurementId, location.pathname, location.search])
 }
 
-// Opens Google's consent message again, so visitors can change their choice
-export function openConsentSettings() {
-  window.googlefc = window.googlefc ?? {}
-  window.googlefc.callbackQueue = window.googlefc.callbackQueue ?? []
-  window.googlefc.callbackQueue.push(() =>
-    window.googlefc?.showRevocationMessage?.(),
-  )
+// Google's consent message (CMP) adds a floating "privacy and cookie
+// settings" button in the bottom left corner, over the left side of the gate
+// banner. It lives in an open shadow root and Google keeps resetting its
+// class and inline position, so a stylesheet with !important moves it (and
+// its bubble) to the right instead. If Google changes the markup, the rules
+// stop matching and the button stays on the left; nothing breaks.
+// (The position may also be configurable in AdSense > Privacy & messaging.)
+const TOOLBAR = '#ft-floating-toolbar'
+const RIGHT_CSS = [
+  `${TOOLBAR}{left:auto!important;right:10px!important}`,
+  `${TOOLBAR} .ft-menu{left:auto!important;right:0!important}`,
+  `${TOOLBAR} .ft-reg-bubble{left:auto!important;right:65px!important}`,
+].join('')
+
+export function useConsentButtonOnRight() {
+  useEffect(() => {
+    const apply = () => {
+      for (const el of document.body.children) {
+        const root = el.shadowRoot
+        if (!root?.querySelector(TOOLBAR)) continue
+        if (root.querySelector('style[data-szinhaz-right]')) continue
+        const style = document.createElement('style')
+        style.dataset.szinhazRight = ''
+        style.textContent = RIGHT_CSS
+        root.appendChild(style)
+      }
+    }
+    apply()
+    const observer = new MutationObserver(apply)
+    observer.observe(document.body, { childList: true })
+    // The CMP fills its shadow root a moment after adding the host element
+    const timer = setInterval(apply, 1000)
+    const stop = setTimeout(() => clearInterval(timer), 30_000)
+    return () => {
+      observer.disconnect()
+      clearInterval(timer)
+      clearTimeout(stop)
+    }
+  }, [])
 }

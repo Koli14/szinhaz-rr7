@@ -19,7 +19,10 @@ import { GateBanner } from './components/GateBanner'
 import { Footer } from './components/Footer'
 import { SearchModal } from './components/search/SearchModal'
 import { useAdSenseScript } from './components/AdSense'
-import { useGoogleAnalytics } from './components/Analytics'
+import {
+  useConsentButtonOnRight,
+  useGoogleAnalytics,
+} from './components/Analytics'
 import { NavigationProgress } from './components/NavigationProgress'
 import { MobileDrawer } from './components/header/MobileDrawer'
 import { fetchFromGraphQL, gql } from './utils/graphql.server'
@@ -227,6 +230,7 @@ export default function App() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   useAdSenseScript()
   useGoogleAnalytics(data?.gaMeasurementId)
+  useConsentButtonOnRight()
 
   const hasGateBanner = !!data?.banners?.gatebanner?.kep
   const tagClouds = data?.tagClouds ?? []
