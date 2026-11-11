@@ -52,3 +52,18 @@ DB and code of the snapshot (`wp-config.php`, uploads and caches stay).
 Rehearsed on remix on 2026-11-11: 45 s DB, 1 s code.
 
 The full cutover runbook is in [`../CUTOVER.md`](../CUTOVER.md).
+
+## Performance settings on prod (2026-11-11)
+
+- PHP 8.5 (Websupport admin → hosting service `szinhaz.online` → Szolgáltatás).
+  OPcache runs in file-cache-only mode there; WordPress' Site Health still
+  reports it as off.
+- `WP_DEBUG` off; PHP errors go to `~/szinhaz.online/wp-logs/php-error.log`
+  (outside the web roots).
+- Persistent object cache: `object-cache.php` (this folder) in `wp-content/`,
+  using the drop-in of the **inactive** "Memcached Object Cache" plugin
+  (`plugins/memcached`, keep it: phase C must not delete it) and the server's
+  memcache. WP-CLI can't reach that memcache, so `lib.sh`'s `wp()` touches
+  `wp-content/object-cache.version` after every command, which gives the web
+  a fresh cache. To switch it off, delete `wp-content/object-cache.php`.
+- WPGraphQL: no public introspection, query depth limit 15 (rr7 needs ~7).
