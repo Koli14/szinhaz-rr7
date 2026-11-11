@@ -13,7 +13,8 @@ export const FeaturedItem = ({
   mobileOnly?: boolean
   desktopOnly?: boolean
 }) => {
-  const image = item.featuredImage.node
+  // Not every post has a featured image
+  const image = item.featuredImage?.node
   const tag = item.kiemeltCimke.featuredTag?.nodes?.[0] ?? item.tags.nodes[0]
   const isBig = !mobileOnly && !desktopOnly
   const bgColor = tag?.taxonomyColor?.taxColor || '#F4A91C'
@@ -27,13 +28,15 @@ export const FeaturedItem = ({
     >
       <Box pos='relative' mb={{ lg: '22px' }}>
         <Link to={item.uri ?? `/${item.slug}/`} prefetch='viewport'>
-          <Box aspectRatio={16 / 9} overflow='hidden' width='100%'>
-            <img
-              src={image.sourceUrl}
-              alt={image.altText}
-              title={image.title}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
+          <Box aspectRatio={16 / 9} overflow='hidden' width='100%' bg='#F8F1E9'>
+            {image && (
+              <img
+                src={image.sourceUrl}
+                alt={image.altText}
+                title={image.title}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            )}
           </Box>
         </Link>
         {tag && <CoverTag tag={tag} />}

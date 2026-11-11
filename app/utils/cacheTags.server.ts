@@ -1,5 +1,6 @@
 import { AsyncLocalStorage } from 'node:async_hooks'
 import type { MiddlewareFunction } from 'react-router'
+import { CACHE } from './cache'
 
 // WPGraphQL Smart Cache lists in the X-GraphQL-Keys response header which
 // content a query touched: node ids (base64 `post:123`), lists (`list:post`)
@@ -9,6 +10,14 @@ import type { MiddlewareFunction } from 'react-router'
 // purged keys to /api/revalidate, which invalidates exactly those pages.
 
 const store = new AsyncLocalStorage<Set<string>>()
+
+// Marker in the key set: the page was rendered with missing data (e.g. the
+// menu query failed), so it must not stay in the CDN for days
+const DEGRADED = '\u0000degraded'
+
+export function markResponseDegraded() {
+  store.getStore()?.add(DEGRADED)
+}
 
 // Collect the keys of every GraphQL request made while handling `fn`
 export function collectGraphqlKeys<T>(fn: () => Promise<T>) {
@@ -86,6 +95,10 @@ export const cacheTagsMiddleware: MiddlewareFunction<Response> = async (
 ) => {
   const { result: response, keys } = await collectGraphqlKeys(() => next())
   const cacheControl = response.headers.get('Cache-Control') ?? ''
+  if (keys.has(DEGRADED) && cacheControl.includes('public')) {
+    response.headers.set('Cache-Control', CACHE.error)
+    return response
+  }
   if (keys.size > 0 && cacheControl.includes('public')) {
     const tags = toCacheTags(keys)
     if (tags.length > 0)

@@ -1,15 +1,26 @@
 import { recordGraphqlKeys } from './cacheTags.server'
 import { getGraphqlEndpoint } from './wp.server'
 
+// The shared hosting answers 429/502/503 for a moment when it is busy or
+// restarts PHP: one retry after a short pause usually gets through
+const RETRY_STATUSES = new Set([429, 502, 503])
+const RETRY_DELAY_MS = 700
+
 export async function fetchFromGraphQL<T>(
   query: string,
   variables?: Record<string, unknown>,
 ): Promise<T> {
-  const response = await fetch(getGraphqlEndpoint(), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query, variables }),
-  })
+  const request = () =>
+    fetch(getGraphqlEndpoint(), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, variables }),
+    })
+  let response = await request()
+  if (RETRY_STATUSES.has(response.status)) {
+    await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS))
+    response = await request()
+  }
 
   if (!response.ok) {
     throw new Error(

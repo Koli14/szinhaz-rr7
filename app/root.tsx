@@ -23,7 +23,10 @@ import { useGoogleAnalytics } from './components/Analytics'
 import { NavigationProgress } from './components/NavigationProgress'
 import { MobileDrawer } from './components/header/MobileDrawer'
 import { fetchFromGraphQL, gql } from './utils/graphql.server'
-import { cacheTagsMiddleware } from './utils/cacheTags.server'
+import {
+  cacheTagsMiddleware,
+  markResponseDegraded,
+} from './utils/cacheTags.server'
 import { trackingParamsMiddleware } from './utils/trackingParams.server'
 import type { Tag, FlatMenuItem, BannersData, BannerSlot } from './types'
 
@@ -168,6 +171,7 @@ export async function loader(_: Route.LoaderArgs) {
     }
   } catch (e) {
     console.error('Root loader failed:', e)
+    markResponseDegraded()
     return { gaMeasurementId, tagClouds: [], menuItems: [], banners: null }
   }
 }
