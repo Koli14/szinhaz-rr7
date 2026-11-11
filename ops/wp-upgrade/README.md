@@ -14,6 +14,7 @@ database and code (uploads stay on prod, `upload_url_path` points there).
 | `03-upgrade.sh`       | **phase A**: WP 7.1.4, plugin updates, GraphQL plugins, rr7 ACF/CPT UI GraphQL names  | `TARGET=~/szinhaz.online/sub/wp` |
 | `04-switch-to-rr7.sh` | **phase B**: Yoast XML sitemaps on, CDN purge on (after szinhaz.online points to rr7) | yes                              |
 | `05-cleanup.sh`       | **phase C**: removes ACF to REST API, WP REST Cache, menus-endpoints                  | after the rollback window        |
+| `06-restore.sh`       | rollback of phase A from an `OUT=… 01-snapshot-prod.sh` snapshot (~1 min)             | only if phase A goes wrong       |
 
 Phase A keeps Frontity working: ACF to REST API and the core `wp-sitemap.xml`
 stay, and the Frontity HTML rendered against the upgraded clone matched the
@@ -46,5 +47,8 @@ Failures are written to the PHP error log. On remix the constants point to
 configured test site. Only the GraphQL keys are applied, matched by group and
 field key, so the prod field definitions stay untouched.
 
-Restore: `prod-db.sql.gz` from `01-snapshot-prod.sh` plus the code copy
-(`rsync` back without `wp-content/uploads`).
+Restore: `SNAP=$R/before-phase-a TARGET=$SUB/wp bash 06-restore.sh` puts back the
+DB and code of the snapshot (`wp-config.php`, uploads and caches stay).
+Rehearsed on remix on 2026-11-11: 45 s DB, 1 s code.
+
+The full cutover runbook is in [`../CUTOVER.md`](../CUTOVER.md).
