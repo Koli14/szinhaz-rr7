@@ -34,6 +34,8 @@ export const FeaturedItem = ({
                 src={image.sourceUrl}
                 alt={image.altText}
                 title={image.title}
+                // The big lead image is the LCP element: fetch it first
+                fetchPriority={isBig ? 'high' : undefined}
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             )}

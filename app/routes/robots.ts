@@ -16,6 +16,7 @@ const BLOCKED_BOTS = [
   'YandexBot',
   'proximic',
   'SirdataBot',
+  'DataForSeoBot',
 ]
 
 export function loader({ request }: Route.LoaderArgs) {

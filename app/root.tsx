@@ -156,6 +156,11 @@ function toBanners(
 // Drops Facebook's fbclid (see trackingParams.server.ts), then tags every
 // response with the WordPress content it shows, so publishing can
 // invalidate exactly those pages on the CDN
+// Vercel Function settings for every route (child routes inherit them): a
+// page waits on WordPress for a second or two, never minutes. The default
+// limit was 300 s, billed while it waits.
+export const config = { maxDuration: 30 }
+
 export const middleware: Route.MiddlewareFunction[] = [
   trackingParamsMiddleware,
   cacheTagsMiddleware,

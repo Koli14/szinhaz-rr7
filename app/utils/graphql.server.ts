@@ -5,6 +5,8 @@ import { getGraphqlEndpoint } from './wp.server'
 // restarts PHP: one retry after a short pause usually gets through
 const RETRY_STATUSES = new Set([429, 502, 503])
 const RETRY_DELAY_MS = 700
+// Give up on a hanging backend instead of waiting for the function limit
+const TIMEOUT_MS = 15_000
 
 export async function fetchFromGraphQL<T>(
   query: string,
@@ -15,6 +17,7 @@ export async function fetchFromGraphQL<T>(
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query, variables }),
+      signal: AbortSignal.timeout(TIMEOUT_MS),
     })
   let response = await request()
   if (RETRY_STATUSES.has(response.status)) {
