@@ -15,32 +15,31 @@ has downtime, and each one can be rolled back on its own.
       ads, banners, feed, sitemaps, robots.txt, ads.txt, GA4, Instagram.
 - [x] Upgrade, rollback and CDN purge rehearsed on remix.
 - [x] Vercel project `berta/szinhaz-rr7`, deployed from GitHub `main`
-      (Node 26.x, fra1, Fluid). The Hobby project `szinhaz-rr7` stays as the
-      remix test site until it is no longer needed.
+      (Node 26.x, fra1, Fluid), Vercel Authentication off (the site sends
+      noindex until phase B). It is the remix test site now: remix purges
+      go to https://szinhaz-rr7-berta.vercel.app/api/revalidate. The old
+      Hobby project `szinhaz-rr7` can be deleted.
 - [x] Firewall copied from `szinhaz-online`: IP blocks 54.155.239.53 and
       54.229.183.196; "Allow feed readers" (bypass, UA
       `mszt.org|SimplePie|Photon/`); "Block scrapers" (deny, UA
       `HeadlessChrome|Lightpanda|^curl/`); Bot Protection: Log; OWASP rules
       gen/rce/sqli/xss: Log; AI bots off.
+- [x] fbclid redirect, viewport prefetch of the lead stories.
 - [ ] Production env vars of `berta/szinhaz-rr7`:
 
-  | name                     | value                                          | when           |
-  | ------------------------ | ---------------------------------------------- | -------------- |
-  | `GRAPHQL_API`            | remix now; `https://wp.szinhaz.online/graphql` | after phase A  |
-  | `SITE_URL`               | `https://szinhaz.online`                       | set            |
-  | `CRON_SECRET`            | random                                         | set            |
-  | `VERCEL_TEAM_ID`         | `berta` team id                                | set            |
-  | `REVALIDATE_SECRET`      | new random, same as `SZINHAZ_PURGE_SECRET`     | phase A'       |
-  | `SITE_INDEXABLE`         | `true`                                         | phase B        |
-  | `GA_MEASUREMENT_ID`      | `G-1LRX9ENL3S`                                 | phase B        |
-  | `INSTAGRAM_ACCESS_TOKEN` | long-lived Instagram token                     | before phase B |
-  | `GLOBAL_CONFIG`          | added by connecting a Global Config store      | before phase B |
-  | `VERCEL_API_TOKEN`       | token that may write the store                 | before phase B |
+  | name                     | value                                                                            | when           |
+  | ------------------------ | -------------------------------------------------------------------------------- | -------------- |
+  | `GRAPHQL_API`            | remix now; `https://wp.szinhaz.online/graphql`                                   | after phase A  |
+  | `SITE_URL`               | `https://szinhaz.online`                                                         | set            |
+  | `CRON_SECRET`            | random                                                                           | set            |
+  | `VERCEL_TEAM_ID`         | `berta` team id                                                                  | set            |
+  | `REVALIDATE_SECRET`      | same as `SZINHAZ_PURGE_SECRET` in remix wp-config                                | set            |
+  | `SITE_INDEXABLE`         | `true`                                                                           | phase B        |
+  | `GA_MEASUREMENT_ID`      | `G-1LRX9ENL3S`                                                                   | phase B        |
+  | `INSTAGRAM_ACCESS_TOKEN` | long-lived Instagram token                                                       | before phase B |
+  | `GLOBAL_CONFIG`          | store `my-global-config-store` (shared with Frontity), token `szinhaz-rr7-token` | set            |
+  | `VERCEL_API_TOKEN`       | owner creates it (berta scope, no expiry)                                        | before phase B |
 
-- [ ] Deployment Protection keeps `*.vercel.app` behind Vercel login. For the
-      phase A' scripts (and a purge before the switch) a "Protection Bypass
-      for Automation" secret is needed (`x-vercel-protection-bypass` header),
-      or the checks are done in a logged-in browser.
 - Consent: the Google CMP (AdSense Privacy & messaging, TCF) is already
   published for szinhaz.online and comes with adsbygoogle.js. rr7 sets
   consent mode v2 (denied by default in the EEA/UK/CH) and maps the TCF
@@ -67,12 +66,13 @@ Rollback: `SNAP=$R/before-phase-a TARGET=$SUB/wp bash 06-restore.sh`
 ## A'. rr7 on prod data, before the switch
 
 1. rr7 `GRAPHQL_API` → `https://wp.szinhaz.online/graphql`, redeploy.
-2. New `REVALIDATE_SECRET` in the rr7 project, the same value as
-   `SZINHAZ_PURGE_SECRET` on prod (`wp config set … --type=constant`). The
-   purge URL is set in phase B: before the switch the project URL is behind
-   Deployment Protection.
-3. With the bypass secret (see 0.):
-   `VERCEL_PROTECTION_BYPASS=… node scripts/url-parity.mjs --wp https://wp.szinhaz.online --base https://szinhaz-rr7-berta.vercel.app --ref https://szinhaz.online --posts 300 --tags 150`.
+2. Purge on prod, to the rr7 project with the same secret as remix
+   (`wp config get SZINHAZ_PURGE_SECRET` in remix):
+   `wp config set SZINHAZ_PURGE_URL https://szinhaz-rr7-berta.vercel.app/api/revalidate --type=constant`
+   and `wp config set SZINHAZ_PURGE_SECRET … --type=constant` in `$SUB/wp`.
+   Then delete both constants from the remix wp-config: remix edits must
+   not purge pages that now show prod content.
+3. `node scripts/url-parity.mjs --wp https://wp.szinhaz.online --base https://szinhaz-rr7-berta.vercel.app --ref https://szinhaz.online --posts 300 --tags 150`.
 4. Spot checks: images (Jetpack CDN in content?), banners, ads, related
    posts.
 
