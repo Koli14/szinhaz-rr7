@@ -39,6 +39,11 @@ export function buildSeoMeta(
   const origin = getSiteOrigin(request)
   const head = rewriteBackendUrls(seo?.fullHead ?? '', origin)
   const meta: MetaDescriptor[] = []
+  const path = new URL(request.url).pathname.replace(/\/page\/1\/?$/, '/')
+  // Archive pages 2, 3, …: Yoast's head is the archive's own, pointing at
+  // page 1. Paginated pages must point at themselves, or search engines
+  // treat them as duplicates of page 1 and skip the older posts.
+  const pagedUrl = /\/page\/\d+\/?$/.test(path) ? `${origin}${path}` : null
 
   const title = head.match(/<title>([\s\S]*?)<\/title>/)?.[1]
   meta.push({ title: title ? decodeEntities(title) : fallbackTitle })
@@ -49,7 +54,10 @@ export function buildSeoMeta(
     if (a.name && a.content !== undefined)
       meta.push({ name: a.name, content: a.content })
     else if (a.property && a.content !== undefined)
-      meta.push({ property: a.property, content: a.content })
+      meta.push({
+        property: a.property,
+        content: a.property === 'og:url' && pagedUrl ? pagedUrl : a.content,
+      })
   }
 
   // Yoast has no description for most archives: use the site tagline, as
@@ -63,12 +71,12 @@ export function buildSeoMeta(
     const a = parseAttributes(tag)
     if (!a.rel || !a.href) continue
     if (a.rel === 'canonical') hasCanonical = true
-    meta.push({ tagName: 'link', rel: a.rel, href: a.href })
+    const href = a.rel === 'canonical' && pagedUrl ? pagedUrl : a.href
+    meta.push({ tagName: 'link', rel: a.rel, href })
   }
 
   // Yoast leaves the canonical out while the backend is set to noindex
   if (!hasCanonical) {
-    const path = new URL(request.url).pathname.replace(/\/page\/1\/?$/, '/')
     meta.push({ tagName: 'link', rel: 'canonical', href: `${origin}${path}` })
   }
 
