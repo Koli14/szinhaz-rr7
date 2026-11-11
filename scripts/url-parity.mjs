@@ -39,6 +39,12 @@ const REF = args.ref?.replace(/\/$/, '')
 const UA =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36'
 
+// Deployment Protection: a "Protection Bypass for Automation" secret lets the
+// script into a protected *.vercel.app deployment
+const BASE_HEADERS = process.env.VERCEL_PROTECTION_BYPASS
+  ? { 'x-vercel-protection-bypass': process.env.VERCEL_PROTECTION_BYPASS }
+  : {}
+
 const FIXED = [
   '/',
   '/hirek/',
@@ -147,7 +153,7 @@ async function check(path) {
   try {
     const res = await fetch(BASE + path, {
       redirect: 'manual',
-      headers: { 'user-agent': UA },
+      headers: { 'user-agent': UA, ...BASE_HEADERS },
       signal: AbortSignal.timeout(30_000),
     })
     result.status = res.status
