@@ -8,6 +8,9 @@ import { FeaturedItem } from './FeaturedItem'
 import type { PostPreview } from '~/types'
 
 const BIG = 100 / 30
+// Lead stories below the featured ones that load as soon as they are on
+// screen; the rest of the home page prefetches on hover/touch
+const VIEWPORT_PREFETCH = 3
 const LITTLE = 100 / 48
 
 function useBanners() {
@@ -35,7 +38,10 @@ export const LeftCoverItems = ({
       <FeaturedItem item={featuredItems[1]} mobileOnly />
       {items.map((item, i) => (
         <Fragment key={item.slug}>
-          <CoverItem item={item} />
+          <CoverItem
+            item={item}
+            prefetch={i < VIEWPORT_PREFETCH ? 'viewport' : undefined}
+          />
           {i === 1 && (
             <>
               <Banner banner={banners?.bigbanner1} aspectRatio={BIG} />

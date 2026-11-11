@@ -3,7 +3,15 @@ import { Link } from '~/components/Link'
 import { Tag } from '~/components/Tags'
 import type { PostPreview } from '~/types'
 
-export const CoverItem = ({ item }: { item: PostPreview }) => {
+// `prefetch='viewport'` loads the post as soon as the item is on screen
+// (only for the first items of the home page: phones have no hover)
+export const CoverItem = ({
+  item,
+  prefetch,
+}: {
+  item: PostPreview
+  prefetch?: 'viewport'
+}) => {
   const image = item.featuredImage?.node
   const thumbnail = image?.mediaDetails.sizes.find(
     (s) => s.name === 'thumbnail',
@@ -25,7 +33,7 @@ export const CoverItem = ({ item }: { item: PostPreview }) => {
           minHeight='100px'
           mx='1rem'
         >
-          <Link to={item.uri ?? `/${item.slug}/`}>
+          <Link to={item.uri ?? `/${item.slug}/`} prefetch={prefetch}>
             <Box aspectRatio={1} overflow='hidden' width='100%'>
               <img
                 src={src}
@@ -43,7 +51,7 @@ export const CoverItem = ({ item }: { item: PostPreview }) => {
             <Tag tag={tag} />
           </Box>
         )}
-        <Link to={item.uri ?? `/${item.slug}/`}>
+        <Link to={item.uri ?? `/${item.slug}/`} prefetch={prefetch}>
           <CoverHeading title={item.title} />
           <CoverExcerpt excerpt={item.excerpt} />
         </Link>

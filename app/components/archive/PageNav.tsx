@@ -29,13 +29,13 @@ export function PageNav({
   return (
     <Box display='flex' mt='56px' justifyContent='center' gap='4'>
       {page > 1 && (
-        <Link to={pageUrl(page - 1)} style={buttonStyle}>
+        <Link to={pageUrl(page - 1)} prefetch='viewport' style={buttonStyle}>
           <Box as={BsChevronLeft} mr='2' />
           Újabb hírek
         </Link>
       )}
       {hasNextPage && (
-        <Link to={pageUrl(page + 1)} style={buttonStyle}>
+        <Link to={pageUrl(page + 1)} prefetch='viewport' style={buttonStyle}>
           Régebbi hírek
           <Box as={BsChevronRight} ml='2' />
         </Link>

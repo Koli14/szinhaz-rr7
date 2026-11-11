@@ -91,5 +91,19 @@ export const cacheTagsMiddleware: MiddlewareFunction<Response> = async (
     if (tags.length > 0)
       response.headers.set('Vercel-Cache-Tag', tags.join(','))
   }
+  // Client data (.data) of prefetched links: let the browser keep it for a
+  // few minutes, or every scroll back to a prefetched link fetches it again.
+  // Pages themselves stay max-age=0.
+  const isData = response.headers
+    .get('Content-Type')
+    ?.startsWith('text/x-script')
+  if (isData && response.status === 200 && cacheControl.includes('max-age=0')) {
+    response.headers.set(
+      'Cache-Control',
+      cacheControl.replace('max-age=0', `max-age=${DATA_BROWSER_MAX_AGE}`),
+    )
+  }
   return response
 }
+
+const DATA_BROWSER_MAX_AGE = 300
