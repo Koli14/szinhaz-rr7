@@ -1,5 +1,6 @@
 import { Box, Flex } from '@chakra-ui/react'
 import { IoLogoFacebook } from 'react-icons/io5'
+import { openConsentSettings } from '~/components/Analytics'
 import { Link } from '~/components/Link'
 import SocialNav from '~/components/header/SocialNav'
 
@@ -15,6 +16,28 @@ const LOGOS = [
   ['https://www.nka.hu/', '/images/NKA_logo.png', 'Nemzeti Kulturális Alap'],
   ['https://emmiugyfelszolgalat.gov.hu/', '/images/eem.png', 'EMMI'],
 ] as const
+
+function FooterMenuItem({
+  first,
+  children,
+}: {
+  first: boolean
+  children: React.ReactNode
+}) {
+  return (
+    <Box
+      as='li'
+      px='18px'
+      ml={first ? 0 : '-1px'}
+      borderLeft={first ? 'none' : '1px solid black'}
+      whiteSpace='nowrap'
+      transition='opacity 0.5s ease'
+      _hover={{ opacity: 0.5 }}
+    >
+      {children}
+    </Box>
+  )
+}
 
 export function Footer() {
   return (
@@ -74,19 +97,20 @@ export function Footer() {
             textTransform='uppercase'
           >
             {MENU.map(([to, name], i) => (
-              <Box
-                as='li'
-                key={to}
-                px='18px'
-                ml={i ? '-1px' : 0}
-                borderLeft={i ? '1px solid black' : 'none'}
-                whiteSpace='nowrap'
-                transition='opacity 0.5s ease'
-                _hover={{ opacity: 0.5 }}
-              >
+              <FooterMenuItem key={to} first={i === 0}>
                 <Link to={to}>{name}</Link>
-              </Box>
+              </FooterMenuItem>
             ))}
+            <FooterMenuItem first={false}>
+              {/* Google's consent message (CMP) can be reopened any time */}
+              <button
+                type='button'
+                onClick={openConsentSettings}
+                style={{ textTransform: 'inherit', letterSpacing: 'inherit' }}
+              >
+                Süti beállítások
+              </button>
+            </FooterMenuItem>
           </Flex>
 
           <Flex

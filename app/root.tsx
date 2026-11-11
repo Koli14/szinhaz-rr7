@@ -17,7 +17,6 @@ import notoSerif from './assets/fonts/noto-serif-v9-latin-ext-regular.woff2?url'
 import { Header } from './components/header'
 import { GateBanner } from './components/GateBanner'
 import { Footer } from './components/Footer'
-import { CookieConsent } from './components/CookieConsent'
 import { SearchModal } from './components/search/SearchModal'
 import { useAdSenseScript } from './components/AdSense'
 import { useGoogleAnalytics } from './components/Analytics'
@@ -249,7 +248,6 @@ export default function App() {
         <Outlet />
       </Box>
       <Footer />
-      <CookieConsent />
       <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
       <MobileDrawer
         open={drawerOpen}
