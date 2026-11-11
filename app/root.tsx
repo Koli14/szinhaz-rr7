@@ -20,6 +20,7 @@ import { Footer } from './components/Footer'
 import { CookieConsent } from './components/CookieConsent'
 import { SearchModal } from './components/search/SearchModal'
 import { useAdSenseScript } from './components/AdSense'
+import { useGoogleAnalytics } from './components/Analytics'
 import { NavigationProgress } from './components/NavigationProgress'
 import { MobileDrawer } from './components/header/MobileDrawer'
 import { fetchFromGraphQL, gql } from './utils/graphql.server'
@@ -151,16 +152,19 @@ function toBanners(
 export const middleware: Route.MiddlewareFunction[] = [cacheTagsMiddleware]
 
 export async function loader(_: Route.LoaderArgs) {
+  // Only the production project sets it, so test deployments aren't measured
+  const gaMeasurementId = process.env.GA_MEASUREMENT_ID || null
   try {
     const data = await fetchFromGraphQL<RootGqlData>(GET_ROOT)
     return {
+      gaMeasurementId,
       tagClouds: data.tagCloud?.tagCloudFields?.tagCloud?.nodes ?? [],
       menuItems: data.menuItems.nodes,
       banners: toBanners(data.bannerek?.bannerFields ?? null),
     }
   } catch (e) {
     console.error('Root loader failed:', e)
-    return null
+    return { gaMeasurementId, tagClouds: [], menuItems: [], banners: null }
   }
 }
 
@@ -214,6 +218,7 @@ export default function App() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   useAdSenseScript()
+  useGoogleAnalytics(data?.gaMeasurementId)
 
   const hasGateBanner = !!data?.banners?.gatebanner?.kep
   const tagClouds = data?.tagClouds ?? []
