@@ -12,6 +12,7 @@ import { Banner } from '~/components/Banner'
 import { AdSense, AD_SLOTS } from '~/components/AdSense'
 import { Tag } from '~/components/Tags'
 import { CACHE, cacheHeaders } from '~/utils/cache'
+import { untrackGraphqlKeys } from '~/utils/cacheTags.server'
 import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
 import { FOLDER_POST_FIELDS, toFolderPost } from '~/utils/folderPost.server'
 import type { GqlFolderPost } from '~/utils/folderPost.server'
@@ -23,7 +24,11 @@ import '~/styles/post.css'
 
 type NodeData = {
   nodeByUri:
-    | (Post & { __typename: 'Post'; seo: { fullHead: string | null } })
+    | (Post & {
+        __typename: 'Post'
+        id: string
+        seo: { fullHead: string | null }
+      })
     | {
         __typename: 'Page' | 'Quote'
         title: string
@@ -40,11 +45,17 @@ type NodeData = {
   } | null
 }
 
+// Node id of the related posts ACF options page (acf_options_page:related-posts)
+const RELATED_POSTS_PAGE_ID = Buffer.from(
+  'acf_options_page:related-posts',
+).toString('base64')
+
 const GET_NODE = gql`
   query getNode($uri: String!) {
     nodeByUri(uri: $uri) {
       __typename
       ... on Post {
+        id
         title
         content
         date
@@ -146,19 +157,26 @@ export async function loader({ request }: Route.LoaderArgs) {
   const content = relativizeContentLinks(node.content ?? '')
   const seo = buildSeoMeta(request, node.seo, node.title)
 
+  const related = (
+    data.relatedPosts?.relatedPostsFields?.relatedPosts?.nodes ?? []
+  ).filter((p): p is GqlFolderPost => 'uri' in p)
+  // The related list is the same on every post (pages don't show it):
+  // editing one of its posts should not invalidate all post pages. They
+  // refresh when the list itself is saved (its options page key stays) or
+  // when their TTL ends.
+  const ownId = 'id' in node ? node.id : null
+  untrackGraphqlKeys(related.map((p) => p.id).filter((id) => id !== ownId))
+  if (node.__typename !== 'Post') untrackGraphqlKeys([RELATED_POSTS_PAGE_ID])
+
   if (node.__typename === 'Post') {
     const post = node as Post
-    const related =
-      data.relatedPosts?.relatedPostsFields?.relatedPosts?.nodes ?? []
     return {
       title: post.title,
       uri: pathname,
       date: post.date,
       tags: postTags(post),
       content,
-      relatedPosts: related
-        .filter((p): p is GqlFolderPost => 'uri' in p && p.uri !== pathname)
-        .map(toFolderPost),
+      relatedPosts: related.filter((p) => p.uri !== pathname).map(toFolderPost),
       seo,
     }
   }

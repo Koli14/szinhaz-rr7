@@ -30,10 +30,11 @@ t 'ACF Pro 6.8.11 + add-wpgraphql-seo 6.0.0 from pkg' pro
 
 t 'plugin update (wp.org)' w --skip-plugins plugin update --all --exclude=advanced-custom-fields-pro,add-wpgraphql-seo
 t 'plugin languages' w language plugin update --all
-t 'activate graphql plugins' w plugin activate wp-graphql wpgraphql-acf add-wpgraphql-seo
+t 'activate graphql plugins' w plugin activate wp-graphql wpgraphql-acf wpgraphql-smart-cache add-wpgraphql-seo
 t 'plugin db upgrades (load once)' w option get wpseo --format=json >/dev/null
 t 'apply rr7 config' w eval-file $R/apply-config.php $R/rr7-config.json
-t 'mu-plugins: headless exceptions, graphql' cp $P/szinhaz-headless-exceptions.php $P/szinhaz-graphql.php $T/wp-content/mu-plugins/
+# szinhaz-vercel-purge.php does nothing until 04-switch-to-rr7.sh sets its constants
+t 'mu-plugins: headless exceptions, graphql, vercel purge' cp $P/szinhaz-headless-exceptions.php $P/szinhaz-graphql.php $P/szinhaz-vercel-purge.php $T/wp-content/mu-plugins/
 t 'rewrite flush' w rewrite flush
 t 'cache flush' w cache flush
 

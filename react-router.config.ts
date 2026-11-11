@@ -12,5 +12,7 @@ export default {
     // Keeps the trailing slash in client data requests (/tag/x/_.data), so
     // the loaders' WordPress-style trailing slash redirects don't loop
     unstable_trailingSlashAwareDataRequests: true,
+    // Route middleware: the root one tags responses with CDN cache tags
+    v8_middleware: true,
   },
 } satisfies Config

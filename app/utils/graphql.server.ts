@@ -1,3 +1,4 @@
+import { recordGraphqlKeys } from './cacheTags.server'
 import { getGraphqlEndpoint } from './wp.server'
 
 export async function fetchFromGraphQL<T>(
@@ -15,6 +16,9 @@ export async function fetchFromGraphQL<T>(
       `GraphQL request failed: ${response.status} ${response.statusText}`,
     )
   }
+
+  // Content keys of WPGraphQL Smart Cache, used as CDN cache tags
+  recordGraphqlKeys(response.headers.get('x-graphql-keys'))
 
   const json = await response.json()
 

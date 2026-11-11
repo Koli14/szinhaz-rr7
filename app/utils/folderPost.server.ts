@@ -8,6 +8,7 @@ export type GqlImage = {
 } | null
 
 export type GqlFolderPost = {
+  id: string
   title: string
   uri: string
   excerpt: string | null
@@ -15,6 +16,7 @@ export type GqlFolderPost = {
 }
 
 export const FOLDER_POST_FIELDS = `
+  id
   title
   uri
   excerpt

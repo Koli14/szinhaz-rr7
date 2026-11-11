@@ -23,6 +23,7 @@ import { useAdSenseScript } from './components/AdSense'
 import { NavigationProgress } from './components/NavigationProgress'
 import { MobileDrawer } from './components/header/MobileDrawer'
 import { fetchFromGraphQL, gql } from './utils/graphql.server'
+import { cacheTagsMiddleware } from './utils/cacheTags.server'
 import type { Tag, FlatMenuItem, BannersData, BannerSlot } from './types'
 
 // ─── GraphQL (menu, tag cloud, banners) ─────────────────────────────────────
@@ -144,6 +145,10 @@ function toBanners(
 }
 
 // ─── Loader ──────────────────────────────────────────────────────────────────
+
+// Tags every response with the WordPress content it shows, so publishing
+// can invalidate exactly those pages on the CDN
+export const middleware: Route.MiddlewareFunction[] = [cacheTagsMiddleware]
 
 export async function loader(_: Route.LoaderArgs) {
   try {

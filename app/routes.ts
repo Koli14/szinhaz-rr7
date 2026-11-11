@@ -32,6 +32,9 @@ export default [
   ...sitemapRoutes,
   route('feed', 'routes/feed.ts'),
 
+  // CDN cache invalidation, called by WordPress
+  route('api/revalidate', 'routes/api/revalidate.ts'),
+
   // Listings, with WordPress-style /page/N/ pagination
   route('hirek/*', 'routes/archive.tsx', { id: 'archive-posts' }),
   route('category/*', 'routes/archive.tsx', { id: 'archive-category' }),
