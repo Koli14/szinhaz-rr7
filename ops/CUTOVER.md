@@ -9,6 +9,18 @@ The WordPress upgrade (phase A) and the frontend switch (phase B) are
 separate: Frontity keeps working on the upgraded WordPress, so neither step
 has downtime, and each one can be rolled back on its own.
 
+## Status (2026-11-11)
+
+- **A, A' and B are done.** szinhaz.online and www (308) are on
+  `berta/szinhaz-rr7` since ~21:30. Prod WordPress: 7.1.4, PHP 8.5, GraphQL,
+  Yoast XML sitemaps, purge to https://szinhaz.online/api/revalidate,
+  memcache object cache, WP_DEBUG off. Rollback point: `$R/before-phase-a`.
+- Owner to do: Search Console `sitemap_index.xml`; GA4 history page views
+  off; Instagram token (Meta business portfolio for the new Business app);
+  ask Websupport about shared-memory OPcache.
+- Phase C after 1–2 weeks (see below). Keep `plugins/memcached` (object
+  cache drop-in) and the purge mu-plugin.
+
 ## 0. Preparation (no prod change)
 
 - [x] rr7 parity with Frontity: URL parity (status, title, canonical), UI,
