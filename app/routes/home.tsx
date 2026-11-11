@@ -8,7 +8,6 @@ import type { HomeGallery } from '~/components/home/GallerySection'
 import { Quotes } from '~/components/home/Quotes'
 import type { HomeQuote } from '~/components/home/Quotes'
 import { Instagram } from '~/components/Instagram'
-import type { InstaPost } from '~/components/Instagram'
 import { CACHE, cacheHeaders } from '~/utils/cache'
 import {
   fetchFromGraphQL,
@@ -16,6 +15,7 @@ import {
   POST_PREVIEW_FIELDS,
 } from '~/utils/graphql.server'
 import { buildSeoMeta, SEO_FIELDS } from '~/utils/seo.server'
+import { loadInstagram } from '~/utils/instagram.server'
 import {
   FOLDER_POST_FIELDS,
   toFolderPost,
@@ -128,40 +128,6 @@ function toFolders(list: FolderList): HomeFolder[] {
       color: f.taxonomyColor?.taxColor ?? null,
       posts: f.posts.nodes.map(toFolderPost),
     }))
-}
-
-type InstaFeed = {
-  data?: {
-    id: string
-    permalink: string
-    media_url: string
-    thumbnail_url?: string
-    media_type?: string
-  }[]
-}
-
-// The Instagram proxy only answers requests from the production origin.
-// The section must never break or slow down the home page.
-async function loadInstagram(): Promise<InstaPost[]> {
-  try {
-    const res = await fetch('https://insta.szinhaz.online', {
-      headers: { Origin: 'https://szinhaz.online' },
-      signal: AbortSignal.timeout(1500),
-    })
-    const text = res.ok ? await res.text() : ''
-    if (!text) return []
-    const feed = JSON.parse(text) as InstaFeed
-    return (feed.data ?? []).slice(0, 8).map((item) => ({
-      id: item.id,
-      url: item.permalink,
-      thumbnail:
-        item.media_type === 'VIDEO' && item.thumbnail_url
-          ? item.thumbnail_url
-          : item.media_url,
-    }))
-  } catch {
-    return []
-  }
 }
 
 export async function loader({ request }: Route.LoaderArgs) {

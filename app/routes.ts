@@ -34,6 +34,8 @@ export default [
 
   // CDN cache invalidation, called by WordPress
   route('api/revalidate', 'routes/api/revalidate.ts'),
+  // Weekly cron: keeps the Instagram access token alive
+  route('api/instagram-refresh', 'routes/api/instagram-refresh.ts'),
 
   // Listings, with WordPress-style /page/N/ pagination
   route('hirek/*', 'routes/archive.tsx', { id: 'archive-posts' }),
