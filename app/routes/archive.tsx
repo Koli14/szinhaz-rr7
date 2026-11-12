@@ -1,16 +1,16 @@
 import { Box, Heading } from '@chakra-ui/react'
-import { redirect, useLoaderData } from 'react-router'
+import { useLoaderData } from 'react-router'
 import { ArchiveItem } from '~/components/archive/ArchiveItem'
 import { PageNav } from '~/components/archive/PageNav'
 import { loadArchive, splitPagedPath } from '~/utils/archive.server'
-import { CACHE, cacheHeaders } from '~/utils/cache'
+import { CACHE, cacheHeaders, permanentRedirect } from '~/utils/cache'
 import type { Route } from './+types/archive'
 
 // Serves /category/…/, /tag/…/, /folder/…/ and the posts page (/hirek/),
 // each with WordPress-style /page/N/ pagination.
 export async function loader({ request }: Route.LoaderArgs) {
   const { pathname, search, searchParams } = new URL(request.url)
-  if (!pathname.endsWith('/')) throw redirect(`${pathname}/${search}`, 301)
+  if (!pathname.endsWith('/')) throw permanentRedirect(`${pathname}/${search}`)
 
   const { uri, page } = splitPagedPath(pathname)
 
@@ -18,9 +18,9 @@ export async function loader({ request }: Route.LoaderArgs) {
   const s = searchParams.get('s')
   if (s !== null && uri === '/hirek/') {
     const paged = page > 1 ? `&page=${page}` : ''
-    throw redirect(`/search?s=${encodeURIComponent(s)}${paged}`, 301)
+    throw permanentRedirect(`/search?s=${encodeURIComponent(s)}${paged}`)
   }
-  if (page === 1 && uri !== pathname) throw redirect(uri, 301)
+  if (page === 1 && uri !== pathname) throw permanentRedirect(uri)
 
   return loadArchive(request, uri, page)
 }

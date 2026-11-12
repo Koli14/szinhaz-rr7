@@ -11,7 +11,7 @@ import { ShareButtons } from '~/components/post/ShareButtons'
 import { Banner } from '~/components/Banner'
 import { AdSense, AD_SLOTS } from '~/components/AdSense'
 import { Tag } from '~/components/Tags'
-import { CACHE, cacheHeaders } from '~/utils/cache'
+import { CACHE, cacheHeaders, permanentRedirect } from '~/utils/cache'
 import { untrackGraphqlKeys } from '~/utils/cacheTags.server'
 import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
 import { FOLDER_POST_FIELDS, toFolderPost } from '~/utils/folderPost.server'
@@ -145,14 +145,14 @@ function postTags(post: Post): TagType[] {
 
 export async function loader({ request }: Route.LoaderArgs) {
   const { pathname, search } = new URL(request.url)
-  if (!pathname.endsWith('/')) throw redirect(`${pathname}/${search}`, 301)
+  if (!pathname.endsWith('/')) throw permanentRedirect(`${pathname}/${search}`)
 
   const data = await fetchFromGraphQL<NodeData>(GET_NODE, { uri: pathname })
   const node = data.nodeByUri
   if (!node || !('title' in node)) {
     throw new Response('Not Found', { status: 404 })
   }
-  if ('isFrontPage' in node && node.isFrontPage) throw redirect('/', 301)
+  if ('isFrontPage' in node && node.isFrontPage) throw permanentRedirect('/')
 
   const content = relativizeContentLinks(node.content ?? '')
   const seo = buildSeoMeta(request, node.seo, node.title)

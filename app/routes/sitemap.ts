@@ -1,5 +1,4 @@
-import { redirect } from 'react-router'
-import { CACHE } from '~/utils/cache'
+import { CACHE, permanentRedirect } from '~/utils/cache'
 import { proxyWpXml } from '~/utils/wp.server'
 import type { Route } from './+types/sitemap'
 
@@ -10,7 +9,7 @@ export function loader({ request }: Route.LoaderArgs) {
 
   // Old core sitemap URLs (the Frontity robots.txt pointed to wp-sitemap.xml)
   if (pathname === '/sitemap.xml' || pathname.startsWith('/wp-sitemap')) {
-    throw redirect('/sitemap_index.xml', 301)
+    throw permanentRedirect('/sitemap_index.xml')
   }
 
   return proxyWpXml(request, pathname, { cacheControl: CACHE.xml })

@@ -1,5 +1,5 @@
-import { redirect } from 'react-router'
 import { getWpOrigin } from '~/utils/wp.server'
+import { permanentRedirect } from '~/utils/cache'
 import type { Route } from './+types/redirect'
 
 // Permanent redirects for URLs that changed or are aliases:
@@ -10,16 +10,16 @@ import type { Route } from './+types/redirect'
 export function loader({ request, params }: Route.LoaderArgs) {
   const { pathname, search } = new URL(request.url)
   if (pathname.startsWith('/wp-content/')) {
-    throw redirect(`${getWpOrigin()}${pathname}${search}`, 301)
+    throw permanentRedirect(`${getWpOrigin()}${pathname}${search}`)
   }
   if (pathname.startsWith('/tags/') && params.slug) {
-    throw redirect(`/tag/${params.slug}/`, 301)
+    throw permanentRedirect(`/tag/${params.slug}/`)
   }
   if (params.page !== undefined) {
     if (!/^\d+$/.test(params.page)) {
       throw new Response('Not Found', { status: 404 })
     }
-    throw redirect(`/${params.slug}/`, 301)
+    throw permanentRedirect(`/${params.slug}/`)
   }
-  throw redirect('/', 301)
+  throw permanentRedirect('/')
 }

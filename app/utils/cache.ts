@@ -1,3 +1,4 @@
+import { redirect } from 'react-router'
 import type { HeadersFunction } from 'react-router'
 
 // Pages are tagged with the WordPress content they show (cacheTags.server.ts)
@@ -12,7 +13,14 @@ export const CACHE = {
   feed: 'public, max-age=0, s-maxage=600, stale-while-revalidate=86400',
   error: 'public, max-age=0, s-maxage=60',
   none: 'private, no-store',
+  // Permanent redirects (missing trailing slash, old URLs): without it
+  // every hit ran the function again
+  redirect: 'public, max-age=3600, s-maxage=2592000',
 } as const
+
+// 301 that the CDN keeps, use with `throw`
+export const permanentRedirect = (url: string) =>
+  redirect(url, { status: 301, headers: { 'Cache-Control': CACHE.redirect } })
 
 // Route `headers` export: cache the page, but cache errors (404s) briefly.
 export function cacheHeaders(cacheControl: string): HeadersFunction {

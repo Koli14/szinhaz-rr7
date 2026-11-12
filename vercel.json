@@ -3,6 +3,13 @@
   "framework": "react-router",
   "regions": ["fra1"],
   "fluid": true,
+  "redirects": [
+    {
+      "source": "/wp-content/:path*",
+      "destination": "https://wp.szinhaz.online/wp-content/:path*",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",
