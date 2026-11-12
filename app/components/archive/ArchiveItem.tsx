@@ -3,16 +3,8 @@ import { CoverItem } from '~/components/home/CoverItem'
 import { FeaturedItem } from '~/components/home/FeaturedItem'
 import { Link } from '~/components/Link'
 import { Tag } from '~/components/Tags'
+import { POST_IMAGE_WIDTHS, responsiveImage } from '~/utils/images'
 import type { PostPreview } from '~/types'
-
-const imageSrc = (item: PostPreview, featured: boolean) => {
-  const image = item.featuredImage?.node
-  const size = (name: string) =>
-    image?.mediaDetails.sizes.find((s) => s.name === name)?.sourceUrl
-  return featured
-    ? (size('large') ?? size('medium_large') ?? image?.sourceUrl)
-    : (size('medium_large') ?? size('medium') ?? image?.sourceUrl)
-}
 
 // One archive entry, laid out like Frontity: a wide image + text row on
 // desktop (the first entry of each page is bigger), the home page cover
@@ -42,7 +34,13 @@ function DesktopItem({
   featured: boolean
 }) {
   const image = item.featuredImage?.node
-  const src = imageSrc(item, featured)
+  const img = image?.sourceUrl
+    ? responsiveImage(image.sourceUrl, POST_IMAGE_WIDTHS)
+    : null
+  // The image takes 11/20 (first entry) or 1/3 of the row
+  const sizes = featured
+    ? '(min-width: 48rem) 55vw, 100vw'
+    : '(min-width: 48rem) 33vw, 100vw'
   const tag = item.kiemeltCimke.featuredTag?.nodes?.[0] ?? item.tags.nodes[0]
   const to = item.uri ?? `/${item.slug}/`
 
@@ -54,12 +52,14 @@ function DesktopItem({
       position='relative'
       py='5'
     >
-      {src && (
+      {img && (
         <Box asChild display='block' flex={featured ? '11' : '1'}>
           <Link to={to}>
             <Box aspectRatio={9 / 5} overflow='hidden'>
               <img
-                src={src}
+                src={img.src}
+                srcSet={img.srcSet}
+                sizes={sizes}
                 alt={image?.altText}
                 loading='lazy'
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}

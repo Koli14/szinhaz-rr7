@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import { Link } from '~/components/Link'
+import { POST_IMAGE_WIDTHS, responsiveImage } from '~/utils/images'
 import { CoverTag } from '~/components/Tags'
 import { CoverExcerpt, CoverHeading } from './CoverItem'
 import type { PostPreview } from '~/types'
@@ -18,6 +19,12 @@ export const FeaturedItem = ({
   const tag = item.kiemeltCimke.featuredTag?.nodes?.[0] ?? item.tags.nodes[0]
   const isBig = !mobileOnly && !desktopOnly
   const bgColor = tag?.taxonomyColor?.taxColor || '#F4A91C'
+  const img = image ? responsiveImage(image.sourceUrl, POST_IMAGE_WIDTHS) : null
+  // Rendered width: the big one is 2/3 of the page on desktop, the
+  // right-column one 1/3, both full width on phones
+  const sizes = mobileOnly
+    ? '100vw'
+    : `(min-width: 64rem) ${isBig ? '66vw' : '33vw'}, 100vw`
 
   return (
     <Box
@@ -29,9 +36,11 @@ export const FeaturedItem = ({
       <Box pos='relative' mb={{ lg: '22px' }}>
         <Link to={item.uri ?? `/${item.slug}/`} prefetch='viewport'>
           <Box aspectRatio={16 / 9} overflow='hidden' width='100%' bg='#F8F1E9'>
-            {image && (
+            {image && img && (
               <img
-                src={image.sourceUrl}
+                src={img.src}
+                srcSet={img.srcSet}
+                sizes={sizes}
                 alt={image.altText}
                 title={image.title}
                 // The big lead image is the LCP element: fetch it first
