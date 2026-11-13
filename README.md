@@ -23,7 +23,9 @@ The site keeps the WordPress/Frontity URL structure:
 | `/idezet/:slug/` | quotes |
 | `/search?s=…` | search (`/?s=…` redirects here) |
 | `/sitemap_index.xml`, `/*-sitemap*.xml`, `/main-sitemap.xsl` | Yoast sitemaps proxied from WordPress |
-| `/feed/` | RSS feed proxied from WordPress |
+| `/news-sitemap.xml` | Google News sitemap: the posts of the last 48 hours |
+| `/feed/`, `/category/…/feed/`, `/tag/:slug/feed/`, `/folder/:slug/feed/` | RSS feeds proxied from WordPress, with the featured images added |
+| `/<key>.txt` | IndexNow key (`public/`, `app/utils/indexnow.server.ts`) |
 | `/robots.txt` | generated, see `SITE_INDEXABLE` |
 
 Missing trailing slashes, `/page/1/`, `/kezdooldal/`, `/tags/:slug`,
@@ -34,7 +36,18 @@ Missing trailing slashes, `/page/1/`, `/kezdooldal/`, `/tags/:slug`,
 Every page renders the Yoast head (`seo { fullHead }`) of its WordPress
 object: title, description, canonical, Open Graph and JSON-LD. Backend URLs
 are rewritten to the frontend origin (`SITE_URL` or the request origin);
-uploads stay on WordPress.
+uploads stay on WordPress. `app/utils/seo.server.ts` adds what the GraphQL
+head lacks or gets wrong:
+
+- the robots meta (`max-image-preview:large` for Google Discover), from
+  Yoast's index/follow fields;
+- page numbers in the titles, canonicals and prev/next links of `/page/N/`;
+- bylines: only the names listed there get out, never a WordPress user name,
+  and persons lose their Gravatar.
+
+Titles and descriptions of categories, tags and folders are Yoast templates
+(WordPress admin → Yoast SEO → Beállítások). When WordPress invalidates a
+changed post (`/api/revalidate`), its URL is also sent to IndexNow.
 
 ## Caching
 

@@ -69,12 +69,26 @@ export function relativizeContentLinks(html: string) {
   )
 }
 
+export const escapeXml = (s: string) =>
+  s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+
 // Fetches a path from WordPress and returns it with backend URLs rewritten to
-// this site. Used for the sitemaps, the XSL stylesheet and the RSS feed.
+// this site. Used for the sitemaps, the XSL stylesheet and the RSS feeds.
+// `transform` can change the rewritten XML before it is sent.
 export async function proxyWpXml(
   request: Request,
   path: string,
-  { cacheControl }: { cacheControl: string },
+  {
+    cacheControl,
+    transform,
+  }: {
+    cacheControl: string
+    transform?: (xml: string) => string | Promise<string>
+  },
 ) {
   const upstream = await fetch(`${getWpOrigin()}${path}`, {
     headers: { 'User-Agent': 'szinhaz-rr7 (+https://szinhaz.online)' },
@@ -97,10 +111,11 @@ export async function proxyWpXml(
   }
 
   const origin = getSiteOrigin(request)
-  const body = rewriteBackendUrls(await upstream.text(), origin).replace(
+  const xml = rewriteBackendUrls(await upstream.text(), origin).replace(
     /\/\/[^"']+\/wp-content\/plugins\/wordpress-seo\/css\/main-sitemap\.xsl/g,
     `${origin}/main-sitemap.xsl`,
   )
+  const body = transform ? await transform(xml) : xml
 
   return new Response(body, {
     headers: {

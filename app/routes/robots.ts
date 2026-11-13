@@ -24,6 +24,7 @@ export function loader({ request }: Route.LoaderArgs) {
   const body = isIndexable()
     ? [
         `Sitemap: ${origin}/sitemap_index.xml`,
+        `Sitemap: ${origin}/news-sitemap.xml`,
         '',
         '# SEO-eszközök és irreleváns keresők: nem hoznak forgalmat, csak function-időt égetnek',
         ...BLOCKED_BOTS.map((bot) => `User-agent: ${bot}`),

@@ -30,7 +30,15 @@ export default [
   route('sitemap.xml', 'routes/sitemap.ts', { id: 'sitemap-legacy' }),
   route('wp-sitemap.xml', 'routes/sitemap.ts', { id: 'sitemap-wp' }),
   ...sitemapRoutes,
+  route('news-sitemap.xml', 'routes/news-sitemap.ts'),
   route('feed', 'routes/feed.ts'),
+  // Feeds of categories (up to three levels), tags and folders. They rank
+  // above the listing splats below.
+  route('category/:a/feed', 'routes/feed.ts', { id: 'feed-category-1' }),
+  route('category/:a/:b/feed', 'routes/feed.ts', { id: 'feed-category-2' }),
+  route('category/:a/:b/:c/feed', 'routes/feed.ts', { id: 'feed-category-3' }),
+  route('tag/:slug/feed', 'routes/feed.ts', { id: 'feed-tag' }),
+  route('folder/:slug/feed', 'routes/feed.ts', { id: 'feed-folder' }),
 
   // CDN cache invalidation, called by WordPress
   route('api/revalidate', 'routes/api/revalidate.ts'),
