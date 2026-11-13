@@ -53,6 +53,33 @@ Rehearsed on remix on 2026-11-11: 45 s DB, 1 s code.
 
 The full cutover runbook is in [`../CUTOVER.md`](../CUTOVER.md).
 
+## SEO settings on prod (2026-11-13)
+
+Set in the WordPress admin, not by a script:
+
+- EWWW Image Optimizer → Max Image Dimensions: width 1200 (was 800). Google
+  Discover shows a large card only for images at least 1200 px wide; rr7
+  still serves sized variants. Only new uploads are affected.
+- Settings → Reading: 30 posts in feeds (was 10).
+- Users: display names are real names (`Tóth Berta`, `Vass Kata`), not the
+  login or the nickname. Yoast prints the display name as the author.
+- Yoast SEO → Settings, no English text left:
+  - tags: `%%term_title%% – hírek, cikkek %%page%% %%sep%% %%sitename%%`,
+    description `%%term_title%% – a legfrissebb hírek, interjúk és
+    háttéranyagok egy helyen a Színház.online-on.`
+  - categories: `%%term_title%% rovat …`, description `%%term_title%% rovat –
+    friss hírek, interjúk és beszámolók a színházi világból a
+    Színház.online-on.`
+  - folders: `%%term_title%% …`, description `%%term_title%% – válogatás a
+    Színház.online cikkeiből.`
+  - gallery and quote archives without "Archive"; search and 404 titles,
+    breadcrumbs (`Címlap`) in Hungarian
+  - RSS: `Forrás: %%POSTLINK%% – %%BLOGLINK%%` after each post
+
+`szinhaz-hide-users.php` (this folder) is **not installed yet**: copy it to
+`wp-content/mu-plugins/` after trying it on a clone. Until then
+`/wp-json/wp/v2/users` and GraphQL `users` list the login slugs to anyone.
+
 ## Performance settings on prod (2026-11-11)
 
 - PHP 8.5 (Websupport admin → hosting service `szinhaz.online` → Szolgáltatás).
