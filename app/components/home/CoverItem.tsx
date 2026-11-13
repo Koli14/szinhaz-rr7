@@ -39,6 +39,9 @@ export const CoverItem = ({
                 src={src}
                 alt={image?.altText}
                 title={image?.title}
+                // Without it React preloads every thumbnail in <head>,
+                // on desktop too, where they are not shown at all
+                loading='lazy'
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </Box>
@@ -66,7 +69,7 @@ export const CoverHeading = ({
 }: { title: string } & React.ComponentProps<typeof Heading>) => (
   <Heading
     width='100%'
-    as='h4'
+    as='h2'
     fontFamily='heading'
     fontSize={{ base: '1.0625rem', md: '1.375rem' }}
     lineHeight='1.25'

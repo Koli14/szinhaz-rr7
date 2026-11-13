@@ -13,6 +13,7 @@ export function RelatedPosts({
   return (
     <Box as='aside' bg='#F8F1E9' px='29px' pb='3' {...props}>
       <Box
+        as='h2'
         display='inline-block'
         my='30px'
         p='9px 30px'

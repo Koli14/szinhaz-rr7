@@ -9,6 +9,7 @@ export function Banner({
   mt = '20px',
   mb,
   sizes = '(min-width: 64rem) 66vw, 100vw',
+  loading = 'lazy',
 }: {
   banner: BannerSlot | null | undefined
   aspectRatio?: number
@@ -17,6 +18,9 @@ export function Banner({
   mb?: string
   // Rendered width, for picking the image variant
   sizes?: string
+  // 'eager' only for banners at the top of a page: React preloads eager
+  // images in <head>, where they compete with the page's lead image
+  loading?: 'lazy' | 'eager'
 }) {
   if (!banner?.kep?.sourceUrl) return null
   const href = banner.link?.url ?? '#'
@@ -31,7 +35,8 @@ export function Banner({
               src={img.src}
               srcSet={img.srcSet}
               sizes={sizes}
-              alt='banner'
+              alt='hirdetés'
+              loading={loading}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </Box>
@@ -40,7 +45,8 @@ export function Banner({
             src={img.src}
             srcSet={img.srcSet}
             sizes={sizes}
-            alt='banner'
+            alt='hirdetés'
+            loading={loading}
             style={{ width: '100%' }}
           />
         )}

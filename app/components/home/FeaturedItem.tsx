@@ -43,8 +43,11 @@ export const FeaturedItem = ({
                 sizes={sizes}
                 alt={image.altText}
                 title={image.title}
-                // The big lead image is the LCP element: fetch it first
+                // The big lead image is the LCP element: fetch it first.
+                // The second one is rendered twice (phone and desktop
+                // place): lazy, so only the visible copy loads
                 fetchPriority={isBig ? 'high' : undefined}
+                loading={isBig ? undefined : 'lazy'}
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             )}

@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Flex, Heading } from '@chakra-ui/react'
 import { redirect, useLoaderData } from 'react-router'
 import { LeftCoverItems, RightCoverItems } from '~/components/home/CoverSection'
 import { FolderRow } from '~/components/home/Folders'
@@ -190,6 +190,11 @@ export default function Home() {
 
   return (
     <Box>
+      {/* The logo is the visible title; this one is for screen readers
+          and search engines */}
+      <Heading as='h1' srOnly>
+        Színház.online – A színházi világ hírei
+      </Heading>
       <Flex as='section' direction={{ base: 'column', lg: 'row' }}>
         <LeftCoverItems featuredItems={featuredItems} items={leftItems} />
         <RightCoverItems featuredItem={featuredItems[1]} items={rightItems} />

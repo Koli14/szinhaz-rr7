@@ -58,20 +58,23 @@ function Folder({ folder }: { folder: HomeFolder }) {
       _even={{ bg: { base: '#F8F1E9', md: 'transparent' } }}
       px={{ base: '1.5rem', md: '0' }}
     >
-      <Box
-        asChild
-        display='inline-block'
-        p='9px 19px'
-        fontSize='13px'
-        fontWeight='800'
-        color={color}
-        textTransform='uppercase'
-        border='1px solid'
-        borderColor={color}
-        bg='white'
-        mt={{ base: '30px', md: '0' }}
-      >
-        <Link to={`/folder/${folder.slug}/`}>{folder.name}</Link>
+      {/* A heading for the outline only: it has no box of its own */}
+      <Box as='h2' display='contents'>
+        <Box
+          asChild
+          display='inline-block'
+          p='9px 19px'
+          fontSize='13px'
+          fontWeight='800'
+          color={color}
+          textTransform='uppercase'
+          border='1px solid'
+          borderColor={color}
+          bg='white'
+          mt={{ base: '30px', md: '0' }}
+        >
+          <Link to={`/folder/${folder.slug}/`}>{folder.name}</Link>
+        </Box>
       </Box>
       <Box>
         {folder.posts.map((post, index) => (
@@ -115,7 +118,7 @@ export function FolderPostItem({
           )}
           <Flex direction='column' px='5' w='calc(100% - 115px)'>
             <Heading
-              as='h4'
+              as='h3'
               fontSize={{ base: '1.25rem', md: '22px' }}
               lineHeight='1.25'
               fontWeight='400'

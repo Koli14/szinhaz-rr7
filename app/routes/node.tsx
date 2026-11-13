@@ -219,9 +219,17 @@ export default function Node() {
   return (
     <Box maxWidth='800px' marginX='auto' px={{ base: '28px', md: '0' }}>
       <Box pt={{ base: '10px', lg: '2rem' }}>
-        <Banner banner={banners?.bigbanner3} aspectRatio={100 / 30} />
-        <Banner banner={banners?.bigbanner4} aspectRatio={100 / 30} />
-        <Banner banner={banners?.whateversizebanner} />
+        <Banner
+          banner={banners?.bigbanner3}
+          aspectRatio={100 / 30}
+          loading='eager'
+        />
+        <Banner
+          banner={banners?.bigbanner4}
+          aspectRatio={100 / 30}
+          loading='eager'
+        />
+        <Banner banner={banners?.whateversizebanner} loading='eager' />
         {adsense?.postbigadsense1 && <AdSense slot={AD_SLOTS.postTop1} />}
         {adsense?.postbigadsense1_2 && <AdSense slot={AD_SLOTS.postTop2} />}
         {adsense?.postbigadsense1_3 && <AdSense slot={AD_SLOTS.postTop3} />}

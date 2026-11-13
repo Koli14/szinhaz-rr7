@@ -75,7 +75,7 @@ function DesktopItem({
           </Flex>
         )}
         <Heading
-          as='h4'
+          as='h2'
           fontFamily='heading'
           fontSize={featured ? '1.6875rem' : '1.375rem'}
           fontWeight='500'

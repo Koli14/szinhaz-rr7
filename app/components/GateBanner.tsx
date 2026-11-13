@@ -44,7 +44,7 @@ export const GateBanner = ({ banners }: { banners: GateBannerData }) => {
             src={mobile?.src ?? EMPTY}
             srcSet={mobile?.srcSet}
             sizes='100vw'
-            alt='gate banner'
+            alt='hirdetés'
             style={{
               display: 'block',
               width: '100%',

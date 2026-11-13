@@ -6,8 +6,15 @@ import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
 import { POSTS_PER_PAGE as PER_PAGE } from '~/types'
 import type { GalleryItem, PageInfo } from '~/types'
 import { CACHE, cacheHeaders } from '~/utils/cache'
+import { responsiveImage } from '~/utils/images'
 import { buildSeoMeta } from '~/utils/seo.server'
 import type { Route } from './+types/gallery'
+
+// Cards are half of a phone's width and a quarter of the desktop page
+const CARD_WIDTHS = [240, 360, 480, 640]
+const CARD_SIZES = '(min-width: 64rem) 300px, (min-width: 48rem) 33vw, 50vw'
+// The first row of cards is on screen when the page opens
+const EAGER_CARDS = 4
 
 type GalleriesData = {
   myGalleries: {
@@ -53,7 +60,12 @@ export async function loader({ request }: Route.LoaderArgs) {
     galleries: data.myGalleries.nodes,
     pageInfo: data.myGalleries.pageInfo,
     basePath: new URL(request.url).pathname,
-    seo: buildSeoMeta(request, null, 'Galériák - Színház.online'),
+    seo: buildSeoMeta(
+      request,
+      null,
+      'Galériák - Színház.online',
+      'Színházi fotógalériák: előadások, próbák és események képei a Színház.online-on.',
+    ),
   }
 }
 
@@ -89,8 +101,12 @@ export default function Gallery() {
           }}
           gap='4'
         >
-          {galleries.map((gallery) => (
-            <GalleryCard key={gallery.slug} gallery={gallery} />
+          {galleries.map((gallery, i) => (
+            <GalleryCard
+              key={gallery.slug}
+              gallery={gallery}
+              lazy={i >= EAGER_CARDS}
+            />
           ))}
         </Grid>
       )}
@@ -99,8 +115,15 @@ export default function Gallery() {
   )
 }
 
-function GalleryCard({ gallery }: { gallery: GalleryItem }) {
+function GalleryCard({
+  gallery,
+  lazy,
+}: {
+  gallery: GalleryItem
+  lazy: boolean
+}) {
   const img = gallery.featuredImage?.node
+  const sized = img ? responsiveImage(img.sourceUrl, CARD_WIDTHS) : null
 
   return (
     <Box
@@ -113,11 +136,14 @@ function GalleryCard({ gallery }: { gallery: GalleryItem }) {
       transition='opacity 0.2s'
     >
       <Link to={`/galeria/${gallery.slug}/`}>
-        {img ? (
+        {img && sized ? (
           <Box aspectRatio={4 / 3} overflow='hidden' bg='gray.100'>
             <img
-              src={img.sourceUrl}
+              src={sized.src}
+              srcSet={sized.srcSet}
+              sizes={CARD_SIZES}
               alt={img.altText || gallery.title}
+              loading={lazy ? 'lazy' : undefined}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </Box>
