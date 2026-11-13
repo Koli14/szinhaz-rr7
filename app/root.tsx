@@ -209,6 +209,13 @@ export const links: Route.LinksFunction = () => [
     type: 'font/woff2',
     crossOrigin: 'anonymous',
   },
+  // Feed readers find the feed through this link
+  {
+    rel: 'alternate',
+    type: 'application/rss+xml',
+    title: 'Színház.online – friss hírek',
+    href: '/feed/',
+  },
 ]
 
 export function Layout({ children }: { children: React.ReactNode }) {

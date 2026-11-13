@@ -1,5 +1,6 @@
-import { buildSeoMeta, SEO_FIELDS } from './seo.server'
+import { buildSeoMeta, decodeEntities, SEO_FIELDS } from './seo.server'
 import { fetchFromGraphQL, gql, POST_PREVIEW_FIELDS } from './graphql.server'
+import { getSiteOrigin } from './wp.server'
 import { POSTS_PER_PAGE } from '~/types'
 import type { PageInfo, PostPreview } from '~/types'
 
@@ -92,6 +93,10 @@ const ARCHIVE_PAGE = gql`
 
 const isTermUri = (uri: string) => /^\/(category|tag|folder)\//.test(uri)
 
+// The posts page (/hirek/) has no Yoast template for its description
+const POSTS_PAGE_DESCRIPTION =
+  'Friss színházi hírek: bemutatók, interjúk, személyi változások és háttér a Színház.online-on.'
+
 export type ArchiveData = {
   name: string
   posts: PostPreview[]
@@ -161,13 +166,41 @@ export async function loadArchive(
     throw new Response('Not Found', { status: 404 })
   }
 
+  const { hasNextPage } = picked.posts.pageInfo
+  const origin = getSiteOrigin(request)
+  const pageUrl = (n: number) =>
+    n === 1 ? `${origin}${uri}` : `${origin}${uri}page/${n}/`
+  const seo = buildSeoMeta(
+    request,
+    picked.seo,
+    picked.name,
+    root ? POSTS_PAGE_DESCRIPTION : undefined,
+  )
+  if (page > 1) {
+    seo.push({ tagName: 'link', rel: 'prev', href: pageUrl(page - 1) })
+  }
+  if (hasNextPage && page < MAX_PAGE) {
+    seo.push({ tagName: 'link', rel: 'next', href: pageUrl(page + 1) })
+  }
+  // Categories, tags and folders have their own feed (routes/feed.ts); the
+  // posts page's is the site feed, linked from every page
+  if (!root) {
+    seo.push({
+      tagName: 'link',
+      rel: 'alternate',
+      type: 'application/rss+xml',
+      title: `${decodeEntities(picked.name)} – Színház.online`,
+      href: `${origin}${uri}feed/`,
+    })
+  }
+
   return {
     name: picked.name,
     posts: picked.posts.nodes,
     page,
-    hasNextPage: picked.posts.pageInfo.hasNextPage,
+    hasNextPage,
     basePath: uri,
-    seo: buildSeoMeta(request, picked.seo, picked.name),
+    seo,
   }
 }
 
