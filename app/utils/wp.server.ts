@@ -7,7 +7,7 @@ export function getGraphqlEndpoint() {
   return endpoint
 }
 
-// https://remix.szinhaz.online
+// https://wp.szinhaz.online
 export function getWpOrigin() {
   return new URL(getGraphqlEndpoint()).origin
 }
