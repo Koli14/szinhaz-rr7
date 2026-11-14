@@ -117,5 +117,6 @@ because Frontity serves the core `wp-sitemap.xml`.
    menus-endpoints).
 2. Frontity project: pause or delete; close szinhaz.live PR #10.
 3. Compare the Vercel invoice and GA4 traffic with the Frontity period.
-4. Delete `$R/before-phase-a`, `$R/remix-snap` and the remix clone, if no
-   longer needed.
+4. Delete `$R/before-phase-a` and `$R/prod-db.sql.gz`, if no longer needed.
+   (The remix clone, its database tables, `$R/remix-snap`, `$R/remix-orig`
+   and `$R/remix-backup` were deleted on 2026-11-14.)

@@ -6,6 +6,10 @@ can serve rr7 over GraphQL. They run in the Websupport basic shell
 
 Rehearsed on 2026-11-10 on remix.szinhaz.online with a full copy of the prod
 database and code (uploads stay on prod, `upload_url_path` points there).
+That clone is gone: its files, all tables of its database and its copies in
+`~/rehearsal/` (`remix-orig`, `remix-backup`, `remix-snap`) were deleted on
+2026-11-14. `02-build-clone.sh` needs a new subdomain, database and
+wp-config before it can run again.
 
 | script                | what                                                                                  | prod?                            |
 | --------------------- | ------------------------------------------------------------------------------------- | -------------------------------- |
@@ -40,8 +44,7 @@ changes, WPGraphQL Smart Cache fires `graphql_purge` with the same keys;
 `szinhaz-vercel-purge.php` collects them and posts them once per request to
 `/api/revalidate` (`Authorization: Bearer $REVALIDATE_SECRET`), which marks
 the matching pages stale. Saving an ACF options page purges that page's id.
-Failures are written to the PHP error log. On remix the constants point to
-`https://szinhaz-rr7.vercel.app/api/revalidate`.
+Failures are written to the PHP error log.
 
 `rr7-config.json` holds the ACF field groups and CPT UI post types of the
 configured test site. Only the GraphQL keys are applied, matched by group and
@@ -66,19 +69,21 @@ Set in the WordPress admin, not by a script:
 - Yoast SEO → Settings, no English text left:
   - tags: `%%term_title%% – hírek, cikkek %%page%% %%sep%% %%sitename%%`,
     description `%%term_title%% – a legfrissebb hírek, interjúk és
-    háttéranyagok egy helyen a Színház.online-on.`
+háttéranyagok egy helyen a Színház.online-on.`
   - categories: `%%term_title%% rovat …`, description `%%term_title%% rovat –
-    friss hírek, interjúk és beszámolók a színházi világból a
-    Színház.online-on.`
+friss hírek, interjúk és beszámolók a színházi világból a
+Színház.online-on.`
   - folders: `%%term_title%% …`, description `%%term_title%% – válogatás a
-    Színház.online cikkeiből.`
+Színház.online cikkeiből.`
   - gallery and quote archives without "Archive"; search and 404 titles,
     breadcrumbs (`Címlap`) in Hungarian
   - RSS: `Forrás: %%POSTLINK%% – %%BLOGLINK%%` after each post
 
-`szinhaz-hide-users.php` (this folder) is **not installed yet**: copy it to
-`wp-content/mu-plugins/` after trying it on a clone. Until then
-`/wp-json/wp/v2/users` and GraphQL `users` list the login slugs to anyone.
+`szinhaz-hide-users.php` (this folder) is in `wp-content/mu-plugins/` on prod
+since 2026-11-14. For anonymous visitors `/wp-json/wp/v2/users` answers 401,
+GraphQL `users` is empty and a post's `author` is null, and oEmbed has no
+`author_url`. The byline is not affected: Yoast prints the display name into
+the head.
 
 ## Performance settings on prod (2026-11-11)
 

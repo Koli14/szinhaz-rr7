@@ -11,7 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	return;
 }
 
-// /wp-json/wp/v2/users and /users/<id> listed every author with their slug
+// /wp-json/wp/v2/users and /users/<id> listed every author with their slug.
+// Runs last: other plugins hook this filter without returning its value
+// (ACF to REST API does), which would drop the error again.
 add_filter(
 	'rest_pre_dispatch',
 	function ( $result, $server, $request ) {
@@ -20,7 +22,7 @@ add_filter(
 		}
 		return $result;
 	},
-	10,
+	PHP_INT_MAX,
 	3
 );
 
