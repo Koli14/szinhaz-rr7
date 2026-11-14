@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useLocation } from 'react-router'
 
 const ADSENSE_CLIENT = 'ca-pub-5865633360595458'
 
@@ -40,6 +41,10 @@ export function AdSense({
   inArticle?: boolean
 }) {
   const ref = useRef<HTMLModElement>(null)
+  // A new <ins> for every page. Going from one post to another keeps the
+  // route, so React kept the node too: the first post's ad stayed on screen
+  // and the next post requested none.
+  const { pathname } = useLocation()
 
   useEffect(() => {
     // Push each <ins> once (effects can run again on remount)
@@ -52,11 +57,12 @@ export function AdSense({
         {},
       )
     } catch {}
-  }, [])
+  }, [pathname])
 
   if (inArticle) {
     return (
       <ins
+        key={pathname}
         ref={ref}
         className='adsbygoogle'
         style={{ display: 'block', marginTop: '1rem', textAlign: 'center' }}
@@ -70,6 +76,7 @@ export function AdSense({
 
   return (
     <ins
+      key={pathname}
       ref={ref}
       className='adsbygoogle'
       style={{ display: 'block', marginTop: '1rem' }}
