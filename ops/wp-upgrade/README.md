@@ -99,3 +99,17 @@ the head.
   `wp-content/object-cache.version` after every command, which gives the web
   a fresh cache. To switch it off, delete `wp-content/object-cache.php`.
 - WPGraphQL: no public introspection, query depth limit 15 (rr7 needs ~7).
+
+## Editing ACF fields on prod
+
+On 2026-11-14 the labels of the four "Nagy Banner" fields were edited in the
+ACF UI. The save stored a lowercase GraphQL name for each of them
+(`bigBanner1` became `bigbanner1`), so rr7's root query failed and every page
+generated after that had no menu, no banners and no ads. Fixed by setting
+`graphql_field_name` back to the field name (`fix-banner-graphql-names.php`
+in `~/rehearsal/`).
+
+After editing a field, open its GraphQL tab and check that "GraphQL Field
+Name" is still the field's own name, then load a freshly generated page.
+Pages rendered while the query failed stay in the CDN cache: a new deployment
+empties it.
