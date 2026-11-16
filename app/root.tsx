@@ -35,7 +35,12 @@ import type { Tag, FlatMenuItem, BannersData, BannerSlot } from './types'
 
 // ─── GraphQL (menu, tag cloud, banners) ─────────────────────────────────────
 
-type GqlImage = { node: { sourceUrl: string } } | null
+type GqlImage = {
+  node: {
+    sourceUrl: string
+    mediaDetails?: { width: number | null; height: number | null } | null
+  }
+} | null
 type GqlSlot = { kep: GqlImage; link?: { url: string | null } | null } | null
 
 type RootGqlData = {
@@ -58,6 +63,9 @@ type RootGqlData = {
 }
 
 const SLOT = gql`kep { node { sourceUrl } } link { url }`
+// The gate banner sits above the page on phones: without its size the
+// content jumps down when the image loads (CLS ~0.2)
+const GATE_IMAGE = gql`kep { node { sourceUrl mediaDetails { width height } } }`
 
 const GET_ROOT = gql`
   query getRoot {
@@ -99,8 +107,8 @@ const GET_ROOT = gql`
           postLittleAdSense1v2
           postLittleAdSense1v3
         }
-        gateBanner { ${SLOT} }
-        gateBannerMobile { kep { node { sourceUrl } } }
+        gateBanner { ${GATE_IMAGE} link { url } }
+        gateBannerMobile { ${GATE_IMAGE} }
         bigBanner1 { ${SLOT} }
         bigBanner2 { ${SLOT} }
         bigBanner3 { ${SLOT} }
@@ -114,10 +122,14 @@ const GET_ROOT = gql`
 `
 
 function toSlot(slot: GqlSlot): BannerSlot | null {
-  const url = slot?.kep?.node?.sourceUrl
-  if (!url) return null
+  const node = slot?.kep?.node
+  if (!node?.sourceUrl) return null
+  const { width, height } = node.mediaDetails ?? {}
   const link = slot?.link?.url
-  return { kep: { sourceUrl: url }, link: link ? { url: link } : null }
+  return {
+    kep: { sourceUrl: node.sourceUrl, width, height },
+    link: link ? { url: link } : null,
+  }
 }
 
 function toBanners(

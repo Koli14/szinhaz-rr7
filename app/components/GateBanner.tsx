@@ -39,15 +39,22 @@ export const GateBanner = ({ banners }: { banners: GateBannerData }) => {
             media={DESKTOP_MEDIA}
             srcSet={desktop.srcSet ?? desktop.src}
             sizes='100vw'
+            width={kep.width ?? undefined}
+            height={kep.height ?? undefined}
           />
           <img
             src={mobile?.src ?? EMPTY}
             srcSet={mobile?.srcSet}
             sizes='100vw'
+            // the intrinsic size lets the browser reserve the banner's height
+            // before it loads, so the page below doesn't jump
+            width={mobileKep?.width ?? undefined}
+            height={mobileKep?.height ?? undefined}
             alt='hirdetés'
             style={{
               display: 'block',
               width: '100%',
+              height: 'auto',
               objectFit: 'cover',
               objectPosition: 'top',
             }}

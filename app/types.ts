@@ -47,14 +47,22 @@ export type HierarchicalMenuItem = FlatMenuItem & {
   children?: HierarchicalMenuItem[]
 }
 
+// width/height come from the media library, so the page can reserve the
+// banner's space before the image arrives
+export type BannerImage = {
+  sourceUrl: string
+  width?: number | null
+  height?: number | null
+}
+
 export type BannerSlot = {
-  kep: { sourceUrl: string } | null
+  kep: BannerImage | null
   link: { url: string } | null
 }
 
 export type BannersData = {
   gatebanner: BannerSlot | null
-  gatebannermobile: { kep: { sourceUrl: string } | null }
+  gatebannermobile: { kep: BannerImage | null }
   bigbanner1: BannerSlot | null
   bigbanner2: BannerSlot | null
   bigbanner3: BannerSlot | null
