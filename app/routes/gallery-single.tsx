@@ -5,7 +5,7 @@ import { Carousel } from '~/components/Carousel'
 import type { CarouselApi } from '~/components/Carousel'
 import { Tag } from '~/components/Tags'
 import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
-import { CACHE, cacheHeaders } from '~/utils/cache'
+import { CACHE, cacheHeaders, permanentRedirect } from '~/utils/cache'
 import { formatDate } from '~/utils/helpers'
 import { buildSeoMeta, SEO_FIELDS } from '~/utils/seo.server'
 import type { Tag as TagType } from '~/types'
@@ -65,6 +65,9 @@ const GET_GALLERY = gql`
 `
 
 export async function loader({ params, request }: Route.LoaderArgs) {
+  const { pathname, search } = new URL(request.url)
+  if (!pathname.endsWith('/')) throw permanentRedirect(`${pathname}/${search}`)
+
   const data = await fetchFromGraphQL<GalleryData>(GET_GALLERY, {
     slug: params.gallerySlug,
   })
