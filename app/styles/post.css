@@ -32,3 +32,12 @@
 .postContainer iframe {
   margin: auto;
 }
+
+/* Subheadings inside the article body: Chakra's reset makes headings inherit
+   the body weight, so they read like plain text. Matched by element (not by
+   the wp-block-heading class) so classic-editor posts get it too. The title
+   and the related-post teasers sit outside .postContainer and stay as they
+   are. 800 is the only bold Open Sans face loaded. */
+.postContainer :is(h2, h3, h4) {
+  font-weight: 800;
+}
