@@ -12,7 +12,7 @@ const BIG = 100 / 30
 // screen; the rest of the home page prefetches on hover/touch
 const VIEWPORT_PREFETCH = 3
 const LITTLE = 100 / 48
-const RIGHT_COLUMN = '(min-width: 64rem) 33vw, 100vw'
+const RIGHT_COLUMN = '(min-width: 62em) 33vw, 100vw'
 
 function useBanners() {
   const root = useRouteLoaderData<typeof import('../../root').loader>('root')

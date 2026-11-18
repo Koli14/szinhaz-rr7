@@ -1,4 +1,5 @@
 import { Box } from '@chakra-ui/react'
+import type { BoxProps } from '@chakra-ui/react'
 import { Link } from '~/components/Link'
 import { Carousel } from '~/components/Carousel'
 
@@ -8,7 +9,10 @@ export type HomeQuote = {
   link: string
 }
 
-export function Quotes({ quotes }: { quotes: HomeQuote[] }) {
+export function Quotes({
+  quotes,
+  ...props
+}: { quotes: HomeQuote[] } & BoxProps) {
   if (!quotes.length) return null
 
   return (
@@ -18,6 +22,7 @@ export function Quotes({ quotes }: { quotes: HomeQuote[] }) {
       textAlign='center'
       px={{ base: '5%', md: '20%' }}
       my='5'
+      {...props}
     >
       <Carousel label='Idézetek' arrowColor={{ base: 'white', md: '#9D9D9D' }}>
         {quotes.map((quote, i) => (

@@ -24,7 +24,7 @@ export const FeaturedItem = ({
   // right-column one 1/3, both full width on phones
   const sizes = mobileOnly
     ? '100vw'
-    : `(min-width: 64rem) ${isBig ? '66vw' : '33vw'}, 100vw`
+    : `(min-width: 62em) ${isBig ? '66vw' : '33vw'}, 100vw`
 
   return (
     <Box

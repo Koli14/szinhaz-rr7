@@ -1,23 +1,22 @@
 import { Box, Flex } from '@chakra-ui/react'
-import {
-  isRouteErrorResponse,
-  redirect,
-  useLoaderData,
-  useRouteLoaderData,
-} from 'react-router'
+import { useLoaderData, useRouteLoaderData } from 'react-router'
 import { PostHeader } from '~/components/post/Header'
 import { PostContent } from '~/components/post/PostContent'
 import { RelatedPosts } from '~/components/post/RelatedPosts'
+import { Quotes } from '~/components/home/Quotes'
 import { ShareButtons } from '~/components/post/ShareButtons'
 import { Banner } from '~/components/Banner'
 import { AdSense, AD_SLOTS } from '~/components/AdSense'
 import { Tag } from '~/components/Tags'
+import { NOT_FOUND_TITLE, PageError } from '~/components/NotFound'
 import { CACHE, cacheHeaders, permanentRedirect } from '~/utils/cache'
 import { untrackGraphqlKeys } from '~/utils/cacheTags.server'
 import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
 import { FOLDER_POST_FIELDS, toFolderPost } from '~/utils/folderPost.server'
 import type { GqlFolderPost } from '~/utils/folderPost.server'
 import { buildSeoMeta, SEO_FIELDS } from '~/utils/seo.server'
+import { QUOTES_QUERY, toQuotes } from '~/utils/quotes.server'
+import type { GqlQuotes } from '~/utils/quotes.server'
 import { relativizeContentLinks } from '~/utils/wp.server'
 import type { Post, Tag as TagType } from '~/types'
 import type { Route } from './+types/node'
@@ -39,17 +38,13 @@ type NodeData = {
       }
     | { __typename: string }
     | null
+  quotes: GqlQuotes
   relatedPosts: {
     relatedPostsFields: {
       relatedPosts: { nodes: (GqlFolderPost | Record<string, never>)[] } | null
     } | null
   } | null
 }
-
-// Node id of the related posts ACF options page (acf_options_page:related-posts)
-const RELATED_POSTS_PAGE_ID = Buffer.from(
-  'acf_options_page:related-posts',
-).toString('base64')
 
 const GET_NODE = gql`
   query getNode($uri: String!) {
@@ -97,6 +92,7 @@ const GET_NODE = gql`
         ${SEO_FIELDS}
       }
     }
+    ${QUOTES_QUERY}
     relatedPosts {
       relatedPostsFields {
         relatedPosts(first: 50) {
@@ -161,53 +157,48 @@ export async function loader({ request }: Route.LoaderArgs) {
   const related = (
     data.relatedPosts?.relatedPostsFields?.relatedPosts?.nodes ?? []
   ).filter((p): p is GqlFolderPost => 'uri' in p)
-  // The related list is the same on every post (pages don't show it):
-  // editing one of its posts should not invalidate all post pages. They
-  // refresh when the list itself is saved (its options page key stays) or
-  // when their TTL ends.
+  // The related list and the quotes are the same on every post and page:
+  // editing one of their posts should not invalidate all of them. They
+  // refresh when the list itself is saved (its options page key stays), a
+  // quote is added (list:quote) or when their TTL ends.
   const ownId = 'id' in node ? node.id : null
   untrackGraphqlKeys(related.map((p) => p.id).filter((id) => id !== ownId))
-  if (node.__typename !== 'Post') untrackGraphqlKeys([RELATED_POSTS_PAGE_ID])
+  untrackGraphqlKeys(data.quotes.nodes.map((q) => q.id))
+  const shared = {
+    uri: pathname,
+    content,
+    relatedPosts: related.filter((p) => p.uri !== pathname).map(toFolderPost),
+    quotes: toQuotes(data.quotes),
+    seo,
+  }
 
   if (node.__typename === 'Post') {
     const post = node as Post
     return {
+      ...shared,
       title: post.title,
-      uri: pathname,
       date: post.date,
       tags: postTags(post),
-      content,
-      relatedPosts: related.filter((p) => p.uri !== pathname).map(toFolderPost),
-      seo,
     }
   }
-  return {
-    title: node.title,
-    uri: pathname,
-    date: null,
-    tags: [],
-    content,
-    relatedPosts: [],
-    seo,
-  }
+  return { ...shared, title: node.title, date: null, tags: [] }
 }
 
 export const meta: Route.MetaFunction = ({ data }) =>
-  data?.seo ?? [{ title: 'Az oldal nem található | Színház.online' }]
+  data?.seo ?? [{ title: NOT_FOUND_TITLE }]
 
 export const headers = cacheHeaders(CACHE.post)
 
-// Posts and pages share the Frontity post layout: banners, title, content,
-// tags, share buttons, end banners and (on mobile) the related posts.
+// Posts and pages share the Frontity post layout: banners, title, content
+// with an ad in the middle, tags, share buttons, end banners and (on mobile)
+// the related posts and the quotes.
 export default function Node() {
-  const { title, uri, date, tags, content, relatedPosts } =
+  const { title, uri, date, tags, content, relatedPosts, quotes } =
     useLoaderData<typeof loader>()
   const root = useRouteLoaderData<typeof import('../root').loader>('root')
   const banners = root?.banners
   const adsense = banners?.adsense
-  const isPost = !!date
-  const parts =
-    isPost && adsense?.postbigadsense2 ? splitForMiddleAd(content) : null
+  const parts = adsense?.postbigadsense2 ? splitForMiddleAd(content) : null
   // Text size and line height are set on the paragraphs in post.css
   const contentProps = {
     className: 'postContainer',
@@ -217,7 +208,14 @@ export default function Node() {
   }
 
   return (
-    <Box maxWidth='800px' marginX='auto' px={{ base: '28px', md: '0' }}>
+    // Extra room on desktop between the share buttons (or end banners) and
+    // the footer's line
+    <Box
+      maxWidth='800px'
+      marginX='auto'
+      px={{ base: '28px', md: '0' }}
+      pb={{ base: '0', md: '40px' }}
+    >
       <Box pt={{ base: '10px', lg: '2rem' }}>
         <Banner
           banner={banners?.bigbanner3}
@@ -275,6 +273,12 @@ export default function Node() {
         display={{ base: 'block', lg: 'none' }}
         mx={{ base: '-28px', md: '0' }}
       />
+      <Quotes
+        quotes={quotes}
+        display={{ base: 'block', md: 'none' }}
+        my='0'
+        mx='-28px'
+      />
 
       <Banner
         banner={banners?.littlebanner1}
@@ -291,15 +295,4 @@ export default function Node() {
   )
 }
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  const message =
-    isRouteErrorResponse(error) && error.status === 404
-      ? 'Az oldal nem található.'
-      : 'Nem sikerült betölteni az oldalt.'
-
-  return (
-    <Box maxWidth='800px' marginX='auto' px={{ base: '28px', md: '0' }} py='8'>
-      <p>{message}</p>
-    </Box>
-  )
-}
+export { PageError as ErrorBoundary }

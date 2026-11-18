@@ -1,5 +1,6 @@
 import { getWpOrigin } from '~/utils/wp.server'
-import { permanentRedirect } from '~/utils/cache'
+import { CACHE, cacheHeaders, permanentRedirect } from '~/utils/cache'
+import { NOT_FOUND_TITLE } from '~/components/NotFound'
 import type { Route } from './+types/redirect'
 
 // Permanent redirects for URLs that changed or are aliases:
@@ -20,8 +21,7 @@ export function loader({ request, params }: Route.LoaderArgs) {
   }
   if (params.page !== undefined) {
     const isMonthArchive =
-      /^\d{4}$/.test(params.slug ?? '') &&
-      /^(0[1-9]|1[0-2])$/.test(params.page)
+      /^\d{4}$/.test(params.slug ?? '') && /^(0[1-9]|1[0-2])$/.test(params.page)
     if (!/^\d+$/.test(params.page) || isMonthArchive) {
       throw new Response('Not Found', { status: 404 })
     }
@@ -32,3 +32,10 @@ export function loader({ request, params }: Route.LoaderArgs) {
   }
   throw permanentRedirect('/')
 }
+
+// The 404s above (month archives, /x/abc/) show the site's 404 page
+export const meta: Route.MetaFunction = () => [{ title: NOT_FOUND_TITLE }]
+
+export const headers = cacheHeaders(CACHE.error)
+
+export { PageError as ErrorBoundary } from '~/components/NotFound'

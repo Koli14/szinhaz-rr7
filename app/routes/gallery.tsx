@@ -1,25 +1,29 @@
 import { Box, Grid, Heading } from '@chakra-ui/react'
 import { useLoaderData } from 'react-router'
 import { Link } from '~/components/Link'
-import { Pagination } from '~/components/archive/Pagination'
+import { PageNav } from '~/components/archive/PageNav'
+import { NOT_FOUND_TITLE, PageError } from '~/components/NotFound'
 import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
-import { POSTS_PER_PAGE as PER_PAGE } from '~/types'
-import type { GalleryItem, PageInfo } from '~/types'
-import { CACHE, cacheHeaders } from '~/utils/cache'
+import type { GalleryItem } from '~/types'
+import { CACHE, cacheHeaders, permanentRedirect } from '~/utils/cache'
 import { responsiveImage } from '~/utils/images'
+import { cursorAfter, MENU_ORDER } from '~/utils/offset.server'
 import { buildSeoMeta } from '~/utils/seo.server'
+import { getSiteOrigin } from '~/utils/wp.server'
 import type { Route } from './+types/gallery'
 
+// Three full rows of 4 on desktop (6 of 2 on phones)
+const PER_PAGE = 12
 // Cards are half of a phone's width and a quarter of the desktop page
 const CARD_WIDTHS = [240, 360, 480, 640]
-const CARD_SIZES = '(min-width: 64rem) 300px, (min-width: 48rem) 33vw, 50vw'
+const CARD_SIZES = '(min-width: 62em) 300px, (min-width: 48rem) 33vw, 50vw'
 // The first row of cards is on screen when the page opens
 const EAGER_CARDS = 4
 
 type GalleriesData = {
   myGalleries: {
     nodes: GalleryItem[]
-    pageInfo: PageInfo
+    pageInfo: { hasNextPage: boolean }
   }
 }
 
@@ -32,9 +36,6 @@ const GET_GALLERIES = gql`
     ) {
       pageInfo {
         hasNextPage
-        hasPreviousPage
-        endCursor
-        startCursor
       }
       nodes {
         title
@@ -50,32 +51,65 @@ const GET_GALLERIES = gql`
   }
 `
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const after = new URL(request.url).searchParams.get('after') ?? undefined
+const pageUrl = (page: number) =>
+  page === 1 ? '/galeria/' : `/galeria/page/${page}/`
+
+// /galeria/ and /galeria/page/N/, as on the Frontity site
+export async function loader({ request, params }: Route.LoaderArgs) {
+  const { pathname, search } = new URL(request.url)
+  if (!pathname.endsWith('/')) throw permanentRedirect(`${pathname}/${search}`)
+
+  const page = params.page === undefined ? 1 : Number(params.page)
+  if (!Number.isInteger(page) || page < 1) {
+    throw new Response('Not Found', { status: 404 })
+  }
+  if (page === 1 && params.page !== undefined) {
+    throw permanentRedirect('/galeria/')
+  }
+
+  let after: string | null = null
+  if (page > 1) {
+    after = await cursorAfter('galeria', MENU_ORDER, (page - 1) * PER_PAGE)
+    if (!after) throw new Response('Not Found', { status: 404 })
+  }
   const data = await fetchFromGraphQL<GalleriesData>(GET_GALLERIES, {
     first: PER_PAGE,
     after,
   })
-  return {
-    galleries: data.myGalleries.nodes,
-    pageInfo: data.myGalleries.pageInfo,
-    basePath: new URL(request.url).pathname,
-    seo: buildSeoMeta(
-      request,
-      null,
-      'Galériák - Színház.online',
-      'Színházi fotógalériák: előadások, próbák és események képei a Színház.online-on.',
-    ),
+  const { hasNextPage } = data.myGalleries.pageInfo
+
+  const seo = buildSeoMeta(
+    request,
+    null,
+    'Galériák - Színház.online',
+    'Színházi fotógalériák: előadások, próbák és események képei a Színház.online-on.',
+  )
+  const origin = getSiteOrigin(request)
+  if (page > 1) {
+    seo.push({
+      tagName: 'link',
+      rel: 'prev',
+      href: `${origin}${pageUrl(page - 1)}`,
+    })
   }
+  if (hasNextPage) {
+    seo.push({
+      tagName: 'link',
+      rel: 'next',
+      href: `${origin}${pageUrl(page + 1)}`,
+    })
+  }
+
+  return { galleries: data.myGalleries.nodes, page, hasNextPage, seo }
 }
 
 export const meta: Route.MetaFunction = ({ data }) =>
-  data?.seo ?? [{ title: 'Galériák - Színház.online' }]
+  data?.seo ?? [{ title: NOT_FOUND_TITLE }]
 
 export const headers = cacheHeaders(CACHE.list)
 
 export default function Gallery() {
-  const { galleries, pageInfo, basePath } = useLoaderData<typeof loader>()
+  const { galleries, page, hasNextPage } = useLoaderData<typeof loader>()
 
   return (
     <Box px={{ base: '1rem', lg: '0' }} py='4'>
@@ -110,7 +144,13 @@ export default function Gallery() {
           ))}
         </Grid>
       )}
-      <Pagination pageInfo={pageInfo} basePath={basePath} />
+      <PageNav
+        page={page}
+        hasNextPage={hasNextPage}
+        pageUrl={pageUrl}
+        newerLabel='Újabb galériák'
+        olderLabel='Régebbi galériák'
+      />
     </Box>
   )
 }
@@ -169,3 +209,5 @@ function GalleryCard({
     </Box>
   )
 }
+
+export { PageError as ErrorBoundary }

@@ -8,7 +8,7 @@ export function Banner({
   maxWidth,
   mt = '20px',
   mb,
-  sizes = '(min-width: 64rem) 66vw, 100vw',
+  sizes = '(min-width: 62em) 66vw, 100vw',
   loading = 'lazy',
 }: {
   banner: BannerSlot | null | undefined

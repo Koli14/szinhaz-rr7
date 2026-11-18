@@ -7,10 +7,12 @@ import {
   POST_PREVIEW_FIELDS,
 } from '~/utils/graphql.server'
 import { CACHE, cacheHeaders } from '~/utils/cache'
+import { cursorAfter } from '~/utils/offset.server'
 import type { PostPreview, PageInfo } from '~/types'
 import { POSTS_PER_PAGE as PER_PAGE } from '~/types'
 import type { Route } from './+types/search'
 import { PageNav } from '~/components/archive/PageNav'
+import { PageError } from '~/components/NotFound'
 
 type SearchData = {
   posts: {
@@ -18,21 +20,6 @@ type SearchData = {
     pageInfo: PageInfo
   }
 }
-
-type CursorData = { posts: { pageInfo: { endCursor: string | null } } }
-
-// Like the archives: numbered pages, but no crawling of deep result pages
-const MAX_PAGE = 50
-
-const SEARCH_CURSOR = gql`
-  query searchCursor($search: String!, $skip: Int!) {
-    posts(first: $skip, where: { search: $search }) {
-      pageInfo {
-        endCursor
-      }
-    }
-  }
-`
 
 const SEARCH_POSTS = gql`
   query searchPosts($search: String!, $first: Int!, $after: String) {
@@ -64,17 +51,18 @@ export async function loader({ request }: Route.LoaderArgs) {
   const page = Number(url.searchParams.get('page') ?? '1')
 
   if (!search) return empty(search)
-  if (!Number.isInteger(page) || page < 1 || page > MAX_PAGE) {
+  if (!Number.isInteger(page) || page < 1) {
     throw new Response('Not Found', { status: 404 })
   }
 
+  // Numbered pages like the archives (see offset.server.ts)
   let after: string | null = null
   if (page > 1) {
-    const cursor = await fetchFromGraphQL<CursorData>(SEARCH_CURSOR, {
-      search,
-      skip: (page - 1) * PER_PAGE,
-    })
-    after = cursor.posts.pageInfo.endCursor
+    after = await cursorAfter(
+      'posts',
+      { search, orderby: 'relevance' },
+      (page - 1) * PER_PAGE,
+    )
     if (!after) return empty(search, page)
   }
 
@@ -94,8 +82,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export function meta({ data }: Route.MetaArgs) {
   const title = data?.search
-    ? `„${data.search}” keresési eredmények | Színház.online`
-    : 'Keresés | Színház.online'
+    ? `„${data.search}” keresési eredmények - Színház.online`
+    : 'Keresés - Színház.online'
   return [{ title }, { name: 'robots', content: 'noindex, follow' }]
 }
 
@@ -113,7 +101,7 @@ export default function Search() {
         textTransform='uppercase'
         fontFamily='heading'
       >
-        {search ? `Keresés: „${search}"` : 'Keresés'}
+        {search ? `Keresés: „${search}”` : 'Keresés'}
       </Heading>
       {posts.length === 0 ? (
         <Box color='gray.500' py='8'>
@@ -140,3 +128,5 @@ export default function Search() {
     </Box>
   )
 }
+
+export { PageError as ErrorBoundary }

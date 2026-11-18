@@ -1,15 +1,11 @@
 import { buildSeoMeta, decodeEntities, SEO_FIELDS } from './seo.server'
 import { fetchFromGraphQL, gql, POST_PREVIEW_FIELDS } from './graphql.server'
 import { getSiteOrigin } from './wp.server'
+import { cursorAfter, MENU_ORDER } from './offset.server'
 import { POSTS_PER_PAGE } from '~/types'
 import type { PageInfo, PostPreview } from '~/types'
 
-// Deeper pages need a cursor lookup first; keep crawlers from walking
-// thousands of pages of the same listing.
-const MAX_PAGE = 50
-
 type PostConnection = { nodes: PostPreview[]; pageInfo: PageInfo }
-type CursorConnection = { pageInfo: { endCursor: string | null } }
 
 type SeoField = { fullHead: string | null } | undefined
 
@@ -50,24 +46,59 @@ const POSTS_PAGE = gql`
   }
 `
 
-// Lists are in menu order (Simple Custom Post Order), as on Frontity.
-// `$root` adds the unfiltered post list, used by the posts page (/hirek/)
-const ARCHIVE_CURSOR = gql`
-  query archiveCursor(
-    $uri: String!
-    $pageSlug: String!
-    $skip: Int!
-    $root: Boolean!
-  ) {
+// Pages 2, 3, … start after a cursor looked up by offset (offset.server.ts),
+// which needs the term's id. `$root` checks the posts page (/hirek/).
+const ARCHIVE_TERM = gql`
+  query archiveTerm($uri: String!, $pageSlug: String!, $root: Boolean!) {
     nodeByUri(uri: $uri) {
       __typename
-      ${termFields('posts(first: $skip, where: { orderby: { field: MENU_ORDER, order: ASC } }) { pageInfo { endCursor } }')}
+      ... on Category {
+        databaseId
+      }
+      ... on Tag {
+        databaseId
+      }
+      ... on Folder {
+        databaseId
+      }
+      ... on ContentType {
+        isPostsPage
+      }
     }
-    posts(first: $skip, where: { orderby: { field: MENU_ORDER, order: ASC } }) @include(if: $root) { pageInfo { endCursor } }
-    ${POSTS_PAGE}
+    postsPage: pages(first: 1, where: { name: $pageSlug }) @include(if: $root) {
+      nodes {
+        isPostsPage
+      }
+    }
   }
 `
 
+type TermResponse = {
+  nodeByUri:
+    | { __typename: 'Category' | 'Tag' | 'Folder'; databaseId: number }
+    | { __typename: 'ContentType'; isPostsPage: boolean }
+    | { __typename: string }
+    | null
+  postsPage?: { nodes: { isPostsPage: boolean }[] } | null
+}
+
+// REST filter of the archive's posts, null if the URI is not an archive
+function restFilter({ nodeByUri: node, postsPage }: TermResponse) {
+  if (!node) return null
+  if ('databaseId' in node) {
+    const param = { Category: 'categories', Tag: 'tags', Folder: 'folder' }[
+      node.__typename
+    ]
+    return param ? { [param]: String(node.databaseId) } : null
+  }
+  if ('isPostsPage' in node && node.isPostsPage) {
+    return postsPage?.nodes[0]?.isPostsPage ? {} : null
+  }
+  return null
+}
+
+// Lists are in menu order (Simple Custom Post Order), as on Frontity.
+// `$root` adds the unfiltered post list, used by the posts page (/hirek/)
 const ARCHIVE_PAGE = gql`
   query archivePage(
     $uri: String!
@@ -130,23 +161,27 @@ export async function loadArchive(
   uri: string,
   page: number,
 ): Promise<ArchiveData> {
-  if (!Number.isInteger(page) || page < 1 || page > MAX_PAGE) {
+  if (!Number.isInteger(page) || page < 1) {
     throw new Response('Not Found', { status: 404 })
   }
 
   const root = !isTermUri(uri)
+  const pageSlug = uri.split('/').filter(Boolean).pop() ?? ''
   let after: string | null = null
   if (page > 1) {
-    const cursor = await fetchFromGraphQL<ArchiveResponse<CursorConnection>>(
-      ARCHIVE_CURSOR,
-      {
-        uri,
-        pageSlug: uri.split('/').filter(Boolean).pop() ?? '',
-        skip: (page - 1) * POSTS_PER_PAGE,
-        root,
-      },
-    )
-    after = pickPosts(cursor)?.posts.pageInfo.endCursor ?? null
+    const term = await fetchFromGraphQL<TermResponse>(ARCHIVE_TERM, {
+      uri,
+      pageSlug,
+      root,
+    })
+    const filter = restFilter(term)
+    if (filter) {
+      after = await cursorAfter(
+        'posts',
+        { ...filter, ...MENU_ORDER },
+        (page - 1) * POSTS_PER_PAGE,
+      )
+    }
     if (!after) throw new Response('Not Found', { status: 404 })
   }
 
@@ -154,7 +189,7 @@ export async function loadArchive(
     ARCHIVE_PAGE,
     {
       uri,
-      pageSlug: uri.split('/').filter(Boolean).pop() ?? '',
+      pageSlug,
       first: POSTS_PER_PAGE,
       after,
       root,
@@ -179,7 +214,7 @@ export async function loadArchive(
   if (page > 1) {
     seo.push({ tagName: 'link', rel: 'prev', href: pageUrl(page - 1) })
   }
-  if (hasNextPage && page < MAX_PAGE) {
+  if (hasNextPage) {
     seo.push({ tagName: 'link', rel: 'next', href: pageUrl(page + 1) })
   }
   // Categories, tags and folders have their own feed (routes/feed.ts); the

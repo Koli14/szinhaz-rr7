@@ -2,6 +2,7 @@ import { Box, Heading } from '@chakra-ui/react'
 import { useLoaderData } from 'react-router'
 import { ArchiveItem } from '~/components/archive/ArchiveItem'
 import { PageNav } from '~/components/archive/PageNav'
+import { NOT_FOUND_TITLE, PageError } from '~/components/NotFound'
 import { loadArchive, splitPagedPath } from '~/utils/archive.server'
 import { CACHE, cacheHeaders, permanentRedirect } from '~/utils/cache'
 import type { Route } from './+types/archive'
@@ -26,7 +27,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export const meta: Route.MetaFunction = ({ data }) =>
-  data?.seo ?? [{ title: 'Az oldal nem található | Színház.online' }]
+  data?.seo ?? [{ title: NOT_FOUND_TITLE }]
 
 export const headers = cacheHeaders(CACHE.list)
 
@@ -38,7 +39,7 @@ export default function Archive() {
     useLoaderData<typeof loader>()
 
   return (
-    <Box py='4'>
+    <Box pb='4'>
       {/* Frontity showed no title; keep it for screen readers and SEO */}
       <Heading as='h1' srOnly dangerouslySetInnerHTML={{ __html: name }} />
       <Box>
@@ -55,10 +56,4 @@ export default function Archive() {
   )
 }
 
-export function ErrorBoundary() {
-  return (
-    <Box px={{ base: '1rem', lg: '0' }} py='8'>
-      <p>Az oldal nem található.</p>
-    </Box>
-  )
-}
+export { PageError as ErrorBoundary }

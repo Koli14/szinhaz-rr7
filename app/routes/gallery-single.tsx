@@ -4,6 +4,7 @@ import { useLoaderData } from 'react-router'
 import { Carousel } from '~/components/Carousel'
 import type { CarouselApi } from '~/components/Carousel'
 import { Tag } from '~/components/Tags'
+import { NOT_FOUND_TITLE, PageError } from '~/components/NotFound'
 import { fetchFromGraphQL, gql } from '~/utils/graphql.server'
 import { CACHE, cacheHeaders, permanentRedirect } from '~/utils/cache'
 import { formatDate } from '~/utils/helpers'
@@ -91,7 +92,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 }
 
 export const meta: Route.MetaFunction = ({ data }) =>
-  data?.seo ?? [{ title: 'Az oldal nem található | Színház.online' }]
+  data?.seo ?? [{ title: NOT_FOUND_TITLE }]
 
 export const headers = cacheHeaders(CACHE.post)
 
@@ -106,7 +107,7 @@ export default function GallerySingle() {
   }
 
   return (
-    <Box maxWidth='900px' marginX='auto' px={{ base: '32px', md: '0' }}>
+    <Box px={{ base: '32px', md: '0' }}>
       <Box pt={{ base: '20px', lg: '4rem' }} pb={{ base: '2rem', lg: '5' }}>
         {gallery.tag && <Tag tag={gallery.tag} />}
         <Heading
@@ -176,3 +177,5 @@ export default function GallerySingle() {
     </Box>
   )
 }
+
+export { PageError as ErrorBoundary }
