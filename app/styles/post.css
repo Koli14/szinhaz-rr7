@@ -1,5 +1,76 @@
+/* Styles of the WordPress post HTML, matching the Frontity theme: its
+   `Content` styled component (post/post.js) and the html2react processors
+   (styles/processors.js). Chakra v3's preflight resets more than v1's did
+   (list markers, italics, heading sizes), those are put back here too. The
+   preflight sits in a cascade layer, so these unlayered rules win over it. */
+
+.postContainer {
+  word-break: break-word;
+}
+
+.postContainer * {
+  max-width: 100%;
+}
+
+/* Paragraphs carry the text size, the container stays at 16px like the
+   Frontity one, so headings, lists and captions size from that */
 .postContainer p {
+  font-size: 0.9375rem;
+  line-height: 1.625;
+}
+
+@media (min-width: 48rem) {
+  .postContainer p {
+    font-size: 1.125rem;
+  }
+}
+
+/* Only top-level paragraphs get the gap, not the ones nested in quotes or
+   lists. `.postBlocks` wraps each chunk of the post HTML. */
+.postBlocks > p {
   margin-top: 10px;
+}
+
+.postContainer h1 {
+  font-size: 2.44em;
+}
+.postContainer h2 {
+  font-size: 1.95em;
+}
+.postContainer h3 {
+  font-size: 1.56em;
+}
+.postContainer h4 {
+  font-size: 1.25em;
+}
+.postContainer h5 {
+  font-size: 1em;
+}
+.postContainer h6 {
+  font-size: 0.8em;
+}
+
+/* Chakra v1 kept the browser's list markers, v3 removes them */
+.postContainer :is(ul, ol) {
+  list-style: revert;
+}
+
+.postContainer ul {
+  padding: 1rem;
+}
+
+/* v3's `* { font: inherit }` drops the browser's italics and bold headers */
+.postContainer :is(em, i, cite, dfn, var, address) {
+  font-style: italic;
+}
+
+.postContainer th {
+  font-weight: bold;
+}
+
+/* v1 drew rules in the text color, v3 in its light gray border token */
+.postContainer hr {
+  border-color: currentColor;
 }
 
 .postContainer a {
@@ -11,33 +82,100 @@
   text-decoration: underline;
 }
 
+.postContainer img {
+  object-fit: cover;
+  object-position: center;
+}
+
 .postContainer figure {
   margin: 24px auto;
 }
 
-.postContainer img {
+.postContainer figcaption {
+  font-size: 1rem;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.postContainer iframe {
+  display: block;
   margin: auto;
 }
 
-.postContainer .wp-block-quote {
+/* Every blockquote except Instagram embeds, which bring their own look */
+.postContainer blockquote:not(.instagram-media) {
   border-left: 4px solid rgb(244, 169, 28);
   margin: 1.75rem;
   padding-inline: 1rem;
   font-style: italic;
-  font-size: 1.5rem;
+}
+
+.postContainer .wp-block-quote.is-style-large {
+  border-left: 0;
+  margin-left: 4rem;
+  margin-right: 4rem;
+}
+
+.postContainer .wp-block-quote p {
   font-family: 'Noto Serif', serif;
+  font-size: 1rem;
   line-height: 1.5;
+  margin-top: 0;
 }
 
-.postContainer iframe {
-  margin: auto;
+@media (min-width: 420px) {
+  .postContainer .wp-block-quote p {
+    font-size: 1.5rem;
+  }
 }
 
-/* Subheadings inside the article body: Chakra's reset makes headings inherit
-   the body weight, so they read like plain text. Matched by element (not by
-   the wp-block-heading class) so classic-editor posts get it too. The title
-   and the related-post teasers sit outside .postContainer and stay as they
-   are. 800 is the only bold Open Sans face loaded. */
-.postContainer :is(h2, h3, h4) {
-  font-weight: 800;
+/* WordPress core alignment classes */
+@media (min-width: 420px) {
+  .postContainer img.aligncenter,
+  .postContainer img.alignleft,
+  .postContainer img.alignright {
+    width: auto;
+  }
+
+  .postContainer .aligncenter {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .postContainer .has-text-align-center {
+    text-align: center;
+  }
+
+  .postContainer .has-text-align-right {
+    text-align: right;
+  }
+
+  .postContainer .alignright {
+    float: right;
+    margin-left: 24px;
+  }
+
+  .postContainer .alignleft {
+    float: left;
+    margin-right: 24px;
+  }
+}
+
+.postContainer .aligncenter img {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* The editor's orange text color */
+.postContainer .has-luminous-vivid-orange-color {
+  color: #f4a91c;
+}
+
+/* In-article galleries (see components/post/PostContent.tsx) */
+.postGallery img {
+  display: inline-block;
+  padding: 1px;
 }

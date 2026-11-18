@@ -6,6 +6,7 @@ import {
   useRouteLoaderData,
 } from 'react-router'
 import { PostHeader } from '~/components/post/Header'
+import { PostContent } from '~/components/post/PostContent'
 import { RelatedPosts } from '~/components/post/RelatedPosts'
 import { ShareButtons } from '~/components/post/ShareButtons'
 import { Banner } from '~/components/Banner'
@@ -207,10 +208,9 @@ export default function Node() {
   const isPost = !!date
   const parts =
     isPost && adsense?.postbigadsense2 ? splitForMiddleAd(content) : null
+  // Text size and line height are set on the paragraphs in post.css
   const contentProps = {
     className: 'postContainer',
-    fontSize: { base: '0.9375rem', md: 'lg' },
-    lineHeight: 'tall',
     color: 'rgba(12, 17, 43, 0.8)',
     pt: { base: '1', md: '5' },
     mb: '40px',
@@ -241,17 +241,19 @@ export default function Node() {
         />
       </Box>
 
-      {parts ? (
-        <Box {...contentProps}>
-          <div dangerouslySetInnerHTML={{ __html: parts[0] }} />
-          <Box my='16px'>
-            <AdSense slot={AD_SLOTS.postMiddle} inArticle />
-          </Box>
-          <div dangerouslySetInnerHTML={{ __html: parts[1] }} />
-        </Box>
-      ) : (
-        <Box {...contentProps} dangerouslySetInnerHTML={{ __html: content }} />
-      )}
+      <Box {...contentProps}>
+        {parts ? (
+          <>
+            <PostContent html={parts[0]} />
+            <Box my='16px'>
+              <AdSense slot={AD_SLOTS.postMiddle} inArticle />
+            </Box>
+            <PostContent html={parts[1]} />
+          </>
+        ) : (
+          <PostContent html={content} />
+        )}
+      </Box>
 
       {tags.length > 0 && (
         <Flex flexWrap='wrap' gap='6px'>

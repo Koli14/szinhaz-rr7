@@ -12,6 +12,8 @@ type Props = {
   // Slides visible at once from the `md` breakpoint (always 1 on mobile)
   perView?: number
   arrowColor?: string | Record<string, string>
+  // Arrow distance from the carousel's sides, negative puts them outside
+  arrowInset?: string
 }
 
 // Scroll-snap carousel: swipeable on touch devices, arrow buttons wrap around
@@ -21,6 +23,7 @@ export function Carousel({
   children,
   perView = 1,
   arrowColor = 'white',
+  arrowInset = '8px',
   apiRef,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null)
@@ -54,7 +57,7 @@ export function Carousel({
       position='absolute'
       top='0'
       bottom='0'
-      {...(dir === 1 ? { right: '8px' } : { left: '8px' })}
+      {...(dir === 1 ? { right: arrowInset } : { left: arrowInset })}
       px='0'
       cursor='pointer'
       color={arrowColor}
