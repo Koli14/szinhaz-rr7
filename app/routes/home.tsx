@@ -6,8 +6,6 @@ import type { HomeFolder } from '~/components/home/Folders'
 import { GallerySection } from '~/components/home/GallerySection'
 import type { HomeGallery } from '~/components/home/GallerySection'
 import { Quotes } from '~/components/home/Quotes'
-import type { HomeQuote } from '~/components/home/Quotes'
-import { Instagram } from '~/components/Instagram'
 import { CACHE, cacheHeaders } from '~/utils/cache'
 import {
   fetchFromGraphQL,
@@ -16,6 +14,8 @@ import {
 } from '~/utils/graphql.server'
 import { buildSeoMeta, SEO_FIELDS } from '~/utils/seo.server'
 import { loadInstagram } from '~/utils/instagram.server'
+import { QUOTES_QUERY, toQuotes } from '~/utils/quotes.server'
+import type { GqlQuotes } from '~/utils/quotes.server'
 import {
   FOLDER_POST_FIELDS,
   toFolderPost,
@@ -46,15 +46,7 @@ type HomeData = {
       folderek2Jobb: FolderList
     } | null
   } | null
-  quotes: {
-    nodes: {
-      content: string
-      quoteFields: {
-        nev: string | null
-        postLink: { node: { uri: string } | null } | null
-      } | null
-    }[]
-  }
+  quotes: GqlQuotes
   myGalleries: {
     nodes: { title: string; uri: string; featuredImage: GqlImage }[]
   }
@@ -98,15 +90,7 @@ const GET_HOME = gql`
         }
       }
     }
-    quotes(first: 10, where: { orderby: { field: MENU_ORDER, order: ASC } }) {
-      nodes {
-        content
-        quoteFields {
-          nev
-          postLink { node { uri } }
-        }
-      }
-    }
+    ${QUOTES_QUERY}
     myGalleries(first: 10, where: { orderby: { field: MENU_ORDER, order: ASC } }) {
       nodes {
         title
@@ -141,11 +125,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   ])
   const folders = data.frontPage?.homepage
 
-  const quotes: HomeQuote[] = data.quotes.nodes.map((q) => ({
-    content: q.content,
-    name: q.quoteFields?.nev ?? null,
-    link: q.quoteFields?.postLink?.node?.uri ?? '/',
-  }))
+  const quotes = toQuotes(data.quotes)
   const galleries: HomeGallery[] = data.myGalleries.nodes.map((g) => ({
     title: g.title,
     uri: g.uri,
@@ -165,6 +145,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     },
     quotes,
     galleries,
+    // Shown in the footer (Footer.tsx)
     instagram,
     seo: buildSeoMeta(request, data.frontPage?.seo, 'Színház.online'),
   }
@@ -182,7 +163,6 @@ export default function Home() {
     folders2,
     quotes,
     galleries,
-    instagram,
   } = useLoaderData<typeof loader>()
   const featuredItems = [items[0], items[6]]
   const leftItems = items.slice(1, 6)
@@ -203,7 +183,6 @@ export default function Home() {
       <FolderRow {...folders1} />
       <Quotes quotes={quotes} />
       <FolderRow {...folders2} />
-      <Instagram posts={instagram} />
     </Box>
   )
 }

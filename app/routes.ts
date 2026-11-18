@@ -44,6 +44,8 @@ export default [
   route('api/revalidate', 'routes/api/revalidate.ts'),
   // Weekly cron: keeps the Instagram access token alive
   route('api/instagram-refresh', 'routes/api/instagram-refresh.ts'),
+  // Instagram posts of the footer
+  route('api/instagram', 'routes/api/instagram.ts'),
 
   // Listings, with WordPress-style /page/N/ pagination
   route('hirek/*', 'routes/archive.tsx', { id: 'archive-posts' }),
@@ -52,6 +54,7 @@ export default [
   route('folder/*', 'routes/archive.tsx', { id: 'archive-folder' }),
   route('search', 'routes/search.tsx'),
   route('galeria', 'routes/gallery.tsx'),
+  route('galeria/page/:page', 'routes/gallery.tsx', { id: 'gallery-paged' }),
   route('galeria/:gallerySlug', 'routes/gallery-single.tsx'),
 
   // Aliases
@@ -64,4 +67,7 @@ export default [
   // Single posts, pages and quotes, resolved by their WordPress URI
   route('idezet/:slug', 'routes/node.tsx', { id: 'node-quote' }),
   route(':slug', 'routes/node.tsx', { id: 'node' }),
+
+  // Everything else is a 404 within the layout
+  route('*', 'routes/not-found.tsx'),
 ] satisfies RouteConfig

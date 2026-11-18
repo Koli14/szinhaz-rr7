@@ -24,6 +24,7 @@ import {
   useGoogleAnalytics,
 } from './components/Analytics'
 import { NavigationProgress } from './components/NavigationProgress'
+import { ScrollToTop } from './components/ScrollToTop'
 import { MobileDrawer } from './components/header/MobileDrawer'
 import { fetchFromGraphQL, gql } from './utils/graphql.server'
 import {
@@ -285,6 +286,7 @@ export default function App() {
         <Outlet />
       </Box>
       <Footer />
+      <ScrollToTop />
       <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
       <MobileDrawer
         open={drawerOpen}
@@ -310,8 +312,11 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     details = error.message
   }
 
+  // Only reached when the layout itself fails: page routes show their errors
+  // inside it (components/NotFound.tsx)
   return (
     <Box p='8' textAlign='center'>
+      <title>{`${message} - Színház.online`}</title>
       <h1>{message}</h1>
       <p>{details}</p>
     </Box>

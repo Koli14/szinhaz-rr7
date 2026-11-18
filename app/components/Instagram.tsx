@@ -1,4 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react'
+import type { BoxProps } from '@chakra-ui/react'
 import { IoLogoInstagram } from 'react-icons/io5'
 
 export type InstaPost = { id: string; url: string; thumbnail: string }
@@ -7,9 +8,12 @@ const PROFILE = 'https://www.instagram.com/szinhaz.online/'
 
 // "Színházi pillanatok az Instagramon" heading with the latest 8 posts
 // (4 on mobile). The grid is left out when the feed is unavailable.
-export function Instagram({ posts }: { posts: InstaPost[] }) {
+export function Instagram({
+  posts,
+  ...props
+}: { posts: InstaPost[] } & BoxProps) {
   return (
-    <Box as='section' mt={{ base: '0', md: '50px' }}>
+    <Box as='section' {...props}>
       <Flex
         asChild
         maxWidth='1210px'

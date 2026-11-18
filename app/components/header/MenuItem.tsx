@@ -43,9 +43,15 @@ export default function MenuItem({
         _last: { borderBottom: '0' },
       })}
     >
+      {/* Narrower below 80em: the nine items are ~1030px wide with the
+          Frontity padding and overflowed the page between 62em and that */}
       <Box
         asChild
-        px='1.375rem'
+        px={
+          isChild
+            ? '1.375rem'
+            : { base: '1.375rem', lg: '1rem', xl: '1.375rem' }
+        }
         borderRight={isLast ? '0' : '1px solid white'}
         transition='opacity 0.5s ease'
         _hover={{ opacity: 0.5 }}

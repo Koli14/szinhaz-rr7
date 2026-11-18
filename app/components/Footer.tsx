@@ -1,7 +1,12 @@
 import { Box, Flex } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 import { IoLogoFacebook } from 'react-icons/io5'
+import { useMatches, useRouteLoaderData } from 'react-router'
+import { Instagram } from '~/components/Instagram'
+import type { InstaPost } from '~/components/Instagram'
 import { Link } from '~/components/Link'
 import SocialNav from '~/components/header/SocialNav'
+import type { loader as homeLoader } from '~/routes/home'
 
 const MENU = [
   ['/kapcsolat/', 'Kapcsolat'],
@@ -38,7 +43,44 @@ function FooterMenuItem({
   )
 }
 
+const DESKTOP = '(min-width: 48em)'
+
+// Instagram block, as in the Frontity footer: on every page on phones, on
+// desktop only on the home page and the 404 page. The home page brings the
+// posts in its data, other pages load them once in the browser.
+function useFooterInstagram() {
+  const matches = useMatches()
+  const leaf = matches[matches.length - 1]
+  const home = useRouteLoaderData<typeof homeLoader>('routes/home')
+  // A route that failed (404) has no data
+  const onDesktop = leaf?.id === 'routes/home' || leaf?.data == null
+  const [loaded, setLoaded] = useState<InstaPost[] | null>(null)
+  const needsFetch =
+    !home && loaded === null && (onDesktop || !matchesDesktop())
+
+  useEffect(() => {
+    if (!needsFetch) return
+    let active = true
+    fetch('/api/instagram')
+      .then((response) => (response.ok ? response.json() : []))
+      .catch(() => [])
+      .then((posts: InstaPost[]) => {
+        if (active) setLoaded(posts)
+      })
+    return () => {
+      active = false
+    }
+  }, [needsFetch])
+
+  return { posts: home?.instagram ?? loaded ?? [], onDesktop }
+}
+
+const matchesDesktop = () =>
+  typeof window !== 'undefined' && window.matchMedia(DESKTOP).matches
+
 export function Footer() {
+  const instagram = useFooterInstagram()
+
   return (
     // Positioned above the fixed gate banner, which otherwise covers the
     // footer on tall desktop windows
@@ -49,6 +91,11 @@ export function Footer() {
       bg='white'
       mt={{ base: '0', md: '50px' }}
     >
+      <Instagram
+        posts={instagram.posts}
+        display={{ base: 'block', md: instagram.onDesktop ? 'block' : 'none' }}
+      />
+
       <Box asChild display={{ base: 'block', md: 'none' }}>
         <a
           href='https://facebook.com/szinhazonline/'
@@ -137,7 +184,14 @@ export function Footer() {
                 <Box
                   asChild
                   maxHeight='80px'
-                  maxWidth={{ base: 'min(200px, 30vw)', md: '200px' }}
+                  // Smaller on narrow desktops (62–80em), where the footer is
+                  // one row and the logos pushed it past the window
+                  maxWidth={{
+                    base: 'min(200px, 30vw)',
+                    md: '200px',
+                    lg: 'min(200px, 13vw)',
+                    xl: '200px',
+                  }}
                 >
                   <img src={src} alt={alt} loading='lazy' />
                 </Box>

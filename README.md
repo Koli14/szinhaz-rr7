@@ -19,9 +19,10 @@ The site keeps the WordPress/Frontity URL structure:
 | `/` | home (`cimlap` folder) |
 | `/:slug/` | post or page, resolved with `nodeByUri` |
 | `/category/…/`, `/tag/:slug/`, `/folder/:slug/`, `/hirek/` | archives, with `/page/N/` pagination |
-| `/galeria/`, `/galeria/:slug/` | galleries |
+| `/galeria/`, `/galeria/page/N/`, `/galeria/:slug/` | galleries |
 | `/idezet/:slug/` | quotes |
-| `/search?s=…` | search (`/?s=…` redirects here) |
+| `/search?s=…&page=N` | search (`/?s=…` and `/hirek/?s=…` redirect here) |
+| `/api/instagram` | Instagram posts of the footer, loaded in the browser |
 | `/sitemap_index.xml`, `/*-sitemap*.xml`, `/main-sitemap.xsl` | Yoast sitemaps proxied from WordPress |
 | `/news-sitemap.xml` | Google News sitemap: the posts of the last 48 hours |
 | `/feed/`, `/category/…/feed/`, `/tag/:slug/feed/`, `/folder/:slug/feed/` | RSS feeds proxied from WordPress, with the featured images added |
@@ -29,7 +30,13 @@ The site keeps the WordPress/Frontity URL structure:
 | `/robots.txt` | generated, see `SITE_INDEXABLE` |
 
 Missing trailing slashes, `/page/1/`, `/kezdooldal/`, `/tags/:slug`,
-`/sitemap.xml` and `/wp-sitemap.xml` answer with a 301.
+`/sitemap.xml` and `/wp-sitemap.xml` answer with a 301. Any other URL gets
+the 404 page inside the site layout (`routes/not-found.tsx`).
+
+Every page of a list can be opened, however deep. WPGraphQL returns at most
+100 items per query, so pages 2, 3, … find their start through the REST API's
+`offset` (`app/utils/offset.server.ts`): it gives the id of the item before
+the page, and a WPGraphQL cursor is `arrayconnection:<id>`.
 
 ## SEO
 
@@ -51,12 +58,17 @@ changed post (`/api/revalidate`), its URL is also sent to IndexNow.
 
 ## Caching
 
-Routes export `headers` with CDN cache rules (`app/utils/cache.ts`), the same
-as the Frontity site:
+Routes export `headers` with CDN cache rules (`app/utils/cache.ts`). Every
+response is tagged with the WordPress content it shows
+(`app/utils/cacheTags.server.ts`) and WordPress invalidates those tags when
+the content changes (`/api/revalidate`), so the TTLs are only a safety net:
 
-- home and listings: `s-maxage=60, stale-while-revalidate=86400`
-- posts and pages: `s-maxage=3600, stale-while-revalidate=86400`
+- home, listings, search and galleries: `s-maxage=3600, stale-while-revalidate=86400`
+- posts, pages and single galleries: `s-maxage=604800` (7 days),
+  `stale-while-revalidate=2592000` (30 days)
 - sitemaps 1 h, feed 10 min, 404s 1 min, 5xx never
+- permanent redirects: 30 days on the CDN, 1 h in the browser
+- client data of prefetched links (`.data`): 5 min in the browser
 - hashed assets (`/assets/*`): one year, immutable (`vercel.json`)
 
 ## Development
