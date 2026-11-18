@@ -6,6 +6,7 @@ import {
   useRouteLoaderData,
 } from 'react-router'
 import { PostHeader } from '~/components/post/Header'
+import { PostContent } from '~/components/post/PostContent'
 import { RelatedPosts } from '~/components/post/RelatedPosts'
 import { ShareButtons } from '~/components/post/ShareButtons'
 import { Banner } from '~/components/Banner'
@@ -240,28 +241,19 @@ export default function Node() {
         />
       </Box>
 
-      {parts ? (
-        <Box {...contentProps}>
-          <div
-            className='postBlocks'
-            dangerouslySetInnerHTML={{ __html: parts[0] }}
-          />
-          <Box my='16px'>
-            <AdSense slot={AD_SLOTS.postMiddle} inArticle />
-          </Box>
-          <div
-            className='postBlocks'
-            dangerouslySetInnerHTML={{ __html: parts[1] }}
-          />
-        </Box>
-      ) : (
-        <Box {...contentProps}>
-          <div
-            className='postBlocks'
-            dangerouslySetInnerHTML={{ __html: content }}
-          />
-        </Box>
-      )}
+      <Box {...contentProps}>
+        {parts ? (
+          <>
+            <PostContent html={parts[0]} />
+            <Box my='16px'>
+              <AdSense slot={AD_SLOTS.postMiddle} inArticle />
+            </Box>
+            <PostContent html={parts[1]} />
+          </>
+        ) : (
+          <PostContent html={content} />
+        )}
+      </Box>
 
       {tags.length > 0 && (
         <Flex flexWrap='wrap' gap='6px'>
