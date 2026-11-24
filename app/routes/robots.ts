@@ -2,23 +2,6 @@ import { CACHE } from '~/utils/cache'
 import { getSiteOrigin, isIndexable } from '~/utils/wp.server'
 import type { Route } from './+types/robots'
 
-// SEO tools and crawlers that bring no visitors, only function time
-// (same list as the Frontity site's robots.txt)
-const BLOCKED_BOTS = [
-  'AhrefsBot',
-  'DotBot',
-  'Barkrowler',
-  'Baiduspider',
-  'SemrushBot',
-  'MJ12bot',
-  'BLEXBot',
-  'PetalBot',
-  'YandexBot',
-  'proximic',
-  'SirdataBot',
-  'DataForSeoBot',
-]
-
 export function loader({ request }: Route.LoaderArgs) {
   const origin = getSiteOrigin(request)
   const body = isIndexable()
@@ -26,10 +9,8 @@ export function loader({ request }: Route.LoaderArgs) {
         `Sitemap: ${origin}/sitemap_index.xml`,
         `Sitemap: ${origin}/news-sitemap.xml`,
         '',
-        '# SEO-eszközök és irreleváns keresők: nem hoznak forgalmat, csak function-időt égetnek',
-        ...BLOCKED_BOTS.map((bot) => `User-agent: ${bot}`),
-        'Disallow: /',
-        '',
+        // Every crawler is welcome: search engines, AI assistants, ad tech
+        // and SEO tools alike (the owner's decision, 2026-11-24)
         'User-agent: *',
         'Disallow:',
         '',

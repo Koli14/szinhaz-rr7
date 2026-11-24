@@ -36,6 +36,11 @@ has downtime, and each one can be rolled back on its own.
       `mszt.org|SimplePie|Photon/`); "Block scrapers" (deny, UA
       `HeadlessChrome|Lightpanda|^curl/`); Bot Protection: Log; OWASP rules
       gen/rce/sqli/xss: Log; AI bots off.
+      2026-11-24: the owner lifted every crawler block (both IP blocks,
+      "Block scrapers", the PerplexityBot rate limit and the robots.txt
+      block list). Left: "Allow feed readers", "Block WordPress probes"
+      (attack paths that do not exist on rr7) and Bot Protection on Log,
+      which must not become Challenge: it flags the WordPress purge calls.
 - [x] fbclid redirect, viewport prefetch of the lead stories.
 - [ ] Production env vars of `berta/szinhaz-rr7`:
 
