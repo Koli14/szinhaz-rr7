@@ -13,7 +13,7 @@ export const CoverItem = ({
   prefetch?: 'viewport'
 }) => {
   const image = item.featuredImage?.node
-  const thumbnail = image?.mediaDetails.sizes.find(
+  const thumbnail = image?.mediaDetails?.sizes?.find(
     (s) => s.name === 'thumbnail',
   )
   const src = thumbnail?.sourceUrl ?? image?.sourceUrl
