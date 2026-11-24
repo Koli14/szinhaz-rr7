@@ -36,9 +36,14 @@ export function useAdSenseScript() {
 export function AdSense({
   slot,
   inArticle = false,
+  placeholder = false,
 }: {
   slot: string
   inArticle?: boolean
+  // Keep the ad's space with a grey „Hirdetés” box from the first paint, so
+  // the content below doesn't jump when the ad arrives (.ad-placeholder in
+  // app.css)
+  placeholder?: boolean
 }) {
   const ref = useRef<HTMLModElement>(null)
   // A new <ins> for every page. Going from one post to another keeps the
@@ -74,16 +79,18 @@ export function AdSense({
     )
   }
 
-  return (
+  const ad = (
     <ins
       key={pathname}
       ref={ref}
       className='adsbygoogle'
-      style={{ display: 'block', marginTop: '1rem' }}
+      style={{ display: 'block', marginTop: placeholder ? undefined : '1rem' }}
       data-ad-client={ADSENSE_CLIENT}
       data-ad-slot={slot}
       data-ad-format='auto'
       data-full-width-responsive='true'
     />
   )
+
+  return placeholder ? <div className='ad-placeholder'>{ad}</div> : ad
 }

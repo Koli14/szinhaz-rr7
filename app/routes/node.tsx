@@ -228,9 +228,15 @@ export default function Node() {
           loading='eager'
         />
         <Banner banner={banners?.whateversizebanner} loading='eager' />
-        {adsense?.postbigadsense1 && <AdSense slot={AD_SLOTS.postTop1} />}
-        {adsense?.postbigadsense1_2 && <AdSense slot={AD_SLOTS.postTop2} />}
-        {adsense?.postbigadsense1_3 && <AdSense slot={AD_SLOTS.postTop3} />}
+        {adsense?.postbigadsense1 && (
+          <AdSense slot={AD_SLOTS.postTop1} placeholder />
+        )}
+        {adsense?.postbigadsense1_2 && (
+          <AdSense slot={AD_SLOTS.postTop2} placeholder />
+        )}
+        {adsense?.postbigadsense1_3 && (
+          <AdSense slot={AD_SLOTS.postTop3} placeholder />
+        )}
         <PostHeader
           mt={{ base: '10px', lg: '2rem' }}
           title={title}

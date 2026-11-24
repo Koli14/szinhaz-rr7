@@ -60,3 +60,55 @@ img {
   max-width: 100%;
   height: auto;
 }
+
+/* Grey „Hirdetés” box that holds an ad's space from the first paint (the ads
+   above a post's title). Without it the title and the text jumped down when
+   the ad arrived, the main poor-CLS issue in Search Console. Sizes measured on
+   the live site, 2026-11-24: AdSense makes the ad 280px high, except on phones,
+   where it is a square as wide as the screen.
+   The box stays when no ad comes (data-ad-status='unfilled', about 15% of the
+   requests in November): AdSense keeps that space blank anyway, and
+   collapsing it would move the whole post up. */
+.ad-placeholder {
+  position: relative;
+  min-height: 280px;
+  margin-top: 1rem;
+  background-color: #f2f2f2;
+}
+
+/* Phones (below Chakra's sm): full screen width like the ad itself, out of
+   the post's side padding */
+@media (max-width: 29.99em) {
+  .ad-placeholder {
+    min-height: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+}
+
+.ad-placeholder::before {
+  content: 'Hirdetés';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8c8c8c;
+}
+
+/* The ad covers the label */
+.ad-placeholder > ins {
+  position: relative;
+  z-index: 1;
+}
+
+.ad-placeholder:has(> ins[data-ad-status='filled']) {
+  background-color: transparent;
+}
+
+.ad-placeholder:has(> ins[data-ad-status='filled'])::before {
+  content: none;
+}
