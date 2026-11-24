@@ -13,7 +13,8 @@ export type FeaturedImage = {
     title?: string
     altText: string
     sourceUrl: string
-    mediaDetails: { sizes: FeaturedImageSize[] }
+    // null for attachments whose metadata WordPress never generated
+    mediaDetails: { sizes: FeaturedImageSize[] | null } | null
   }
 }
 
